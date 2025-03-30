@@ -5,102 +5,99 @@ using UnityEngine.InputSystem;
 [CreateAssetMenu(fileName = nameof(PlayerState_Climbing), menuName = "Scriptable Objects/" + nameof(PlayerState) + "/" + nameof(PlayerState_Climbing))]
 public class PlayerState_Climbing : PlayerState
 {
-    [SerializeField] private float movementSpeed_InMetersPerSecond = 5f;
-    [SerializeField] private float jumpStrength_InMetersPerSecond = 2f;
+    [SerializeField] private float movementSpeedInMetersPerSecond = 5f;
+    [SerializeField] private float jumpStrengthInMetersPerSecond = 2f;
 
-    [SerializeField, Range(0, 90)] private float maxHorizontalAngle_InDegrees = 30f;
+    [SerializeField, Range(0, 90)] private float maxHorizontalAngleInDegrees = 30f;
     [SerializeField] private float handsDistance = 0.4f;
     [SerializeField] private float handsHeight = 1.5f;
 
+    public float MaxHorizontalAngle_InDegrees => maxHorizontalAngleInDegrees;
+    public float HandsReach => Mathf.Sin(maxHorizontalAngleInDegrees * Mathf.Deg2Rad);
 
-    public float MaxHorizontalAngle_InDegrees => maxHorizontalAngle_InDegrees;
-    public float HandsReach => Mathf.Sin(maxHorizontalAngle_InDegrees * Mathf.Deg2Rad);
 
-
-    public override void Enter()
+    protected override void EnterState()
     {
-        player.Actions.Move.performed += HandlePlayerMovement_MoveCallback;
-        player.Actions.Move.canceled += HandlePlayerMovement_MoveCallback;
+        player.Actions.Move.performed += HandleMovement_InputAction;
+        player.Actions.Move.canceled += HandleMovement_InputAction;
 
-        player.Actions.Jump.performed += SetPlayerState_JumpCallback;
+        player.Actions.Jump.performed += HandleJump_InputAction;
     }
 
-    public override void Exit()
+    protected override void ExitState()
     {
-        player.Actions.Move.performed -= HandlePlayerMovement_MoveCallback;
-        player.Actions.Move.canceled -= HandlePlayerMovement_MoveCallback;
+        player.Actions.Move.performed -= HandleMovement_InputAction;
+        player.Actions.Move.canceled -= HandleMovement_InputAction;
 
-        player.Actions.Jump.performed -= SetPlayerState_JumpCallback;
+        player.Actions.Jump.performed -= HandleJump_InputAction;
     }
 
 
-    private void HandlePlayerMovement_MoveCallback(InputAction.CallbackContext context)
+    private void HandleMovement_InputAction(InputAction.CallbackContext context)
     {
         Vector2 input = context.ReadValue<Vector2>();
-        Vector3 velocity = GetVelocity(input);
-
-        player.SetVelocity(velocity);
-        player.SetForward(velocity);
+        HandleMovement(input);
     }
 
-    private void SetPlayerState_JumpCallback(InputAction.CallbackContext context)
+    private void HandleJump_InputAction(InputAction.CallbackContext context)
     {
-        Vector3 jumpVelocity = HandleJump();
-        player.AddVelocity(jumpVelocity);
+        HandleJump();
+    }
+
+
+    private void HandleMovement(Vector2 input)
+    {
+        player.Movement = input * movementSpeedInMetersPerSecond;
+        HandleGrip();
+    }
+
+private void HandleJump()
+    {
+        player.Gravity = -player.Gravity;
 
         player.SwitchState<PlayerState_Airbound>();
     }
 
-
-    private Vector3 GetVelocity(Vector2 input)
+    private void HandleGrip()
     {
-        Vector3 gravityVelocity = HandleGravity();
-        Vector3 movementVelocity = HandleMovement(input);
-        Vector3 velocity = movementVelocity + gravityVelocity;
-        return velocity;
-    }
-
-    private Vector3 forward;
-    private Vector3 HandleGravity()
-    {
-        Vector3 up = Quaternion.LookRotation(Vector3.up) * forward;
-        Vector3 right = Quaternion.LookRotation(Vector3.right) * forward;
+        Vector3 up = Quaternion.LookRotation(Vector3.up) * player.Forward;
+        Vector3 right = Quaternion.LookRotation(Vector3.right) * player.Forward;
 
         Vector3 handsCenterPosition = player.transform.position + up * handsHeight;
         Vector3 handLeftPosition = handsCenterPosition - right * handsDistance;
         Vector3 handRightPosition = handsCenterPosition + right * handsDistance;
 
-        Ray handLeftGrip = new(handLeftPosition, forward);
-        Ray handRightGrip = new(handRightPosition, forward);
+        Ray handLeftGrip = new(handLeftPosition, player.Forward);
+        Ray handRightGrip = new(handRightPosition, player.Forward);
 
         bool leftHandHit = Physics.Raycast(handLeftGrip, out RaycastHit leftHandInfo, HandsReach);
         bool rightHandHit = Physics.Raycast(handLeftGrip, out RaycastHit rightHandInfo, HandsReach);
 
-        Vector3 velocity = forward;
+        Vector3 grip = player.Forward;
 
         if (leftHandHit && rightHandHit)
         {
             float angle = Mathf.Atan2((rightHandInfo.distance - leftHandInfo.distance), (handsDistance * 2)) * Mathf.Rad2Deg;
             Quaternion rotation = Quaternion.Euler(0f, angle / 2, 0f);
-            velocity = rotation * forward;
+            grip = rotation * player.Forward;
         }
 
-        return velocity;
+        player.Gravity = grip;
     }
 
-    private Vector3 HandleMovement(Vector2 input)
+    public override Vector3 CalculateVelocity(Vector2 movement, Vector3 gravity, Vector3 forward)
     {
-        Vector3 relativeDirection = new(input.x, input.y, 0);
-        Vector3 relativeVelocity = relativeDirection * movementSpeed_InMetersPerSecond;
+        Quaternion rotation = Quaternion.LookRotation(gravity);
 
-        Vector3 velocity = Quaternion.LookRotation(forward) * relativeVelocity;
+        Vector3 velocityBuffer = new()
+        {
+            x = movement.x,
+            y = movement.y,
+        };
+        velocityBuffer += gravity;
+        velocityBuffer = rotation * velocityBuffer;
+
+        Vector3 velocity = velocityBuffer;
         return velocity;
-    }
-
-    private Vector3 HandleJump()
-    {
-        Vector3 horizontalVelocity = -player.Forward * movementSpeed_InMetersPerSecond;
-        Vector3 verticalVelocity = jumpStrength_InMetersPerSecond * Vector3.up;
-        return verticalVelocity + horizontalVelocity;
     }
 }

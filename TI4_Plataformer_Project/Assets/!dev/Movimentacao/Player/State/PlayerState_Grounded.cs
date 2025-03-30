@@ -1,74 +1,103 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Windows;
 
 
 [CreateAssetMenu(fileName = nameof(PlayerState_Grounded), menuName = "Scriptable Objects/" + nameof(PlayerState) + "/" + nameof(PlayerState_Grounded))]
 public class PlayerState_Grounded : PlayerState
 {
-    [SerializeField] private float movementSpeed_InMetersPerSecond = 5f;
-    [SerializeField] private float jumpStrength_InMetersPerSecond = 2f;
+    [SerializeField] private float movementSpeedInMetersPerSecond = 5f;
+    [SerializeField] private float jumpStrengthInMetersPerSecond = 5f;
 
-    public override void Enter()
+    private readonly Vector3 gravityDirection = Physics.gravity.normalized;
+
+    protected override void EnterState()
     {
-        player.Actions.Move.performed += HandlePlayerMovement_MoveCallback;
-        player.Actions.Move.canceled += HandlePlayerMovement_MoveCallback;
+        player.Actions.Move.performed += HandleMovement_InputAction;
+        player.Actions.Move.canceled += HandleMovement_InputAction;
 
-        player.Actions.Jump.performed += SetPlayerState_JumpCallback;
+        player.Actions.Jump.performed += HandleJump_InputAction;
+
+        player.collisionUpdate += HandleCollisionUpdate;
+
+        HandleGravity();
     }
 
-    public override void Exit()
+    protected override void ExitState()
     {
-        player.Actions.Move.performed -= HandlePlayerMovement_MoveCallback;
-        player.Actions.Move.canceled -= HandlePlayerMovement_MoveCallback;
+        player.Actions.Move.performed -= HandleMovement_InputAction;
+        player.Actions.Move.canceled -= HandleMovement_InputAction;
 
-        player.Actions.Jump.performed -= SetPlayerState_JumpCallback;
+        player.Actions.Jump.performed -= HandleJump_InputAction;
+
+        player.collisionUpdate -= HandleCollisionUpdate;
     }
 
 
-    private void HandlePlayerMovement_MoveCallback(InputAction.CallbackContext context)
+    private void HandleMovement_InputAction(InputAction.CallbackContext context)
     {
         Vector2 input = context.ReadValue<Vector2>();
-        Vector3 velocity = GetVelocity(input);
-
-        player.SetVelocity(velocity);
-        player.SetForward(velocity);
+        HandleMovement(input);
+    }
+    private void HandleJump_InputAction(InputAction.CallbackContext context)
+    {
+        HandleJump();
     }
 
-    private void SetPlayerState_JumpCallback(InputAction.CallbackContext context)
+    private void HandleCollisionUpdate(ControllerColliderHit hit, CollisionFlags flags)
     {
-        Vector3 jumpVelocity = new(0, jumpStrength_InMetersPerSecond, 0);
-        player.AddVelocity(jumpVelocity);
+        if (!flags.HasFlag(CollisionFlags.Below))
+        {
+            player.SwitchState<PlayerState_Airbound>();
+        }
+    }
+
+    private void HandleMovement(Vector2 input)
+    {
+        if (player.Forward == Vector3.zero)
+        {
+            Vector3 forward = Camera.main.transform.forward;
+            forward.y = 0;
+            player.Look(forward);
+        }
+
+        Vector2 movementVelocity = input * movementSpeedInMetersPerSecond;
+        player.Movement = movementVelocity;
+    }
+
+    private void HandleGravity()
+    {
+        float gravityForce = movementSpeedInMetersPerSecond / Mathf.Tan(player.Slope);
+
+        Vector3 gravityVelocity = gravityDirection * gravityForce;
+        player.Gravity = gravityVelocity;
+    }
+
+    private void HandleJump()
+    {
+        Vector3 gravityVelocity = gravityDirection * -jumpStrengthInMetersPerSecond;
+        player.Gravity = gravityVelocity;
 
         player.SwitchState<PlayerState_Airbound>();
     }
 
-
-    private Vector3 GetVelocity(Vector2 input)
+    public override Vector3 CalculateVelocity(Vector2 movement, Vector3 gravity, Vector3 forward)
     {
-        Vector3 velocity = HandleMovement(input);
-        return velocity;
-    }
+        Quaternion rotation = Quaternion.LookRotation(forward);
 
-    private bool isIdle;
-    private Vector3 forward;
-    private Vector3 HandleMovement(Vector2 input)
-    {
-        Vector3 relativeDirection = new(input.x, 0, input.y);
-        Vector3 relativeVelocity = relativeDirection * movementSpeed_InMetersPerSecond;
-
-        if (isIdle)
+        Vector3 velocityBuffer = new()
         {
-            Vector3 forward = Camera.current.transform.forward;
-            forward.y = 0;
-            this.forward = forward;
-        }
-        else if (input == Vector2.zero)
-        { isIdle = true; }
+            x = movement.x,
+            z = movement.y,
+        };
+        velocityBuffer = rotation * velocityBuffer;
 
-        Vector3 movementVelocity = Quaternion.LookRotation(forward) * relativeVelocity;
-        Vector3 gravityVelocity = Physics.gravity * Time.deltaTime;
+        if (movement != Vector2.zero)
+        { player.Look(velocityBuffer); }
 
-        Vector3 velocity = movementVelocity + gravityVelocity;
+        velocityBuffer += rotation * gravity;
+
+        Vector3 velocity = velocityBuffer;
         return velocity;
     }
 }

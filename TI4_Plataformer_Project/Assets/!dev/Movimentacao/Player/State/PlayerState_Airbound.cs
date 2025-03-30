@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -9,89 +11,110 @@ public class PlayerState_Airbound : PlayerState
     [SerializeField] private float rotationSpeedInDegreesPerSeconds = 270f;
     [SerializeField] private float terminalVelocityInMetersPerSecond = 10f;
 
-
-    public override void Enter()
+    protected override void EnterState()
     {
-        player.Actions.Move.performed += HandlePlayerMovement_MoveCallback;
-        player.Actions.Move.canceled += HandlePlayerMovement_MoveCallback;
+        player.Actions.Move.performed += HandleMovement_InputAction;
+        player.Actions.Move.canceled += HandleMovement_InputAction;
 
-        player.collided += SetPlayerState_CollisionCallback;
+        player.collisionUpdate += HandleCollisionUpdate;
+
+        //movementVelocity = new()
+        //{
+        //    x = player.Velocity.x,
+        //    y = player.Velocity.z,
+        //};
+        //gravityVelocity = player.Velocity.y;
+
+        CoroutineUntilLeaveState(HandleGravity_Coroutine());
     }
 
-    public override void Exit()
+    protected override void ExitState()
     {
-        player.Actions.Move.performed -= HandlePlayerMovement_MoveCallback;
-        player.Actions.Move.canceled -= HandlePlayerMovement_MoveCallback;
+        player.Actions.Move.performed -= HandleMovement_InputAction;
+        player.Actions.Move.canceled -= HandleMovement_InputAction;
 
-        player.collided -= SetPlayerState_CollisionCallback;
+        player.collisionUpdate -= HandleCollisionUpdate;
     }
 
-
-    private void HandlePlayerMovement_MoveCallback(InputAction.CallbackContext context)
-    {
-        Vector2 input = context.ReadValue<Vector2>();
-        Vector3 velocity = GetVelocity(input);
-
-        player.SetVelocity(velocity);
-        player.SetForward(velocity);
-    }
-
-    private void SetPlayerState_CollisionCallback(ControllerColliderHit hit, CollisionFlags flags)
+    private void HandleCollisionUpdate(ControllerColliderHit hit, CollisionFlags flags)
     {
         if (flags.HasFlag(CollisionFlags.Below))
         {
             player.SwitchState<PlayerState_Grounded>();
         }
-        else if (hit.gameObject.CompareTag("CanClimb"))
+        else if (hit != null && hit.gameObject.CompareTag("CanClimb"))
         {
             float angle = player.GetState<PlayerState_Climbing>().MaxHorizontalAngle_InDegrees;
             // Comparando o ângulo entre a frente do jogador e a normal da parede
             if (Mathf.Abs(Vector3.Dot(player.Forward, hit.normal)) > Mathf.Cos(angle * Mathf.Deg2Rad))
             {
-                player.SetForward(-hit.normal);
+                player.Look(-hit.normal);
                 player.SwitchState<PlayerState_Climbing>();
             }
         }
     }
 
-
-    private Vector3 GetVelocity(Vector2 input)
+    private void HandleMovement_InputAction(InputAction.CallbackContext context)
     {
-        Vector3 movementVelocity = HandleMovement(input);
-        Vector3 gravityVelocity = HandleGravity();
-        Vector3 velocity = movementVelocity + gravityVelocity;
-        return velocity;
+        Vector2 input = context.ReadValue<Vector2>();
+        HandleMovement(input);
     }
 
-    private bool isIdle;
-    private Vector3 forward;
-    private Vector3 HandleMovement(Vector2 input)
+    private void HandleMovement(Vector2 input)
     {
-        Vector3 relativeDirection = new(input.x, 0, input.y);
-        Vector3 relativeVelocity = relativeDirection * movementSpeedInMetersPerSecond;
+        if (player.Forward == Vector3.zero)
+        { HandleForward(); }
 
-        if (isIdle)
+        Vector2 movementVelocity = input * movementSpeedInMetersPerSecond;
+        player.Movement = movementVelocity;
+    }
+
+    private void HandleForward()
+    {
+        Vector3 forward = Camera.main.transform.forward;
+        forward.y = 0;
+        player.Forward = forward;
+    }
+
+    private IEnumerator HandleGravity_Coroutine()
+    {
+        float gravityStrength = Physics.gravity.magnitude;
+        Vector3 gravityDirection = Physics.gravity.normalized;
+
+        while (true)
         {
-            Vector3 forward = Camera.current.transform.forward;
-            forward.y = 0;
-            this.forward = forward;
-        }
-        else if (input == Vector2.zero)
-        { isIdle = true; }
+            float currentGravity = Vector3.Dot(player.Gravity, gravityDirection);
+            if (currentGravity < terminalVelocityInMetersPerSecond)
+            {
+                float gravityAcceleration = gravityStrength * Time.deltaTime;
+                currentGravity += gravityAcceleration;
+                if (currentGravity > terminalVelocityInMetersPerSecond)
+                { currentGravity = terminalVelocityInMetersPerSecond; }
 
-        Vector3 movementVelocity = Quaternion.LookRotation(forward) * relativeVelocity;
-        return movementVelocity;
+                player.Gravity = currentGravity * gravityDirection;
+            }
+
+            yield return null;
+        }
     }
 
-    private Vector3 HandleGravity()
+    public override Vector3 CalculateVelocity(Vector2 movement, Vector3 gravity, Vector3 forward)
     {
-        Vector3 currentGravityVelocity = Vector3.Dot(player.Velocity, Physics.gravity) * Physics.gravity.normalized;
-        Vector3 gravityVelocity = currentGravityVelocity + Physics.gravity * Time.deltaTime;
+        Quaternion rotation = Quaternion.LookRotation(forward);
 
-        // Terminal velocity
-        if (gravityVelocity.magnitude > terminalVelocityInMetersPerSecond)
-        { gravityVelocity = Physics.gravity.normalized * terminalVelocityInMetersPerSecond; }
+        Vector3 velocityBuffer = new()
+        {
+            x = movement.x,
+            z = movement.y,
+        };
+        velocityBuffer = rotation * velocityBuffer;
 
-        return gravityVelocity;
+        if (movement != Vector2.zero)
+        { player.Look(velocityBuffer); }
+
+        velocityBuffer += rotation * gravity;
+
+        Vector3 velocity = velocityBuffer;
+        return velocity;
     }
 }

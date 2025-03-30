@@ -7,21 +7,16 @@ using UnityEditor;
 [RequireComponent(typeof(CharacterController))]
 public class Player : MonoBehaviour
 {
-    [Flags]
-    public enum Skill
-    {
-        None = 0,
-        Move = 1,
-        Jump = 2,
-        Climb = 4,
-    }
-
-
-    private PlayerState state;
-    private Vector3 velocity;
-
-
     [SerializeField] private PlayerState[] possibleStates;
+
+    [Header("Observables")]
+    [SerializeField] private PlayerState state;
+    [SerializeField] private Vector3 velocity;
+    [SerializeField] private Vector3 forward;
+    [SerializeField] private Vector2 movementVelocity;
+    [SerializeField] private Vector3 gravityVelocity;
+    [SerializeField] private ControllerColliderHit collisionHit;
+
     private Dictionary<Type, PlayerState> stateInstances;
     private InputSystem_Actions.PlayerActions actions;
     private CharacterController characterController;
@@ -33,7 +28,7 @@ public class Player : MonoBehaviour
             Type stateType = state.GetType();
             PlayerState stateInstance = ScriptableObject.CreateInstance(stateType) as PlayerState;
             stateInstances.Add(stateType, stateInstance);
-            stateInstance.Init(this);
+            stateInstance.Configure(this);
         }
 
         actions = GameManager.Instance.Actions.Player;
@@ -48,15 +43,25 @@ public class Player : MonoBehaviour
             initialState.Enter();
             state = initialState;
         }
+
+        forward = transform.forward;
     }
+    
+    public Action<ControllerColliderHit, CollisionFlags> collisionUpdate;
+
 
     public InputSystem_Actions.PlayerActions Actions => actions;
     public PlayerState State => stateInstances[state.GetType()];
     public Vector3 Velocity => velocity;
-    public Vector3 Forward => transform.forward;
+    public Vector3 Forward { get => forward; set => forward = value; }
+    public Vector2 Movement { get => movementVelocity; set => movementVelocity = value; }
+    public Vector3 Gravity { get => gravityVelocity; set => gravityVelocity = value; }
 
-
-    public Action<ControllerColliderHit, CollisionFlags> collided;
+    public void Look(Vector3 forward)
+    {
+        transform.rotation = Quaternion.LookRotation(forward);
+    }
+    public float Slope => characterController.slopeLimit;
 
 
     public State GetState<State>() where State : PlayerState
@@ -69,32 +74,36 @@ public class Player : MonoBehaviour
         PlayerState oldState = stateInstances[state.GetType()];
         PlayerState newState = GetState<State>();
 
-        oldState.Exit();
-        newState.Enter();
-
+        oldState.Enter(newState);
         state = newState;
     }
 
-    public void SetVelocity(Vector3 velocity)
-    {
-        this.velocity = velocity;
-    }
-    public void AddVelocity(Vector3 velocity)
-    {
-        this.velocity += velocity;
-    }
-    public void SetForward(Vector3 forward)
-    {
-        transform.rotation = Quaternion.LookRotation(forward);
-    }
-
-    private CollisionFlags collisionFlags;
     private void Update()
     {
-        collisionFlags = characterController.Move(velocity * Time.deltaTime);
+        Vector3 velocity = CalculateVelocity(movementVelocity, gravityVelocity, forward);
+        Move(velocity);
     }
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
-        collided?.Invoke(hit, collisionFlags);
+        collisionHit = hit;
+    }
+
+    private Vector3 CalculateVelocity(Vector2 movement, Vector3 gravity, Vector3 forward)
+    {
+        velocity = state.CalculateVelocity(movement, gravity, forward);
+        return velocity;
+    }
+
+    private void Move(Vector3 velocity)
+    {
+        CollisionFlags oldCollision = characterController.collisionFlags;
+        CollisionFlags newCollision = characterController.Move(velocity * Time.deltaTime);
+
+        bool didCollisionUpdate = collisionHit != null || oldCollision != newCollision;
+        if (didCollisionUpdate)
+        {
+            collisionUpdate?.Invoke(collisionHit, newCollision);
+            collisionHit = null;
+        }
     }
 }
