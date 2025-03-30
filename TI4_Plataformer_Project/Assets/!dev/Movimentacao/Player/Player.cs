@@ -16,6 +16,9 @@ public class Player : MonoBehaviour
     [SerializeField] private Vector2 movementVelocity;
     [SerializeField] private Vector3 gravityVelocity;
     [SerializeField] private ControllerColliderHit collisionHit;
+    [SerializeField] private Transform[] interactChecksLR;
+    [SerializeField] private float interactDistance = 0.3f;
+    [SerializeField] private LayerMask canInteract;
 
     private Dictionary<Type, PlayerState> stateInstances;
     private InputSystem_Actions.PlayerActions actions;
@@ -56,6 +59,13 @@ public class Player : MonoBehaviour
     public Vector3 Forward { get => forward; set => forward = value; }
     public Vector2 Movement { get => movementVelocity; set => movementVelocity = value; }
     public Vector3 Gravity { get => gravityVelocity; set => gravityVelocity = value; }
+    public float InteractDistance => interactDistance;
+    public LayerMask CanInteract => canInteract;
+
+    public Transform GetInteractChecks (int i)
+    {
+        return interactChecksLR[i];
+    }
 
     public void Look(Vector3 forward)
     {

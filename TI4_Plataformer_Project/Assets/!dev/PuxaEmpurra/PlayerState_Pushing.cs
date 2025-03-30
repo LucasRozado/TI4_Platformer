@@ -1,13 +1,9 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Windows;
 
-
-[CreateAssetMenu(fileName = nameof(PlayerState_Grounded), menuName = "Scriptable Objects/" + nameof(PlayerState) + "/" + nameof(PlayerState_Grounded))]
-public class PlayerState_Grounded : PlayerState
+public class PlayerState_Pushing : PlayerState
 {
-    [SerializeField] private float movementSpeedInMetersPerSecond = 5f;
-    [SerializeField] private float jumpStrengthInMetersPerSecond = 5f;
+    [SerializeField] private float movementSpeedInMetersPerSecond = 4f;
 
     private readonly Vector3 gravityDirection = Physics.gravity.normalized;
 
@@ -15,8 +11,6 @@ public class PlayerState_Grounded : PlayerState
     {
         player.Actions.Move.performed += HandleMovement_InputAction;
         player.Actions.Move.canceled += HandleMovement_InputAction;
-
-        player.Actions.Jump.performed += HandleJump_InputAction;
 
         player.Actions.Interact.performed += HandleInteraction;
 
@@ -33,20 +27,12 @@ public class PlayerState_Grounded : PlayerState
 
         player.Actions.Interact.performed -= HandleInteraction;
 
-        player.Actions.Jump.performed -= HandleJump_InputAction;
-
         player.collisionUpdate -= HandleCollisionUpdate;
     }
-
-
     private void HandleMovement_InputAction(InputAction.CallbackContext context)
     {
         Vector2 input = context.ReadValue<Vector2>();
         HandleMovement(input);
-    }
-    private void HandleJump_InputAction(InputAction.CallbackContext context)
-    {
-        HandleJump();
     }
 
     private void HandleCollisionUpdate(ControllerColliderHit hit, CollisionFlags flags)
@@ -78,12 +64,9 @@ public class PlayerState_Grounded : PlayerState
         player.Gravity = gravityVelocity;
     }
 
-    private void HandleJump()
+    public void MovementDirection(Vector3 direction)
     {
-        Vector3 gravityVelocity = gravityDirection * -jumpStrengthInMetersPerSecond;
-        player.Gravity = gravityVelocity;
 
-        player.SwitchState<PlayerState_Airbound>();
     }
 
     public override Vector3 CalculateVelocity(Vector2 movement, Vector3 gravity, Vector3 forward)
