@@ -2,15 +2,18 @@ using UnityEngine;
 
 public class PushableObject : Interactable
 {
-    [SerializeField] PlayerState_Pushing pushingState;
+    [SerializeField] private float size;
+    [SerializeField] private float height;
     public override void InteractWith(Player player)
     {
-        RaycastHit hit;
-        Vector3 playerCenter = (player.GetInteractChecks(0).position - player.GetInteractChecks(1).position)/2;
-        playerCenter += player.GetInteractChecks(1).position;
-        Physics.Raycast(playerCenter, player.Forward, out hit, player.InteractDistance, player.CanInteract);
-
-
         player.SwitchState<PlayerState_Pushing>();
+    }
+
+    public bool CheckCollision(Player player)
+    { 
+        Vector3 castPosition = transform.position;
+        castPosition.y += height;
+        Debug.Log(Physics.Raycast(castPosition, player.Forward, size/2));
+        return Physics.Raycast(castPosition, player.Forward, size/2);
     }
 }

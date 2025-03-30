@@ -58,14 +58,7 @@ public class PlayerState_Grounded : PlayerState
     }
 
     private void HandleMovement(Vector2 input)
-    {
-        if (player.Forward == Vector3.zero)
-        {
-            Vector3 forward = Camera.main.transform.forward;
-            forward.y = 0;
-            player.Look(forward);
-        }
-
+    {      
         Vector2 movementVelocity = input * movementSpeedInMetersPerSecond;
         player.Movement = movementVelocity;
     }
@@ -97,8 +90,15 @@ public class PlayerState_Grounded : PlayerState
         };
         velocityBuffer = rotation * velocityBuffer;
 
+        
+
         if (movement != Vector2.zero)
-        { player.Look(velocityBuffer); }
+        {
+            Vector3 cameraForward = Camera.main.transform.forward;
+            cameraForward.y = 0;
+            player.Forward = cameraForward; 
+            player.Look(velocityBuffer);
+        }
 
         velocityBuffer += rotation * gravity;
 

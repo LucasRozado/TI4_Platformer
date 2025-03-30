@@ -1,9 +1,14 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.Windows;
+
+[CreateAssetMenu(fileName = nameof(PlayerState_Pushing), menuName = "Scriptable Objects/" + nameof(PlayerState) + "/" + nameof(PlayerState_Pushing))]
 
 public class PlayerState_Pushing : PlayerState
 {
     [SerializeField] private float movementSpeedInMetersPerSecond = 4f;
+    private PushableObject pushable;
 
     private readonly Vector3 gravityDirection = Physics.gravity.normalized;
 
@@ -17,6 +22,7 @@ public class PlayerState_Pushing : PlayerState
         player.collisionUpdate += HandleCollisionUpdate;
 
 
+        HandleObject();
         HandleGravity();
     }
 
@@ -28,6 +34,8 @@ public class PlayerState_Pushing : PlayerState
         player.Actions.Interact.performed -= HandleInteraction;
 
         player.collisionUpdate -= HandleCollisionUpdate;
+
+        pushable.transform.parent = null;
     }
     private void HandleMovement_InputAction(InputAction.CallbackContext context)
     {
@@ -45,13 +53,8 @@ public class PlayerState_Pushing : PlayerState
 
     private void HandleMovement(Vector2 input)
     {
-        if (player.Forward == Vector3.zero)
-        {
-            Vector3 forward = Camera.main.transform.forward;
-            forward.y = 0;
-            player.Look(forward);
-        }
-
+        input.x = 0;
+        
         Vector2 movementVelocity = input * movementSpeedInMetersPerSecond;
         player.Movement = movementVelocity;
     }
@@ -64,9 +67,15 @@ public class PlayerState_Pushing : PlayerState
         player.Gravity = gravityVelocity;
     }
 
-    public void MovementDirection(Vector3 direction)
+    public void HandleObject()
     {
-
+        RaycastHit hit;
+        Vector3 playerCenter = (player.GetInteractChecks(0).position - player.GetInteractChecks(1).position) / 2;
+        playerCenter += player.GetInteractChecks(1).position;
+        Physics.Raycast(playerCenter, player.Forward, out hit, player.InteractDistance, player.CanInteract);
+        player.Forward = -hit.normal;
+        pushable = hit.collider.gameObject.GetComponent<PushableObject>();
+        pushable.transform.parent = player.transform;
     }
 
     public override Vector3 CalculateVelocity(Vector2 movement, Vector3 gravity, Vector3 forward)
@@ -78,38 +87,23 @@ public class PlayerState_Pushing : PlayerState
             x = movement.x,
             z = movement.y,
         };
-        velocityBuffer = rotation * velocityBuffer;
 
-        if (movement != Vector2.zero)
-        { player.Look(velocityBuffer); }
+        velocityBuffer = rotation * velocityBuffer;
 
         velocityBuffer += rotation * gravity;
 
         Vector3 velocity = velocityBuffer;
+
+        if (pushable.CheckCollision(player) && movement.y > 0)
+        {
+            velocity = Vector2.zero;
+        }
+
         return velocity;
     }
 
     private void HandleInteraction(InputAction.CallbackContext context)
     {
-        Debug.Log("Interaction");
-        Transform checkL = player.GetInteractChecks(0);
-        Transform checkR = player.GetInteractChecks(1);
-        RaycastHit hitL;
-        RaycastHit hitR;
-
-        Physics.Raycast(checkL.position, checkL.forward, out hitL, player.InteractDistance, player.CanInteract);
-        Physics.Raycast(checkR.position, checkR.forward, out hitR, player.InteractDistance, player.CanInteract);
-
-        Debug.Log(hitL.collider);
-        Debug.Log(hitR.collider);
-        if (hitL.collider != null && hitL.collider == hitR.collider)
-        {
-            Debug.Log("Target acquired");
-            if (hitL.collider.TryGetComponent<Interactable>(out Interactable interactable))
-            {
-                interactable.InteractWith(player);
-                Debug.Log("Interact Done");
-            }
-        }
+        player.SwitchState<PlayerState_Grounded>();
     }
 }
