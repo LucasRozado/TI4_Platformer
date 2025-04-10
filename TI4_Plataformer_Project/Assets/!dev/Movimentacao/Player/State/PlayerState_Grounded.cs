@@ -1,9 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Windows;
 
-
-[CreateAssetMenu(fileName = nameof(PlayerState_Grounded), menuName = "Scriptable Objects/" + nameof(PlayerState) + "/" + nameof(PlayerState_Grounded))]
 public class PlayerState_Grounded : PlayerState
 {
     [SerializeField] private float movementSpeedInMetersPerSecond = 5f;
@@ -21,7 +18,6 @@ public class PlayerState_Grounded : PlayerState
         player.Actions.Interact.performed += HandleInteraction;
 
         player.collisionUpdate += HandleCollisionUpdate;
-
 
         HandleGravity();
     }

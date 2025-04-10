@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Reflection;
 using UnityEditor;
+using UnityEngine.InputSystem.LowLevel;
 
 [RequireComponent(typeof(CharacterController))]
 public class Player : MonoBehaviour
 {
-    [SerializeField] private PlayerState[] possibleStates;
-
     [Header("Observables")]
     [SerializeField] private PlayerState state;
     [SerializeField] private Vector3 velocity;
@@ -16,53 +15,43 @@ public class Player : MonoBehaviour
     [SerializeField] private Vector2 movementVelocity;
     [SerializeField] private Vector3 gravityVelocity;
     [SerializeField] private ControllerColliderHit collisionHit;
+
     [SerializeField] private Transform[] interactChecksLR;
     [SerializeField] private float interactDistance = 0.3f;
     [SerializeField] private LayerMask canInteract;
 
-    private Dictionary<Type, PlayerState> stateInstances;
     private InputSystem_Actions.PlayerActions actions;
     private CharacterController characterController;
+    private Dictionary<Type, PlayerState> states;
+    private void Awake()
+    {
+        states = new();
+    }
     private void Start()
     {
-        stateInstances = new();
-        foreach (PlayerState state in possibleStates)
-        {
-            Type stateType = state.GetType();
-            PlayerState stateInstance = ScriptableObject.CreateInstance(stateType) as PlayerState;
-            stateInstances.Add(stateType, stateInstance);
-            stateInstance.Configure(this);
-        }
-
         actions = GameManager.Instance.Actions.Player;
         actions.Enable();
 
+        forward = transform.forward;
+
         characterController = GetComponent<CharacterController>();
 
-        if (possibleStates != null && possibleStates.Length > 0)
-        {
-            PlayerState initialStateDefinition = possibleStates[0];
-            PlayerState initialState = stateInstances[initialStateDefinition.GetType()];
-            initialState.Enter();
-            state = initialState;
-        }
-
-        forward = transform.forward;
+        state.Enter();
     }
-    
+
     public Action<ControllerColliderHit, CollisionFlags> collisionUpdate;
 
-
     public InputSystem_Actions.PlayerActions Actions => actions;
-    public PlayerState State => stateInstances[state.GetType()];
+    public PlayerState State => state;
     public Vector3 Velocity => velocity;
     public Vector3 Forward { get => forward; set => forward = value; }
     public Vector2 Movement { get => movementVelocity; set => movementVelocity = value; }
     public Vector3 Gravity { get => gravityVelocity; set => gravityVelocity = value; }
     public float InteractDistance => interactDistance;
     public LayerMask CanInteract => canInteract;
+    public float Slope => characterController.slopeLimit;
 
-    public Transform GetInteractChecks (int i)
+    public Transform GetInteractChecks(int i)
     {
         return interactChecksLR[i];
     }
@@ -71,21 +60,27 @@ public class Player : MonoBehaviour
     {
         transform.rotation = Quaternion.LookRotation(forward);
     }
-    public float Slope => characterController.slopeLimit;
 
-
-    public State GetState<State>() where State : PlayerState
+    public void AddState(PlayerState state)
     {
-        State stateInstance = stateInstances[typeof(State)] as State;
+        states[state.GetType()] = state;
+        state.enabled = false;
+    }
+
+    public T GetState<T>() where T : PlayerState
+    {
+        T stateInstance = states[typeof(T)] as T;
         return stateInstance;
     }
-    public void SwitchState<State>() where State : PlayerState
+    public void SwitchState<T>() where T : PlayerState
     {
-        PlayerState oldState = stateInstances[state.GetType()];
-        PlayerState newState = GetState<State>();
+        PlayerState state = GetState<T>();
 
-        oldState.Enter(newState);
-        state = newState;
+        this.state.Enter(state);
+        this.state.enabled = false;
+
+        this.state = state;
+        this.state.enabled = true;
     }
 
     private void Update()
@@ -115,5 +110,10 @@ public class Player : MonoBehaviour
             collisionUpdate?.Invoke(collisionHit, newCollision);
             collisionHit = null;
         }
+    }
+
+    private void OnDestroy()
+    {
+        actions.Disable();
     }
 }

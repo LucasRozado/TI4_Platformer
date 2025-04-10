@@ -1,10 +1,7 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-
-[CreateAssetMenu(fileName = nameof(PlayerState_Airbound), menuName = "Scriptable Objects/" + nameof(PlayerState) + "/" + nameof(PlayerState_Airbound))]
 public class PlayerState_Airbound : PlayerState
 {
     [SerializeField] private float movementSpeedInMetersPerSecond = 5f;

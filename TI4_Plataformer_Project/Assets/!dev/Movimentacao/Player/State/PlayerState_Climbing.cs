@@ -1,8 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-
-[CreateAssetMenu(fileName = nameof(PlayerState_Climbing), menuName = "Scriptable Objects/" + nameof(PlayerState) + "/" + nameof(PlayerState_Climbing))]
 public class PlayerState_Climbing : PlayerState
 {
     [SerializeField] private float movementSpeedInMetersPerSecond = 5f;

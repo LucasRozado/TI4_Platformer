@@ -1,24 +1,23 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public abstract partial class PlayerState : ScriptableObject
+[RequireComponent(typeof(Player))]
+public abstract partial class PlayerState : MonoBehaviour
 {
     protected Player player;
     private HashSet<Coroutine> coroutines;
 
-
-    public void Configure(Player player)
+    private void Awake()
     {
-        this.player = player;
         coroutines = new();
     }
-
-
-    protected void CoroutineUntilLeaveState(IEnumerator coroutineDefinition)
+    private void Start()
     {
-        StartCoroutine(coroutineDefinition);
+        player = GetComponent<Player>();
+        player.AddState(this);
     }
 
     public void Enter(PlayerState state)
@@ -30,29 +29,32 @@ public abstract partial class PlayerState : ScriptableObject
     {
         EnterState();
     }
-
     private void Exit()
     {
         ExitState();
         StopCoroutines();
     }
 
-    protected virtual void EnterState() { }
-    protected virtual void ExitState() { }
-    public abstract Vector3 CalculateVelocity(Vector2 movement, Vector3 gravity, Vector3 forward);
-
-
-    private void StartCoroutine(IEnumerator coroutineDefinition)
+    protected void CoroutineUntilLeaveState(IEnumerator coroutineDefinition)
     {
-        Coroutine coroutine = player.StartCoroutine(coroutineDefinition);
+        HandleCoroutine(coroutineDefinition);
+    }
+
+    private void HandleCoroutine(IEnumerator coroutineDefinition)
+    {
+        Coroutine coroutine = StartCoroutine(coroutineDefinition);
         coroutines.Add(coroutine);
     }
 
     private void StopCoroutines()
     {
         foreach (Coroutine coroutine in coroutines)
-        { player.StopCoroutine(coroutine); }
+        { StopCoroutine(coroutine); }
 
         coroutines.Clear();
     }
+
+    protected virtual void EnterState() { }
+    protected virtual void ExitState() { }
+    public abstract Vector3 CalculateVelocity(Vector2 movement, Vector3 gravity, Vector3 forward);
 }
