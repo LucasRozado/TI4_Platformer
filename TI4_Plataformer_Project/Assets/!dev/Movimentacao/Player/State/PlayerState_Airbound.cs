@@ -15,14 +15,7 @@ public class PlayerState_Airbound : PlayerState
 
         player.collisionUpdate += HandleCollisionUpdate;
 
-        //movementVelocity = new()
-        //{
-        //    x = player.Velocity.x,
-        //    y = player.Velocity.z,
-        //};
-        //gravityVelocity = player.Velocity.y;
-
-        CoroutineUntilLeaveState(HandleGravity_Coroutine());
+        HandleCoroutine(HandleGravity_Coroutine());
     }
 
     protected override void ExitState()
@@ -95,7 +88,7 @@ public class PlayerState_Airbound : PlayerState
         }
     }
 
-    public override Vector3 CalculateVelocity(Vector2 movement, Vector3 gravity, Vector3 forward)
+    protected override Vector3 CalculateVelocity(Vector2 movement, Vector3 gravity, Vector3 forward)
     {
         Quaternion rotation = Quaternion.LookRotation(forward);
 

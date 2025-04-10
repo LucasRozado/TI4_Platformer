@@ -49,7 +49,7 @@ public class PlayerState_Climbing : PlayerState
         HandleGrip();
     }
 
-private void HandleJump()
+    private void HandleJump()
     {
         player.Gravity = -player.Gravity;
 
@@ -83,7 +83,7 @@ private void HandleJump()
         player.Gravity = grip;
     }
 
-    public override Vector3 CalculateVelocity(Vector2 movement, Vector3 gravity, Vector3 forward)
+    protected override Vector3 CalculateVelocity(Vector2 movement, Vector3 gravity, Vector3 forward)
     {
         Quaternion rotation = Quaternion.LookRotation(gravity);
 

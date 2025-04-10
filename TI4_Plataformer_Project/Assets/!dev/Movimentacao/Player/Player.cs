@@ -22,11 +22,7 @@ public class Player : MonoBehaviour
 
     private InputSystem_Actions.PlayerActions actions;
     private CharacterController characterController;
-    private Dictionary<Type, PlayerState> states;
-    private void Awake()
-    {
-        states = new();
-    }
+    private readonly Dictionary<Type, PlayerState> states = new();
     private void Start()
     {
         actions = GameManager.Instance.Actions.Player;
@@ -83,24 +79,10 @@ public class Player : MonoBehaviour
         this.state.enabled = true;
     }
 
-    private void Update()
+    public void Move(Vector3 velocity)
     {
-        Vector3 velocity = CalculateVelocity(movementVelocity, gravityVelocity, forward);
-        Move(velocity);
-    }
-    private void OnControllerColliderHit(ControllerColliderHit hit)
-    {
-        collisionHit = hit;
-    }
+        this.velocity = velocity;
 
-    private Vector3 CalculateVelocity(Vector2 movement, Vector3 gravity, Vector3 forward)
-    {
-        velocity = state.CalculateVelocity(movement, gravity, forward);
-        return velocity;
-    }
-
-    private void Move(Vector3 velocity)
-    {
         CollisionFlags oldCollision = characterController.collisionFlags;
         CollisionFlags newCollision = characterController.Move(velocity * Time.deltaTime);
 
@@ -110,6 +92,11 @@ public class Player : MonoBehaviour
             collisionUpdate?.Invoke(collisionHit, newCollision);
             collisionHit = null;
         }
+    }
+
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        collisionHit = hit;
     }
 
     private void OnDestroy()

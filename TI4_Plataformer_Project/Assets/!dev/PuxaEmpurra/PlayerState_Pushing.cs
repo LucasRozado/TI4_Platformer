@@ -78,7 +78,7 @@ public class PlayerState_Pushing : PlayerState
         pushable.transform.parent = player.transform;
     }
 
-    public override Vector3 CalculateVelocity(Vector2 movement, Vector3 gravity, Vector3 forward)
+    protected override Vector3 CalculateVelocity(Vector2 movement, Vector3 gravity, Vector3 forward)
     {
         Quaternion rotation = Quaternion.LookRotation(forward);
 

@@ -1,7 +1,5 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent(typeof(Player))]
@@ -13,9 +11,7 @@ public abstract partial class PlayerState : MonoBehaviour
     private void Awake()
     {
         coroutines = new();
-    }
-    private void Start()
-    {
+
         player = GetComponent<Player>();
         player.AddState(this);
     }
@@ -28,19 +24,22 @@ public abstract partial class PlayerState : MonoBehaviour
     public void Enter()
     {
         EnterState();
+        this.enabled = true;
     }
     private void Exit()
     {
         ExitState();
         StopCoroutines();
+        this.enabled = false;
     }
 
-    protected void CoroutineUntilLeaveState(IEnumerator coroutineDefinition)
+    private void Update()
     {
-        HandleCoroutine(coroutineDefinition);
+        Vector3 velocity = CalculateVelocity(player.Movement, player.Gravity, player.Forward);
+        player.Move(velocity);
     }
 
-    private void HandleCoroutine(IEnumerator coroutineDefinition)
+    protected void HandleCoroutine(IEnumerator coroutineDefinition)
     {
         Coroutine coroutine = StartCoroutine(coroutineDefinition);
         coroutines.Add(coroutine);
@@ -56,5 +55,5 @@ public abstract partial class PlayerState : MonoBehaviour
 
     protected virtual void EnterState() { }
     protected virtual void ExitState() { }
-    public abstract Vector3 CalculateVelocity(Vector2 movement, Vector3 gravity, Vector3 forward);
+    protected abstract Vector3 CalculateVelocity(Vector2 movement, Vector3 gravity, Vector3 forward);
 }

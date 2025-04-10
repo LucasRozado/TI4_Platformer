@@ -34,7 +34,6 @@ public class PlayerState_Grounded : PlayerState
         player.collisionUpdate -= HandleCollisionUpdate;
     }
 
-
     private void HandleMovement_InputAction(InputAction.CallbackContext context)
     {
         Vector2 input = context.ReadValue<Vector2>();
@@ -75,7 +74,7 @@ public class PlayerState_Grounded : PlayerState
         player.SwitchState<PlayerState_Airbound>();
     }
 
-    public override Vector3 CalculateVelocity(Vector2 movement, Vector3 gravity, Vector3 forward)
+    protected override Vector3 CalculateVelocity(Vector2 movement, Vector3 gravity, Vector3 forward)
     {
         Quaternion rotation = Quaternion.LookRotation(forward);
 
@@ -85,8 +84,6 @@ public class PlayerState_Grounded : PlayerState
             z = movement.y,
         };
         velocityBuffer = rotation * velocityBuffer;
-
-        
 
         if (movement != Vector2.zero)
         {
