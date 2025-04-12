@@ -21,12 +21,13 @@ public class CPInteraction : Interactable
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        CheckActivation(); //TODO change sprite do include drawing
     }
-
-    // Update is called once per frame
-    void Update()
+    public void CheckActivation()
     {
-        
+        if (!CPManager.instance.VerifyCheckPoint(info))
+        {
+            isActive = true;
+        }
     }
 }
