@@ -116,4 +116,9 @@ public class Player : MonoBehaviour
             collisionHit = null;
         }
     }
+
+    public void ToggleController(bool toggle)
+    {
+        characterController.enabled = toggle;
+    }
 }
