@@ -18,7 +18,7 @@ public class CPButton : MonoBehaviour
             player.ToggleController(false);
             player.gameObject.transform.position = checkpoint.spawnPosition;
             player.ToggleController(true);
-            UIManager.instance.CloseFastTravel();
+            UIManager.instance.fastTravelScreen.CloseFastTravel();
         }
     }
 
@@ -32,6 +32,6 @@ public class CPButton : MonoBehaviour
 
     public void PrepareTravel()
     {
-        UIManager.instance.PrepareFastTravel(this);
+        UIManager.instance.fastTravelScreen.PrepareFastTravel(this);
     }
 }
