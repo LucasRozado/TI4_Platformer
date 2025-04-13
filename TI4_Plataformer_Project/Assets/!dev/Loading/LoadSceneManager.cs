@@ -1,17 +1,36 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class LoadSceneManager : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public static LoadSceneManager instance;
+
+    private void Awake()
     {
-        
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+
+    }
+    public void LoadAssync(int sceneId)
+    {
+        StartCoroutine(LoadScene(sceneId));
     }
 
-    // Update is called once per frame
-    void Update()
+    public IEnumerator LoadScene(int sceneId)
     {
-        
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneId);
+
+        // Wait until the asynchronous scene fully loads
+        while (!asyncLoad.isDone)
+        {
+            yield return null;
+        }    
     }
 }

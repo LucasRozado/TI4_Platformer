@@ -9,18 +9,8 @@ public class LoadTrigger : MonoBehaviour
     {
         if (other.gameObject.layer == 7)
         {
-            StartCoroutine(LoadScene());
-        }
-    }
-
-    public IEnumerator LoadScene()
-    {
-        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneToGo);
-
-        // Wait until the asynchronous scene fully loads
-        while (!asyncLoad.isDone)
-        {
-            yield return null;
+            LoadSceneManager.instance.LoadAssync(sceneToGo);
+            Destroy(gameObject);
         }
     }
 }
