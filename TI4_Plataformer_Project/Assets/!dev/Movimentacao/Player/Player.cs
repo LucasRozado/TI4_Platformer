@@ -7,6 +7,7 @@ using UnityEditor;
 [RequireComponent(typeof(CharacterController))]
 public class Player : MonoBehaviour
 {
+    public static Player instance;
     [SerializeField] private PlayerState[] possibleStates;
 
     [Header("Observables")]
@@ -23,6 +24,19 @@ public class Player : MonoBehaviour
     private Dictionary<Type, PlayerState> stateInstances;
     private InputSystem_Actions.PlayerActions actions;
     private CharacterController characterController;
+
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+        DontDestroyOnLoad(gameObject);
+    }
     private void Start()
     {
         stateInstances = new();
@@ -115,5 +129,10 @@ public class Player : MonoBehaviour
             collisionUpdate?.Invoke(collisionHit, newCollision);
             collisionHit = null;
         }
+    }
+
+    public void ToggleController(bool toggle)
+    {
+        characterController.enabled = toggle;
     }
 }
