@@ -10,14 +10,16 @@ public class CPButton : MonoBehaviour
         if (checkpoint.scene != SceneManager.GetActiveScene().buildIndex)
         {
             SceneManager.LoadScene(checkpoint.scene);
-            FindFirstObjectByType<Player>().transform.position = checkpoint.spawnPosition;
+            Player.instance.ToggleController(false);
+            Player.instance.gameObject.transform.position = checkpoint.spawnPosition;
+            Player.instance.ToggleController(true);
+
         }
         else
         {
-            Player player = FindFirstObjectByType<Player>();
-            player.ToggleController(false);
-            player.gameObject.transform.position = checkpoint.spawnPosition;
-            player.ToggleController(true);
+            Player.instance.ToggleController(false);
+            Player.instance.gameObject.transform.position = checkpoint.spawnPosition;
+            Player.instance.ToggleController(true);
             UIManager.instance.fastTravelScreen.CloseFastTravel();
         }
     }
