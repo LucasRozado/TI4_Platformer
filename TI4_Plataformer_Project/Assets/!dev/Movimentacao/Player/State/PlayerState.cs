@@ -7,13 +7,11 @@ public abstract partial class PlayerState : MonoBehaviour
 {
     protected Player player;
     private HashSet<Coroutine> coroutines;
-
     private void Awake()
     {
         coroutines = new();
 
         player = GetComponent<Player>();
-        player.AddState(this);
     }
 
     public void Enter(PlayerState state)

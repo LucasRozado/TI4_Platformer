@@ -30,9 +30,36 @@ public class Player : MonoBehaviour
 
         forward = transform.forward;
 
+        // Inicializando o Character Controller
         characterController = GetComponent<CharacterController>();
 
-        state.Enter();
+        // Inicializando a máquina de estados
+        PlayerState[] states = GetComponents<PlayerState>();
+        if (states.Length > 0)
+        {
+            foreach (PlayerState state in states)
+            {
+                // Guardando a referência para cada estado
+                this.states[state.GetType()] = state;
+
+                // Iniciando com o primeiro estado marcado como ativo e desabilitando os outros
+                if (this.state != null)
+                { state.enabled = false; }
+                else if (state.enabled)
+                { this.state = state; }
+            }
+
+            // Se nenhum estado estava ativo, inicia com o primeiro da lista
+            if (this.state != null)
+            {
+                this.state = states[0];
+                this.state.enabled = true;
+            }
+
+            state.Enter();
+        }
+        else
+        { this.state = null; }
     }
 
     public Action<ControllerColliderHit, CollisionFlags> collisionUpdate;
@@ -55,12 +82,6 @@ public class Player : MonoBehaviour
     public void Look(Vector3 forward)
     {
         transform.rotation = Quaternion.LookRotation(forward);
-    }
-
-    public void AddState(PlayerState state)
-    {
-        states[state.GetType()] = state;
-        state.enabled = false;
     }
 
     public T GetState<T>() where T : PlayerState
