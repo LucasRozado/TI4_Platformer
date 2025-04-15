@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
 using JetBrains.Annotations;
-
 public enum CollectableType { Jungle, Cave, Canion, Spiritual}
 public class GameManager : MonoBehaviour
 {
@@ -10,10 +9,8 @@ public class GameManager : MonoBehaviour
 
     private InputSystem_Actions actions;
 
-    public static Vector3 playerSpawnPosition;
-    
-    public int[] collectableScore = new int[4];
-    public bool[,] hasCollected = new bool[4, 100];
+    public static Vector3 playerSpawnPosition;    
+    private CollectableData collectableData;
 
 
     private void Awake()
@@ -29,7 +26,9 @@ public class GameManager : MonoBehaviour
 
         actions = new InputSystem_Actions();
 
-        hasCollected[0, 13] = true;
+        collectableData = new CollectableData();
+        //collectableData.Save();
+        collectableData.LoadCollectables();
     }
 
     public static void SetSpawnPosition(Vector3 newSpawnPosition)
@@ -40,13 +39,56 @@ public class GameManager : MonoBehaviour
 
     public void AddCollectable(CollectableType type, int number)
     {
-        collectableScore[(int)type]++;
-        hasCollected[(int)type, number] = true;
+        collectableData.collectableScore[(int)type]++;
+
+        switch (type)
+        {
+            case CollectableType.Jungle:
+                {
+                    collectableData.jungleCollected[number] = true;
+                    break;
+                }
+            case CollectableType.Cave:
+                {
+                    collectableData.caveCollected[number] = true;
+                    break;
+                }
+            case CollectableType.Canion:
+                {
+                    collectableData.canionCollected[number] = true;
+                    break;
+                }
+            case CollectableType.Spiritual:
+                {
+                    collectableData.spiritualCollected[number] = true;
+                    break;
+                }
+        }
     }
 
     public bool VerifyIfCollected(CollectableType type, int number)
     {
-        return hasCollected[(int)type, number];
+        switch (type)
+        {
+            case CollectableType.Jungle:
+                {
+                    return collectableData.jungleCollected[number];
+                }
+            case CollectableType.Cave:
+                {
+                    return collectableData.caveCollected[number];
+                }
+            case CollectableType.Canion:
+                {
+                    return collectableData.canionCollected[number];
+                }
+            case CollectableType.Spiritual:
+                {
+                    return collectableData.spiritualCollected[number];
+                }
+            default:
+                return false;
+        }
     }
 
     public void UpdateCollectables(Collectable[] list)
@@ -62,5 +104,10 @@ public class GameManager : MonoBehaviour
             }
         }
         Debug.Log("UpdateDone");
+    }
+
+    private void OnDestroy()
+    {
+        SaveManager.Save(SaveType.Collectables, collectableData);
     }
 }
