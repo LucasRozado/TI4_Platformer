@@ -3,26 +3,14 @@ using UnityEngine;
 using System.IO;
 using System;
 [Serializable]
-public class CPManager : MonoBehaviour
+public class CPManager
 {
-    public static CPManager instance;
-    public List<CPInfo> availableCheckpoints;
-    public List<int> availableIDs;
+    private List<CPInfo> availableCheckpoints = new List<CPInfo>();
+    public List<int> availableIDs = new List<int>();
     private Dictionary<int,  CPInfo> allCheckpoints = new Dictionary<int, CPInfo>();
-    [Header("Add all checkpoint info")]
-    public List<CPInfo> allCheckpointsToAdd;
 
-    private void Awake()
+    public void Awake()
     {
-        if (instance == null)
-        {
-            instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-        DontDestroyOnLoad(gameObject);
         CreateDictionary();
         LoadCheckPoints();
         UpdateList(); //TODO check save files for List<int> of available checkpoints
@@ -65,17 +53,11 @@ public class CPManager : MonoBehaviour
 
     public void CreateDictionary()
     {
-        foreach (CPInfo info in allCheckpointsToAdd)
+        foreach (CPInfo info in GameManager.Instance.allCheckpointsToAdd)
         {
             Debug.Log(info.ID + " " + info.name);
             allCheckpoints.Add(info.ID, info);
         }
-    }
-
-    public void OnDestroy()
-    {
-        SaveManager.Save(SaveType.CheckPoints, this);
-        Debug.Log("Saving Checkpoints");
     }
 
     public void LoadCheckPoints()

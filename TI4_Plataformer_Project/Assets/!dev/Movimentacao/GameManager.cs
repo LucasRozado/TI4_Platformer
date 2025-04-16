@@ -11,6 +11,10 @@ public class GameManager : MonoBehaviour
 
     public static Vector3 playerSpawnPosition;    
     private CollectableData collectableData;
+    public CPManager checkpointManager;
+
+    [Header("Add all checkpoint info")]
+    public List<CPInfo> allCheckpointsToAdd;
 
 
     private void Awake()
@@ -29,6 +33,9 @@ public class GameManager : MonoBehaviour
         collectableData = new CollectableData();
         //collectableData.Save();
         collectableData.LoadCollectables();
+
+        checkpointManager = new CPManager();
+        checkpointManager.Awake();
     }
 
     public static void SetSpawnPosition(Vector3 newSpawnPosition)
@@ -109,5 +116,6 @@ public class GameManager : MonoBehaviour
     private void OnDestroy()
     {
         SaveManager.Save(SaveType.Collectables, collectableData);
+        SaveManager.Save(SaveType.CheckPoints, checkpointManager);
     }
 }

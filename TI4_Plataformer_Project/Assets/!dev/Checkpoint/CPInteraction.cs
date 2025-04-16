@@ -11,7 +11,7 @@ public class CPInteraction : Interactable
         if (!isActive)
         {
             isActive = true;
-            CPManager.instance.AddCheckPoint(info);
+            GameManager.Instance.checkpointManager.AddCheckPoint(info);
         }
         else
         {
@@ -23,11 +23,11 @@ public class CPInteraction : Interactable
     void Start()
     {
         info.spawnPosition = spawnPosition.position;
-        CheckActivation(); //TODO change sprite do include drawing
+        CheckActivation(); //TODO change game object sprite do include drawing
     }
     public void CheckActivation()
     {
-        if (CPManager.instance.VerifyCheckPoint(info))
+        if (GameManager.Instance.checkpointManager.VerifyCheckPoint(info))
         {
             isActive = true;    
         }
