@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class PlayerState_Grounded : PlayerState
 {
@@ -8,62 +7,26 @@ public class PlayerState_Grounded : PlayerState
 
     private readonly Vector3 gravityDirection = Physics.gravity.normalized;
 
+    public override void Initialize()
+    {
+        BindInputUpdate(player.Input.Movement, HandleMovement);
+
+        BindInputStart(player.Input.Jump, HandleJump);
+        BindInputStart(player.Input.Interact, HandleInteraction);
+    }
     protected override void EnterState()
     {
-        player.Actions.Move.performed += HandleMovement_InputAction;
-        player.Actions.Move.canceled += HandleMovement_InputAction;
-
-        player.Actions.Jump.performed += HandleJump_InputAction;
-
-        player.Actions.Interact.performed += HandleInteraction;
-
-        player.collisionUpdate += HandleCollisionUpdate;
-
         HandleGravity();
     }
-
     protected override void ExitState()
     {
-        player.Actions.Move.performed -= HandleMovement_InputAction;
-        player.Actions.Move.canceled -= HandleMovement_InputAction;
 
-        player.Actions.Interact.performed -= HandleInteraction;
-
-        player.Actions.Jump.performed -= HandleJump_InputAction;
-
-        player.collisionUpdate -= HandleCollisionUpdate;
-    }
-
-    private void HandleMovement_InputAction(InputAction.CallbackContext context)
-    {
-        Vector2 input = context.ReadValue<Vector2>();
-        HandleMovement(input);
-    }
-    private void HandleJump_InputAction(InputAction.CallbackContext context)
-    {
-        HandleJump();
-    }
-
-    private void HandleCollisionUpdate(ControllerColliderHit hit, CollisionFlags flags)
-    {
-        if (!flags.HasFlag(CollisionFlags.Below))
-        {
-            player.SwitchState<PlayerState_Airbound>();
-        }
     }
 
     private void HandleMovement(Vector2 input)
-    {      
+    {
         Vector2 movementVelocity = input * movementSpeedInMetersPerSecond;
         player.Movement = movementVelocity;
-    }
-
-    private void HandleGravity()
-    {
-        float gravityForce = movementSpeedInMetersPerSecond / Mathf.Tan(player.Slope);
-
-        Vector3 gravityVelocity = gravityDirection * gravityForce;
-        player.Gravity = gravityVelocity;
     }
 
     private void HandleJump()
@@ -72,6 +35,38 @@ public class PlayerState_Grounded : PlayerState
         player.Gravity = gravityVelocity;
 
         player.SwitchState<PlayerState_Airbound>();
+    }
+
+    private void HandleInteraction()
+    {
+        Debug.Log("Interaction");
+        Transform checkL = player.GetInteractChecks(0);
+        Transform checkR = player.GetInteractChecks(1);
+        RaycastHit hitL;
+        RaycastHit hitR;
+
+        Physics.Raycast(checkL.position, checkL.forward, out hitL, player.InteractDistance, player.CanInteract);
+        Physics.Raycast(checkR.position, checkR.forward, out hitR, player.InteractDistance, player.CanInteract);
+
+        Debug.Log(hitL.collider);
+        Debug.Log(hitR.collider);
+        if (hitL.collider != null && hitL.collider == hitR.collider)
+        {
+            Debug.Log("Target acquired");
+            if (hitL.collider.TryGetComponent(out Interactable interactable))
+            {
+                interactable.InteractWith(player);
+                Debug.Log("Interact Done");
+            }
+        }
+    }
+
+    private void HandleGravity()
+    {
+        float gravityForce = movementSpeedInMetersPerSecond / Mathf.Tan(player.Slope);
+
+        Vector3 gravityVelocity = gravityDirection * gravityForce;
+        player.Gravity = gravityVelocity;
     }
 
     protected override Vector3 CalculateVelocity(Vector2 movement, Vector3 gravity, Vector3 forward)
@@ -89,7 +84,7 @@ public class PlayerState_Grounded : PlayerState
         {
             Vector3 cameraForward = Camera.main.transform.forward;
             cameraForward.y = 0;
-            player.Forward = cameraForward; 
+            player.Forward = cameraForward;
             player.Look(velocityBuffer);
         }
 
@@ -99,27 +94,11 @@ public class PlayerState_Grounded : PlayerState
         return velocity;
     }
 
-    private void HandleInteraction(InputAction.CallbackContext context)
+    protected override void HandleCollisionUpdate(Player.ControllerCollision collision)
     {
-        Debug.Log("Interaction");
-        Transform checkL = player.GetInteractChecks(0);
-        Transform checkR = player.GetInteractChecks(1);
-        RaycastHit hitL;
-        RaycastHit hitR;
-
-        Physics.Raycast(checkL.position, checkL.forward, out hitL, player.InteractDistance, player.CanInteract);
-        Physics.Raycast(checkR.position, checkR.forward, out hitR, player.InteractDistance, player.CanInteract);
-
-        Debug.Log(hitL.collider);
-        Debug.Log(hitR.collider);
-        if (hitL.collider != null && hitL.collider == hitR.collider)
+        if (!collision.flags.HasFlag(CollisionFlags.Below))
         {
-            Debug.Log("Target acquired");
-            if (hitL.collider.TryGetComponent<Interactable>(out Interactable interactable))
-            {
-                interactable.InteractWith(player);
-                Debug.Log("Interact Done");
-            }
+            player.SwitchState<PlayerState_Airbound>();
         }
     }
 }

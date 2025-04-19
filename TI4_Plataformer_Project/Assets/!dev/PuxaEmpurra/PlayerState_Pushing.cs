@@ -1,9 +1,4 @@
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
-using UnityEngine.Windows;
-
-[CreateAssetMenu(fileName = nameof(PlayerState_Pushing), menuName = "Scriptable Objects/" + nameof(PlayerState) + "/" + nameof(PlayerState_Pushing))]
 
 public class PlayerState_Pushing : PlayerState
 {
@@ -12,43 +7,19 @@ public class PlayerState_Pushing : PlayerState
 
     private readonly Vector3 gravityDirection = Physics.gravity.normalized;
 
+    public override void Initialize()
+    {
+        BindInputUpdate(player.Input.Movement, HandleMovement);
+        BindInputStart(player.Input.Interact, HandleInteraction);
+    }
     protected override void EnterState()
     {
-        player.Actions.Move.performed += HandleMovement_InputAction;
-        player.Actions.Move.canceled += HandleMovement_InputAction;
-
-        player.Actions.Interact.performed += HandleInteraction;
-
-        player.collisionUpdate += HandleCollisionUpdate;
-
-
         HandleObject();
         HandleGravity();
     }
-
     protected override void ExitState()
     {
-        player.Actions.Move.performed -= HandleMovement_InputAction;
-        player.Actions.Move.canceled -= HandleMovement_InputAction;
-
-        player.Actions.Interact.performed -= HandleInteraction;
-
-        player.collisionUpdate -= HandleCollisionUpdate;
-
         pushable.transform.parent = null;
-    }
-    private void HandleMovement_InputAction(InputAction.CallbackContext context)
-    {
-        Vector2 input = context.ReadValue<Vector2>();
-        HandleMovement(input);
-    }
-
-    private void HandleCollisionUpdate(ControllerColliderHit hit, CollisionFlags flags)
-    {
-        if (!flags.HasFlag(CollisionFlags.Below))
-        {
-            player.SwitchState<PlayerState_Airbound>();
-        }
     }
 
     private void HandleMovement(Vector2 input)
@@ -57,6 +28,11 @@ public class PlayerState_Pushing : PlayerState
         
         Vector2 movementVelocity = input * movementSpeedInMetersPerSecond;
         player.Movement = movementVelocity;
+    }
+
+    private void HandleInteraction()
+    {
+        player.SwitchState<PlayerState_Grounded>();
     }
 
     private void HandleGravity()
@@ -102,8 +78,11 @@ public class PlayerState_Pushing : PlayerState
         return velocity;
     }
 
-    private void HandleInteraction(InputAction.CallbackContext context)
+    protected override void HandleCollisionUpdate(Player.ControllerCollision collision)
     {
-        player.SwitchState<PlayerState_Grounded>();
+        if (!collision.flags.HasFlag(CollisionFlags.Below))
+        {
+            player.SwitchState<PlayerState_Airbound>();
+        }
     }
 }

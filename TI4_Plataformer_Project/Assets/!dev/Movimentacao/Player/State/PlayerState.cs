@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,12 +7,28 @@ using UnityEngine;
 public abstract partial class PlayerState : MonoBehaviour
 {
     protected Player player;
-    private HashSet<Coroutine> coroutines;
+
+    private Action onEnter;
+    private Action onExit;
+
+    private readonly HashSet<Coroutine> coroutines = new();
+
     private void Awake()
     {
-        coroutines = new();
+        this.player = GetComponent<Player>();
 
-        player = GetComponent<Player>();
+        onEnter += EnterState;
+
+        onExit += ExitState;
+        onExit += StopCoroutines;
+    }
+
+    private void Update()
+    {
+        Vector3 velocity = CalculateVelocity(player.Movement, player.Gravity, player.Forward);
+        Player.ControllerCollision collision = player.Move(velocity);
+
+        HandleCollisionUpdate(collision);
     }
 
     public void Enter(PlayerState state)
@@ -19,22 +36,32 @@ public abstract partial class PlayerState : MonoBehaviour
         this.Exit();
         state.Enter();
     }
+
     public void Enter()
     {
-        EnterState();
+        onEnter();
         this.enabled = true;
     }
     private void Exit()
     {
-        ExitState();
-        StopCoroutines();
+        onExit();
         this.enabled = false;
     }
 
-    private void Update()
+    protected void BindInputStart<TValue>(PlayerInput.InputHandler<TValue> input, Action handler) where TValue : struct
     {
-        Vector3 velocity = CalculateVelocity(player.Movement, player.Gravity, player.Forward);
-        player.Move(velocity);
+        onEnter += () => input.OnStart += handler;
+        onExit += () => input.OnStart -= handler;
+    }
+    protected void BindInputCancel<TValue>(PlayerInput.InputHandler<TValue> input, Action handler) where TValue : struct
+    {
+        onEnter += () => input.OnCancel += handler;
+        onExit += () => input.OnCancel -= handler;
+    }
+    protected void BindInputUpdate<TValue>(PlayerInput.InputHandler<TValue> input, Action<TValue> handler) where TValue : struct
+    {
+        onEnter += () => input.OnUpdate += handler;
+        onExit += () => input.OnUpdate -= handler;
     }
 
     protected void HandleCoroutine(IEnumerator coroutineDefinition)
@@ -42,7 +69,6 @@ public abstract partial class PlayerState : MonoBehaviour
         Coroutine coroutine = StartCoroutine(coroutineDefinition);
         coroutines.Add(coroutine);
     }
-
     private void StopCoroutines()
     {
         foreach (Coroutine coroutine in coroutines)
@@ -51,7 +77,9 @@ public abstract partial class PlayerState : MonoBehaviour
         coroutines.Clear();
     }
 
-    protected virtual void EnterState() { }
-    protected virtual void ExitState() { }
+    public abstract void Initialize();
+    protected abstract void EnterState();
+    protected abstract void ExitState();
     protected abstract Vector3 CalculateVelocity(Vector2 movement, Vector3 gravity, Vector3 forward);
+    protected abstract void HandleCollisionUpdate(Player.ControllerCollision collision);
 }

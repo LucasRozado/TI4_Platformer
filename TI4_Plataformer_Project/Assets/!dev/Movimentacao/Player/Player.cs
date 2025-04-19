@@ -8,37 +8,42 @@ using UnityEngine.InputSystem.LowLevel;
 [RequireComponent(typeof(CharacterController))]
 public class Player : MonoBehaviour
 {
+    [Header("Interaction")]
+    [SerializeField] private Transform[] interactChecksLR;
+    [SerializeField] private float interactDistance = 0.3f;
+    [SerializeField] private LayerMask canInteract;
+
     [Header("Observables")]
     [SerializeField] private PlayerState state;
     [SerializeField] private Vector3 velocity;
     [SerializeField] private Vector3 forward;
     [SerializeField] private Vector2 movementVelocity;
     [SerializeField] private Vector3 gravityVelocity;
-    [SerializeField] private ControllerColliderHit collisionHit;
 
-    [SerializeField] private Transform[] interactChecksLR;
-    [SerializeField] private float interactDistance = 0.3f;
-    [SerializeField] private LayerMask canInteract;
-
-    private InputSystem_Actions.PlayerActions actions;
+    private PlayerInput input;
     private CharacterController characterController;
-    private readonly Dictionary<Type, PlayerState> states = new();
-    private void Start()
-    {
-        actions = GameManager.Instance.Actions.Player;
-        actions.Enable();
 
+    private readonly Dictionary<Type, PlayerState> states = new();
+    private readonly ControllerCollision lastCollision = new();
+    private void Awake()
+    {
         forward = transform.forward;
 
-        // Inicializando o Character Controller
         characterController = GetComponent<CharacterController>();
-
+    }
+    private void Start()
+    {
+        input = new PlayerInput(GameManager.Instance.Actions);
+        
         // Inicializando a máquina de estados
         PlayerState[] states = GetComponents<PlayerState>();
         if (states.Length > 0)
         {
             foreach (PlayerState state in states)
             {
+                // Inicializando cada estado
+                state.Initialize();
+
                 // Guardando a referência para cada estado
                 this.states[state.GetType()] = state;
 
@@ -56,6 +61,7 @@ public class Player : MonoBehaviour
                 this.state.enabled = true;
             }
 
+            // Iniciando o primeiro estado
             state.Enter();
         }
         else
@@ -64,7 +70,7 @@ public class Player : MonoBehaviour
 
     public Action<ControllerColliderHit, CollisionFlags> collisionUpdate;
 
-    public InputSystem_Actions.PlayerActions Actions => actions;
+    public PlayerInput Input => input;
     public PlayerState State => state;
     public Vector3 Velocity => velocity;
     public Vector3 Forward { get => forward; set => forward = value; }
@@ -100,28 +106,25 @@ public class Player : MonoBehaviour
         this.state.enabled = true;
     }
 
-    public void Move(Vector3 velocity)
+    public ControllerCollision Move(Vector3 velocity)
     {
         this.velocity = velocity;
 
-        CollisionFlags oldCollision = characterController.collisionFlags;
-        CollisionFlags newCollision = characterController.Move(velocity * Time.deltaTime);
+        CollisionFlags oldCollisionFlags = characterController.collisionFlags;
+        CollisionFlags newCollisionFlags = characterController.Move(velocity * Time.deltaTime);
+        // [OnControllerColliderHit] é chamado no [Move] caso haja colisão
+        lastCollision.flags = newCollisionFlags;
 
-        bool didCollisionUpdate = collisionHit != null || oldCollision != newCollision;
-        if (didCollisionUpdate)
-        {
-            collisionUpdate?.Invoke(collisionHit, newCollision);
-            collisionHit = null;
-        }
+        return lastCollision;
     }
-
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
-        collisionHit = hit;
+        lastCollision.hit = hit;
     }
 
-    private void OnDestroy()
+    public class ControllerCollision
     {
-        actions.Disable();
+        public CollisionFlags flags;
+        public ControllerColliderHit hit;
     }
 }

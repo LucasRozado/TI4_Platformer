@@ -1,6 +1,5 @@
-using System.Collections;
 using UnityEngine;
-using UnityEngine.InputSystem;
+using System.Collections;
 
 public class PlayerState_Airbound : PlayerState
 {
@@ -8,46 +7,18 @@ public class PlayerState_Airbound : PlayerState
     [SerializeField] private float rotationSpeedInDegreesPerSeconds = 270f;
     [SerializeField] private float terminalVelocityInMetersPerSecond = 10f;
 
+
+    public override void Initialize()
+    {
+        BindInputUpdate(player.Input.Movement, HandleMovement);
+    }
     protected override void EnterState()
     {
-        player.Actions.Move.performed += HandleMovement_InputAction;
-        player.Actions.Move.canceled += HandleMovement_InputAction;
-
-        player.collisionUpdate += HandleCollisionUpdate;
-
         HandleCoroutine(HandleGravity_Coroutine());
     }
-
     protected override void ExitState()
     {
-        player.Actions.Move.performed -= HandleMovement_InputAction;
-        player.Actions.Move.canceled -= HandleMovement_InputAction;
 
-        player.collisionUpdate -= HandleCollisionUpdate;
-    }
-
-    private void HandleCollisionUpdate(ControllerColliderHit hit, CollisionFlags flags)
-    {
-        if (flags.HasFlag(CollisionFlags.Below))
-        {
-            player.SwitchState<PlayerState_Grounded>();
-        }
-        else if (hit != null && hit.gameObject.CompareTag("CanClimb"))
-        {
-            float angle = player.GetState<PlayerState_Climbing>().MaxHorizontalAngle_InDegrees;
-            // Comparando o ângulo entre a frente do jogador e a normal da parede
-            if (Mathf.Abs(Vector3.Dot(player.Forward, hit.normal)) > Mathf.Cos(angle * Mathf.Deg2Rad))
-            {
-                player.Look(-hit.normal);
-                player.SwitchState<PlayerState_Climbing>();
-            }
-        }
-    }
-
-    private void HandleMovement_InputAction(InputAction.CallbackContext context)
-    {
-        Vector2 input = context.ReadValue<Vector2>();
-        HandleMovement(input);
     }
 
     private void HandleMovement(Vector2 input)
@@ -106,5 +77,26 @@ public class PlayerState_Airbound : PlayerState
 
         Vector3 velocity = velocityBuffer;
         return velocity;
+    }
+
+    protected override void HandleCollisionUpdate(Player.ControllerCollision collision)
+    {
+        if (collision.flags == CollisionFlags.None) return;
+
+        if (collision.flags.HasFlag(CollisionFlags.Below))
+        {
+            player.SwitchState<PlayerState_Grounded>();
+        }
+
+        else if (collision.hit != null && collision.hit.gameObject.CompareTag("CanClimb"))
+        {
+            float angle = player.GetState<PlayerState_Climbing>().MaxHorizontalAngle_InDegrees;
+            // Comparando o ângulo entre a frente do jogador e a normal da parede
+            if (Mathf.Abs(Vector3.Dot(player.Forward, collision.hit.normal)) > Mathf.Cos(angle * Mathf.Deg2Rad))
+            {
+                player.Look(-collision.hit.normal);
+                player.SwitchState<PlayerState_Climbing>();
+            }
+        }
     }
 }

@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class PlayerState_Climbing : PlayerState
 {
@@ -13,35 +12,19 @@ public class PlayerState_Climbing : PlayerState
     public float MaxHorizontalAngle_InDegrees => maxHorizontalAngleInDegrees;
     public float HandsReach => Mathf.Sin(maxHorizontalAngleInDegrees * Mathf.Deg2Rad);
 
-
+    public override void Initialize()
+    {
+        BindInputUpdate(player.Input.Movement, HandleMovement);
+        BindInputStart(player.Input.Jump, HandleJump);
+    }
     protected override void EnterState()
     {
-        player.Actions.Move.performed += HandleMovement_InputAction;
-        player.Actions.Move.canceled += HandleMovement_InputAction;
 
-        player.Actions.Jump.performed += HandleJump_InputAction;
     }
-
     protected override void ExitState()
     {
-        player.Actions.Move.performed -= HandleMovement_InputAction;
-        player.Actions.Move.canceled -= HandleMovement_InputAction;
 
-        player.Actions.Jump.performed -= HandleJump_InputAction;
     }
-
-
-    private void HandleMovement_InputAction(InputAction.CallbackContext context)
-    {
-        Vector2 input = context.ReadValue<Vector2>();
-        HandleMovement(input);
-    }
-
-    private void HandleJump_InputAction(InputAction.CallbackContext context)
-    {
-        HandleJump();
-    }
-
 
     private void HandleMovement(Vector2 input)
     {
@@ -97,5 +80,10 @@ public class PlayerState_Climbing : PlayerState
 
         Vector3 velocity = velocityBuffer;
         return velocity;
+    }
+
+    protected override void HandleCollisionUpdate(Player.ControllerCollision collision)
+    {
+
     }
 }
