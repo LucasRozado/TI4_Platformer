@@ -39,7 +39,7 @@ public class PlayerState_Airbound : PlayerState
 
     private IEnumerator HandleGravity_Coroutine()
     {
-        float gravityStrength = Physics.gravity.magnitude;
+        float gravityStrength = 27.5f;
         Vector3 gravityDirection = Physics.gravity.normalized;
 
         while (true)

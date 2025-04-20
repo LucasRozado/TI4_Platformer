@@ -31,10 +31,8 @@ public class PlayerState_Grounded : PlayerState
 
     private void HandleJump()
     {
-        Vector3 gravityVelocity = gravityDirection * -jumpStrengthInMetersPerSecond;
-        player.Gravity = gravityVelocity;
-
-        player.SwitchState<PlayerState_Airbound>();
+        Debug.Log("Ground Jump");
+        player.SwitchState<PlayerState_Jump>();
     }
 
     private void HandleInteraction()

@@ -23,7 +23,7 @@ public abstract partial class PlayerState : MonoBehaviour
         onExit += StopCoroutines;
     }
 
-    private void Update()
+    protected virtual void Update()
     {
         Vector3 velocity = CalculateVelocity(player.Movement, player.Gravity, player.Forward);
         Player.ControllerCollision collision = player.Move(velocity);

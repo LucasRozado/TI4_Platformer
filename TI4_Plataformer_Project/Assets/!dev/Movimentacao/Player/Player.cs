@@ -72,6 +72,7 @@ public class Player : MonoBehaviour
         }
         else
         { this.state = null; }
+
     }
 
     public Action<ControllerColliderHit, CollisionFlags> collisionUpdate;
