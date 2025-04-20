@@ -9,7 +9,7 @@ public class Player : MonoBehaviour
 {
     public static Player instance;
     [SerializeField] private PlayerState[] possibleStates;
-
+    
     [Header("Observables")]
     [SerializeField] private PlayerState state;
     [SerializeField] private Vector3 velocity;
@@ -24,6 +24,7 @@ public class Player : MonoBehaviour
     private Dictionary<Type, PlayerState> stateInstances;
     private InputSystem_Actions.PlayerActions actions;
     private CharacterController characterController;
+    public Animator animator;
 
     private void Awake()
     {
@@ -52,6 +53,7 @@ public class Player : MonoBehaviour
         actions.Enable();
 
         characterController = GetComponent<CharacterController>();
+        animator = GetComponentInChildren<Animator>();
 
         if (possibleStates != null && possibleStates.Length > 0)
         {

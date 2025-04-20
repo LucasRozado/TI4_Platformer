@@ -13,7 +13,18 @@ public class PlayerState_Grounded : PlayerState
 
     protected override void EnterState()
     {
+        player.animator.SetBool("isAirBourne", false);
+        if (player.Velocity.x != 0 || player.Velocity.z != 0)
+        {
+            player.animator.SetBool("isWalking", true);
+        }
+        else
+        {
+            player.animator.SetBool("isIdleGround", true);
+        }
+
         player.Actions.Move.performed += HandleMovement_InputAction;
+
         player.Actions.Move.canceled += HandleMovement_InputAction;
 
         player.Actions.Jump.performed += HandleJump_InputAction;
@@ -28,6 +39,8 @@ public class PlayerState_Grounded : PlayerState
 
     protected override void ExitState()
     {
+        player.animator.SetBool("isIdleGround", false);
+
         player.Actions.Move.performed -= HandleMovement_InputAction;
         player.Actions.Move.canceled -= HandleMovement_InputAction;
 
@@ -46,6 +59,7 @@ public class PlayerState_Grounded : PlayerState
     }
     private void HandleJump_InputAction(InputAction.CallbackContext context)
     {
+        player.animator.SetTrigger("jump");
         HandleJump();
     }
 
@@ -60,6 +74,16 @@ public class PlayerState_Grounded : PlayerState
     private void HandleMovement(Vector2 input)
     {      
         Vector2 movementVelocity = input * movementSpeedInMetersPerSecond;
+        if(movementVelocity == Vector2.zero)
+        {
+            player.animator.SetBool("isIdleGround", true);
+            player.animator.SetBool("isWalking", false);
+        }
+        else
+        {
+            player.animator.SetBool("isIdleGround", false);
+            player.animator.SetBool("isWalking", true);
+        }
         player.Movement = movementVelocity;
     }
 
