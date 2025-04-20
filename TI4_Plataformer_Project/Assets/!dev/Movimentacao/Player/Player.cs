@@ -8,12 +8,12 @@ using UnityEngine.InputSystem.LowLevel;
 [RequireComponent(typeof(CharacterController))]
 public class Player : MonoBehaviour
 {
+    public static Player instance;
+
     [Header("Interaction")]
     [SerializeField] private Transform[] interactChecksLR;
     [SerializeField] private float interactDistance = 0.3f;
     [SerializeField] private LayerMask canInteract;
-    public static Player instance;
-    [SerializeField] private PlayerState[] possibleStates;
 
     [Header("Observables")]
     [SerializeField] private PlayerState state;
@@ -24,36 +24,17 @@ public class Player : MonoBehaviour
 
     private PlayerInput input;
     private CharacterController characterController;
-
-    private void Awake()
-    {
-        if (instance == null)
-        {
-            instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-        DontDestroyOnLoad(gameObject);
-    }
-    private void Start()
-    {
-        stateInstances = new();
-        foreach (PlayerState state in possibleStates)
-        {
-            Type stateType = state.GetType();
-            PlayerState stateInstance = ScriptableObject.CreateInstance(stateType) as PlayerState;
-            stateInstances.Add(stateType, stateInstance);
-            stateInstance.Configure(this);
-        }
-
     private readonly Dictionary<Type, PlayerState> states = new();
     private readonly ControllerCollision lastCollision = new();
     private void Awake()
     {
-        forward = transform.forward;
+        if (instance == null)
+        { instance = this; }
+        else
+        { Destroy(gameObject); }
+        DontDestroyOnLoad(gameObject);
 
+        forward = transform.forward;
         characterController = GetComponent<CharacterController>();
     }
     private void Start()
@@ -135,7 +116,6 @@ public class Player : MonoBehaviour
     {
         this.velocity = velocity;
 
-        CollisionFlags oldCollisionFlags = characterController.collisionFlags;
         CollisionFlags newCollisionFlags = characterController.Move(velocity * Time.deltaTime);
         // [OnControllerColliderHit] � chamado no [Move] caso haja colis�o
         lastCollision.flags = newCollisionFlags;
