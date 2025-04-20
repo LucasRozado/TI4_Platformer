@@ -12,6 +12,8 @@ public class Player : MonoBehaviour
     [SerializeField] private Transform[] interactChecksLR;
     [SerializeField] private float interactDistance = 0.3f;
     [SerializeField] private LayerMask canInteract;
+    public static Player instance;
+    [SerializeField] private PlayerState[] possibleStates;
 
     [Header("Observables")]
     [SerializeField] private PlayerState state;
@@ -22,6 +24,29 @@ public class Player : MonoBehaviour
 
     private PlayerInput input;
     private CharacterController characterController;
+
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+        DontDestroyOnLoad(gameObject);
+    }
+    private void Start()
+    {
+        stateInstances = new();
+        foreach (PlayerState state in possibleStates)
+        {
+            Type stateType = state.GetType();
+            PlayerState stateInstance = ScriptableObject.CreateInstance(stateType) as PlayerState;
+            stateInstances.Add(stateType, stateInstance);
+            stateInstance.Configure(this);
+        }
 
     private readonly Dictionary<Type, PlayerState> states = new();
     private readonly ControllerCollision lastCollision = new();
@@ -35,7 +60,7 @@ public class Player : MonoBehaviour
     {
         input = new PlayerInput(GameManager.Instance.Actions);
         
-        // Inicializando a máquina de estados
+        // Inicializando a mï¿½quina de estados
         PlayerState[] states = GetComponents<PlayerState>();
         if (states.Length > 0)
         {
@@ -44,7 +69,7 @@ public class Player : MonoBehaviour
                 // Inicializando cada estado
                 state.Initialize();
 
-                // Guardando a referência para cada estado
+                // Guardando a referï¿½ncia para cada estado
                 this.states[state.GetType()] = state;
 
                 // Iniciando com o primeiro estado marcado como ativo e desabilitando os outros
@@ -112,7 +137,7 @@ public class Player : MonoBehaviour
 
         CollisionFlags oldCollisionFlags = characterController.collisionFlags;
         CollisionFlags newCollisionFlags = characterController.Move(velocity * Time.deltaTime);
-        // [OnControllerColliderHit] é chamado no [Move] caso haja colisão
+        // [OnControllerColliderHit] ï¿½ chamado no [Move] caso haja colisï¿½o
         lastCollision.flags = newCollisionFlags;
 
         return lastCollision;
@@ -126,5 +151,10 @@ public class Player : MonoBehaviour
     {
         public CollisionFlags flags;
         public ControllerColliderHit hit;
+    }
+
+    public void ToggleController(bool toggle)
+    {
+        characterController.enabled = toggle;
     }
 }
