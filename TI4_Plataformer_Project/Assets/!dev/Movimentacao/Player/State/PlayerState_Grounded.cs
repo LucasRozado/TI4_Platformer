@@ -9,6 +9,7 @@ public class PlayerState_Grounded : PlayerState
 
     public override void Initialize()
     {
+        BindInputStart(player.Input.Sprint, HandleSprint);
         BindInputUpdate(player.Input.Movement, HandleMovement);
 
         BindInputStart(player.Input.Jump, HandleJump);
@@ -23,14 +24,42 @@ public class PlayerState_Grounded : PlayerState
 
     }
 
+    private void HandleSprint()
+    {
+        Debug.Log("Sprint");
+        player.Animator.SetBool("isWalking", false);
+        player.Animator.SetBool("isIdleGround", false);
+        player.Animator.SetBool("isSprintingIdle", true);
+        player.Animator.SetTrigger("fall");
+        
+        player.SwitchState<PlayerState_GroundedRunning>();
+    }
     private void HandleMovement(Vector2 input)
     {
+        if (input != Vector2.zero)
+        {
+            player.Animator.SetBool("isWalking", true);
+            player.Animator.SetBool("isIdleGround", false);
+        }
+        else
+        {
+            player.Animator.SetBool("isWalking", false);
+            player.Animator.SetBool("isIdleGround", true);
+        }
+
         Vector2 movementVelocity = input * movementSpeedInMetersPerSecond;
         player.Movement = movementVelocity;
     }
 
     private void HandleJump()
     {
+        player.Animator.SetBool("isWalking", false);
+        player.Animator.SetBool("isIdleGround", false);
+        player.Animator.SetBool("isSprinting", false);
+        player.Animator.SetBool("isSprintingIdle", false);
+
+        player.Animator.SetTrigger("jump");
+
         Debug.Log("Ground Jump");
         player.SwitchState<PlayerState_Jump>();
     }

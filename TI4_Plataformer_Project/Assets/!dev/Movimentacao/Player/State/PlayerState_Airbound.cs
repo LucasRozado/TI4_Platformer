@@ -7,9 +7,12 @@ public class PlayerState_Airbound : PlayerState
     [SerializeField] private float rotationSpeedInDegreesPerSeconds = 270f;
     [SerializeField] private float terminalVelocityInMetersPerSecond = 10f;
 
+    [SerializeField] private bool isSprinting = false;
+
 
     public override void Initialize()
     {
+        BindInputUpdate(player.Input.Sprint, HandleSprint);
         BindInputUpdate(player.Input.Movement, HandleMovement);
     }
     protected override void EnterState()
@@ -29,6 +32,17 @@ public class PlayerState_Airbound : PlayerState
         Vector2 movementVelocity = input * movementSpeedInMetersPerSecond;
         player.Movement = movementVelocity;
     }
+    private void HandleSprint(float input)
+    {
+        if (input >= 1f)
+        {
+            isSprinting = true;
+        }
+        else
+        {
+            isSprinting = false;
+        }
+    }
 
     private void HandleForward()
     {
@@ -44,6 +58,8 @@ public class PlayerState_Airbound : PlayerState
 
         while (true)
         {
+            player.Animator.SetBool("isAirBourne", true);
+
             float currentGravity = Vector3.Dot(player.Gravity, gravityDirection);
             if (currentGravity < terminalVelocityInMetersPerSecond)
             {
@@ -85,13 +101,48 @@ public class PlayerState_Airbound : PlayerState
 
         if (collision.flags.HasFlag(CollisionFlags.Below))
         {
-            player.SwitchState<PlayerState_Grounded>();
+            if (isSprinting)
+            {
+                if (player.Velocity.x != 0f || player.Velocity.z != 0f)
+                {
+                    player.Animator.SetBool("isSprintingIdle", false);
+                    player.Animator.SetBool("isSprinting", true);
+                    player.Animator.SetBool("isWalking", false);
+                    player.Animator.SetBool("isIdleGround", false);
+                }
+                else
+                {
+                    player.Animator.SetBool("isSprintingIdle", true);
+                    player.Animator.SetBool("isSprinting", false);
+                    player.Animator.SetBool("isWalking", false);
+                    player.Animator.SetBool("isIdleGround", false);
+                }
+                
+                player.Animator.SetTrigger("land");
+                player.Animator.SetBool("isAirBourne", false);
+                player.SwitchState<PlayerState_GroundedRunning>();
+            }
+            else
+            {
+                player.Animator.SetBool("isSprinting", false);
+                player.Animator.SetBool("isSprintingIdle", false);
+
+                if (player.Velocity.x != 0 || player.Velocity.z != 0)
+                { player.Animator.SetBool("isWalking", true); player.Animator.SetBool("isIdleGround", false); }
+                else
+                { player.Animator.SetBool("isWalking", false); player.Animator.SetBool("isIdleGround", true); }
+                
+                player.Animator.SetTrigger("land");
+                player.Animator.SetBool("isAirBourne", false);
+
+                player.SwitchState<PlayerState_Grounded>();
+            }
         }
 
         else if (collision.hit != null && collision.hit.gameObject.CompareTag("CanClimb"))
         {
             float angle = player.GetState<PlayerState_Climbing>().MaxHorizontalAngle_InDegrees;
-            // Comparando o ângulo entre a frente do jogador e a normal da parede
+            // Comparando o ï¿½ngulo entre a frente do jogador e a normal da parede
             if (Mathf.Abs(Vector3.Dot(player.Forward, collision.hit.normal)) > Mathf.Cos(angle * Mathf.Deg2Rad))
             {
                 player.Look(-collision.hit.normal);

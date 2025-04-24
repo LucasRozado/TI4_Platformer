@@ -15,11 +15,13 @@ public class PlayerInput
     }
     private void InitializeHandlers()
     {
+        Sprint = new(actions.Sprint);
         Movement = new(actions.Move);
         Jump = new(actions.Jump);
         Interact = new(actions.Interact);
     }
 
+    public InputHandler<float> Sprint;
     public InputHandler<Vector2> Movement;
     public InputHandler<float> Jump;
     public InputHandler<float> Interact;

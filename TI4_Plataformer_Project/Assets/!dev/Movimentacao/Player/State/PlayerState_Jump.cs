@@ -10,6 +10,8 @@ public class PlayerState_Jump : PlayerState
     private float initialJumpVelocity = 4f;
     private float jumpGravity = -13.75f;
 
+    [SerializeField] private bool isSprinting = false;
+
     private readonly Vector3 gravityDirection = Physics.gravity.normalized;
     public override void Initialize()
     {
@@ -74,7 +76,10 @@ public class PlayerState_Jump : PlayerState
                 player.Gravity = currentGravity * Vector3.up;
 
                 if (currentGravity <= 0)
-                { player.SwitchState<PlayerState_Airbound>(); }
+                { 
+                    player.SwitchState<PlayerState_Airbound>(); 
+                    player.Animator.SetBool("isAirBourne", true);
+                }
             }
 
             yield return null;
@@ -92,13 +97,20 @@ public class PlayerState_Jump : PlayerState
 
         if (collision.flags.HasFlag(CollisionFlags.Below))
         {
-            player.SwitchState<PlayerState_Grounded>();
+            if (isSprinting)
+            {
+                player.SwitchState<PlayerState_GroundedRunning>();
+            }
+            else
+            {
+                player.SwitchState<PlayerState_Grounded>();
+            }
         }
 
         else if (collision.hit != null && collision.hit.gameObject.CompareTag("CanClimb"))
         {
             float angle = player.GetState<PlayerState_Climbing>().MaxHorizontalAngle_InDegrees;
-            // Comparando o ângulo entre a frente do jogador e a normal da parede
+            // Comparando o ï¿½ngulo entre a frente do jogador e a normal da parede
             if (Mathf.Abs(Vector3.Dot(player.Forward, collision.hit.normal)) > Mathf.Cos(angle * Mathf.Deg2Rad))
             {
                 player.Look(-collision.hit.normal);
