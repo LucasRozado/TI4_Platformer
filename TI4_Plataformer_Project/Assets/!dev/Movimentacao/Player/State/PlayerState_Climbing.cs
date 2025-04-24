@@ -41,18 +41,14 @@ public class PlayerState_Climbing : PlayerState
 
     private void HandleGrip()
     {
-        Vector3 up = Quaternion.LookRotation(Vector3.up) * player.Forward;
-        Vector3 right = Quaternion.LookRotation(Vector3.right) * player.Forward;
-
-        Vector3 handsCenterPosition = player.transform.position + up * handsHeight;
-        Vector3 handLeftPosition = handsCenterPosition - right * handsDistance;
-        Vector3 handRightPosition = handsCenterPosition + right * handsDistance;
+        Vector3 handLeftPosition = player.GetInteractChecks(0).position;
+        Vector3 handRightPosition = player.GetInteractChecks(1).position;
 
         Ray handLeftGrip = new(handLeftPosition, player.Forward);
         Ray handRightGrip = new(handRightPosition, player.Forward);
 
         bool leftHandHit = Physics.Raycast(handLeftGrip, out RaycastHit leftHandInfo, HandsReach);
-        bool rightHandHit = Physics.Raycast(handLeftGrip, out RaycastHit rightHandInfo, HandsReach);
+        bool rightHandHit = Physics.Raycast(handRightGrip, out RaycastHit rightHandInfo, HandsReach);
 
         Vector3 grip = player.Forward;
 

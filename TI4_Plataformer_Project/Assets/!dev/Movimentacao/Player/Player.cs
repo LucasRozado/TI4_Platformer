@@ -26,6 +26,7 @@ public class Player : MonoBehaviour
     private CharacterController characterController;
     private readonly Dictionary<Type, PlayerState> states = new();
     private readonly ControllerCollision lastCollision = new();
+    private ControllerColliderHit collisionHitBuffer;
     private void Awake()
     {
         if (instance == null)
@@ -117,15 +118,35 @@ public class Player : MonoBehaviour
     {
         this.velocity = velocity;
 
-        CollisionFlags newCollisionFlags = characterController.Move(velocity * Time.deltaTime);
+        CollisionFlags collisionFlags = characterController.Move(velocity * Time.deltaTime);
         // [OnControllerColliderHit] � chamado no [Move] caso haja colis�o
-        lastCollision.flags = newCollisionFlags;
+        lastCollision.flags = collisionFlags;
 
         return lastCollision;
+    }
+    public delegate void CollisionHandler(CollisionFlags flags, ControllerColliderHit hit);
+    public void Move(Vector3 velocity, CollisionHandler onFlagsUpdate = null, CollisionHandler onCollision = null)
+    {
+        this.velocity = velocity;
+
+        CollisionFlags lastCollisionFlags = characterController.collisionFlags;
+        CollisionFlags collisionFlags = characterController.Move(velocity * Time.deltaTime);
+        // [OnControllerColliderHit] eh chamado no [Move] caso haja colisao
+
+        if (lastCollisionFlags != collisionFlags && onFlagsUpdate != null)
+        {
+            onFlagsUpdate(collisionFlags, collisionHitBuffer);
+        }
+        else if (collisionHitBuffer != null && onCollision != null)
+        {
+            onCollision(collisionFlags, collisionHitBuffer);
+            collisionHitBuffer = null;
+        }
     }
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
         lastCollision.hit = hit;
+        collisionHitBuffer = hit;
     }
 
     public class ControllerCollision

@@ -4,9 +4,9 @@ using System.Collections;
 public class PlayerState_Airbound : PlayerState
 {
     [SerializeField] private float movementSpeedInMetersPerSecond = 5f;
-    [SerializeField] private float rotationSpeedInDegreesPerSeconds = 270f;
-    [SerializeField] private float terminalVelocityInMetersPerSecond = 10f;
 
+    [SerializeField] private float jumpDefaultFallTimeInSeconds = 0.2f;
+    [SerializeField] private float terminalVelocityInMetersPerSecond = 10f;
 
     public override void Initialize()
     {
