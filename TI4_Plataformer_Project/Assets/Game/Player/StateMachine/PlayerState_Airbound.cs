@@ -14,11 +14,46 @@ public class PlayerState_Airbound : PlayerState
     }
     protected override void EnterState()
     {
+        player.animator.SetBool("isAirBourne", true);
+        player.animator.SetBool("isIdleGround", false);
+        player.animator.SetBool("isWalking", false);
+        //movementVelocity = new()
+        //{
+        //    x = player.Velocity.x,
+        //    y = player.Velocity.z,
+        //};
+        //gravityVelocity = player.Velocity.y;
+
         HandleCoroutine(HandleGravity_Coroutine());
     }
     protected override void ExitState()
     {
+        player.animator.SetBool("isAirBourne", false);
+        player.animator.SetTrigger("land");
+    }
 
+    private void HandleCollisionUpdate(ControllerColliderHit hit, CollisionFlags flags)
+    {
+        if (flags.HasFlag(CollisionFlags.Below))
+        {
+            player.SwitchState<PlayerState_Grounded>();
+        }
+        else if (hit != null && hit.gameObject.CompareTag("CanClimb"))
+        {
+            float angle = player.GetState<PlayerState_Climbing>().MaxHorizontalAngle_InDegrees;
+            // Comparando o ï¿½ngulo entre a frente do jogador e a normal da parede
+            if (Mathf.Abs(Vector3.Dot(player.Forward, hit.normal)) > Mathf.Cos(angle * Mathf.Deg2Rad))
+            {
+                player.Look(-hit.normal);
+                player.SwitchState<PlayerState_Climbing>();
+            }
+        }
+    }
+
+    private void HandleMovement_InputAction(InputAction.CallbackContext context)
+    {
+        Vector2 input = context.ReadValue<Vector2>();
+        HandleMovement(input);
     }
 
     private void HandleMovement(Vector2 input)
@@ -27,6 +62,7 @@ public class PlayerState_Airbound : PlayerState
         { HandleForward(); }
 
         Vector2 movementVelocity = input * movementSpeedInMetersPerSecond;
+
         player.Movement = movementVelocity;
     }
 
@@ -45,6 +81,9 @@ public class PlayerState_Airbound : PlayerState
         while (true)
         {
             float currentGravity = Vector3.Dot(player.Gravity, gravityDirection);
+            
+            player.animator.SetBool("isAirBourne", true);
+
             if (currentGravity < terminalVelocityInMetersPerSecond)
             {
                 float gravityAcceleration = gravityStrength * Time.deltaTime;
@@ -91,7 +130,7 @@ public class PlayerState_Airbound : PlayerState
         else if (collision.hit != null && collision.hit.gameObject.CompareTag("CanClimb"))
         {
             float angle = player.GetState<PlayerState_Climbing>().MaxHorizontalAngle_InDegrees;
-            // Comparando o ângulo entre a frente do jogador e a normal da parede
+            // Comparando o ï¿½ngulo entre a frente do jogador e a normal da parede
             if (Mathf.Abs(Vector3.Dot(player.Forward, collision.hit.normal)) > Mathf.Cos(angle * Mathf.Deg2Rad))
             {
                 player.Look(-collision.hit.normal);
