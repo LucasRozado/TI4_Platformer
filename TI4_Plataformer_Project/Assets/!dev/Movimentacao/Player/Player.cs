@@ -48,10 +48,7 @@ public class Player : MonoBehaviour
         {
             foreach (PlayerState state in states)
             {
-                // Inicializando cada estado
-                state.Initialize();
-
-                // Guardando a refer�ncia para cada estado
+                // Guardando a referencia para cada estado
                 this.states[state.GetType()] = state;
 
                 // Iniciando com o primeiro estado marcado como ativo e desabilitando os outros
@@ -65,8 +62,12 @@ public class Player : MonoBehaviour
             if (this.state != null)
             {
                 this.state = states[0];
-                this.state.enabled = true;
             }
+
+            // Inicializando os estados
+            // (Precisa ser em outro loop para caso os estados precisem acessar uns aos outros)
+            foreach (PlayerState state in states)
+            { state.Initialize(); }
 
             // Iniciando o primeiro estado
             state.Enter();
@@ -88,14 +89,20 @@ public class Player : MonoBehaviour
     public LayerMask CanInteract => canInteract;
     public float Slope => characterController.slopeLimit;
 
+    public Transform LeftInteractionChecker => interactChecksLR[0];
+    public Transform RightInteractionChecker => interactChecksLR[1];
     public Transform GetInteractChecks(int i)
     {
         return interactChecksLR[i];
     }
 
+    public void Look(Quaternion forward)
+    {
+        transform.rotation = forward;
+    }
     public void Look(Vector3 forward)
     {
-        transform.rotation = Quaternion.LookRotation(forward);
+        Look(Quaternion.LookRotation(forward));
     }
 
     public T GetState<T>() where T : PlayerState
@@ -103,15 +110,20 @@ public class Player : MonoBehaviour
         T stateInstance = states[typeof(T)] as T;
         return stateInstance;
     }
+    public void GetState<T>(out T state) where T : PlayerState
+    {
+        state = GetState<T>();
+    }
     public void SwitchState<T>() where T : PlayerState
     {
         PlayerState state = GetState<T>();
-
-        this.state.Enter(state);
-        this.state.enabled = false;
-
+        SwitchState(state);
+    }
+    public void SwitchState(PlayerState state)
+    {
+        this.state.Exit();
         this.state = state;
-        this.state.enabled = true;
+        this.state.Enter();
     }
 
     public ControllerCollision Move(Vector3 velocity)

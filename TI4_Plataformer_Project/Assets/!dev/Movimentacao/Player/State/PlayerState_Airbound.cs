@@ -3,100 +3,149 @@ using System.Collections;
 
 public class PlayerState_Airbound : PlayerState
 {
-    [SerializeField] private float movementSpeedInMetersPerSecond = 5f;
+    [Header("Values")]
 
-    [SerializeField] private float jumpDefaultFallTimeInSeconds = 0.2f;
-    [SerializeField] private float terminalVelocityInMetersPerSecond = 10f;
+    [SerializeField, Tooltip("In meters per second")]
+    private float movementSpeed = 5f;
 
+    [SerializeField, Tooltip("In meters per seconds")]
+    private float terminalVelocity = 10f;
+
+    [Header("Observables")]
+
+    [Tooltip("In meters per second per second")]
+    private float gravityAcceleration;
+
+    [SerializeField, Tooltip("In meters per second")]
+    private Vector2 directionalVelocity;
+
+    [Tooltip("In meters per second")]
+    public float verticalVelocity;
+
+
+    private PlayerState_Jump jump;
     public override void Initialize()
     {
-        BindInputUpdate(player.Input.Movement, HandleMovement);
+        player.GetState(out jump);
+
+        BindInputStart(player.Input.Jump, HandleCoyoteJump);
     }
+
     protected override void EnterState()
     {
-        HandleCoroutine(HandleGravity_Coroutine());
+        CalculateParameters();
+
+        verticalVelocity = 0;
     }
+
+    private void CalculateParameters()
+    {
+        gravityAcceleration = (2f * jump.DefaultHeight) / -Mathf.Pow(jump.DefaultFallTime, 2);
+    }
+
+    private void HandleCoyoteJump()
+    {
+        if (jump.IsOnCoyoteTime)
+        { player.SwitchState(jump); }
+    }
+
+    private void Update()
+    {
+        UpdateMovement();
+        UpdateGravity();
+
+        RotatePlayer();
+
+        Vector3 velocity = CalculateVelocity();
+        player.Move(velocity,
+            onCollision: HandleCollision
+        );
+    }
+
+    private void UpdateMovement()
+    {
+        Vector2 directionalInput = player.Input.Movement.Value;
+
+        Vector3 cameraDirection = Camera.main.transform.forward;
+        cameraDirection.y = 0;
+
+        Quaternion rotation;
+        if (cameraDirection != Vector3.zero)
+        { rotation = Quaternion.Euler(0, 0, -Camera.main.transform.rotation.eulerAngles.y); }
+        else
+        { rotation = Quaternion.identity; }
+
+        Vector2 movementVelocity = rotation * (directionalInput * movementSpeed);
+        directionalVelocity = movementVelocity;
+    }
+
+    private void UpdateGravity()
+    {
+        if (verticalVelocity > -terminalVelocity)
+        {
+            float velocityFromGravity = gravityAcceleration * Time.deltaTime;
+            verticalVelocity += velocityFromGravity;
+
+            if (verticalVelocity < -terminalVelocity)
+            { verticalVelocity = -terminalVelocity; }
+        }
+    }
+
+    private void RotatePlayer()
+    {
+        if (directionalVelocity != Vector2.zero)
+        {
+            Vector3 lookDirection = new()
+            {
+                x = directionalVelocity.x,
+                y = 0,
+                z = directionalVelocity.y,
+            };
+            player.Look(lookDirection);
+        }
+    }
+
+    private Vector3 CalculateVelocity()
+    {
+        Vector3 velocity = new()
+        {
+            x = directionalVelocity.x,
+            y = verticalVelocity,
+            z = directionalVelocity.y,
+        };
+
+        return velocity;
+    }
+
+    private void HandleCollision(CollisionFlags flags, ControllerColliderHit hit)
+    {
+        bool hitGround = flags.HasFlag(CollisionFlags.Below);
+        if (hitGround)
+        {
+            player.SwitchState<PlayerState_Grounded>();
+            return;
+        }
+
+        bool hitWall = flags.HasFlag(CollisionFlags.Sides);
+        if (hitWall && hit.gameObject.TryGetComponent<ClimbWall>(out _))
+        {
+            player.Look(-hit.normal);
+            player.SwitchState<PlayerState_Climbing>();
+        }
+    }
+
     protected override void ExitState()
     {
 
     }
 
-    private void HandleMovement(Vector2 input)
-    {
-        if (player.Forward == Vector3.zero)
-        { HandleForward(); }
-
-        Vector2 movementVelocity = input * movementSpeedInMetersPerSecond;
-        player.Movement = movementVelocity;
-    }
-
-    private void HandleForward()
-    {
-        Vector3 forward = Camera.main.transform.forward;
-        forward.y = 0;
-        player.Forward = forward;
-    }
-
-    private IEnumerator HandleGravity_Coroutine()
-    {
-        float gravityStrength = 27.5f;
-        Vector3 gravityDirection = Physics.gravity.normalized;
-
-        while (true)
-        {
-            float currentGravity = Vector3.Dot(player.Gravity, gravityDirection);
-            if (currentGravity < terminalVelocityInMetersPerSecond)
-            {
-                float gravityAcceleration = gravityStrength * Time.deltaTime;
-                currentGravity += gravityAcceleration;
-                if (currentGravity > terminalVelocityInMetersPerSecond)
-                { currentGravity = terminalVelocityInMetersPerSecond; }
-
-                player.Gravity = currentGravity * gravityDirection;
-            }
-
-            yield return null;
-        }
-    }
-
     protected override Vector3 CalculateVelocity(Vector2 movement, Vector3 gravity, Vector3 forward)
     {
-        Quaternion rotation = Quaternion.LookRotation(forward);
-
-        Vector3 velocityBuffer = new()
-        {
-            x = movement.x,
-            z = movement.y,
-        };
-        velocityBuffer = rotation * velocityBuffer;
-
-        if (movement != Vector2.zero)
-        { player.Look(velocityBuffer); }
-
-        velocityBuffer += rotation * gravity;
-
-        Vector3 velocity = velocityBuffer;
-        return velocity;
+        throw new System.NotImplementedException();
     }
 
     protected override void HandleCollisionUpdate(Player.ControllerCollision collision)
     {
-        if (collision.flags == CollisionFlags.None) return;
-
-        if (collision.flags.HasFlag(CollisionFlags.Below))
-        {
-            player.SwitchState<PlayerState_Grounded>();
-        }
-
-        else if (collision.hit != null && collision.hit.gameObject.CompareTag("CanClimb"))
-        {
-            float angle = player.GetState<PlayerState_Climbing>().MaxHorizontalAngle_InDegrees;
-            // Comparando o ângulo entre a frente do jogador e a normal da parede
-            if (Mathf.Abs(Vector3.Dot(player.Forward, collision.hit.normal)) > Mathf.Cos(angle * Mathf.Deg2Rad))
-            {
-                player.Look(-collision.hit.normal);
-                player.SwitchState<PlayerState_Climbing>();
-            }
-        }
+        throw new System.NotImplementedException();
     }
 }

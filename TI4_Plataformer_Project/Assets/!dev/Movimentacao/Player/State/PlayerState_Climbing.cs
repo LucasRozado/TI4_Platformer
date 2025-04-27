@@ -2,84 +2,141 @@ using UnityEngine;
 
 public class PlayerState_Climbing : PlayerState
 {
-    [SerializeField] private float movementSpeedInMetersPerSecond = 5f;
-    [SerializeField] private float jumpStrengthInMetersPerSecond = 2f;
+    [Header("Values")]
 
-    [SerializeField, Range(0, 90)] private float maxHorizontalAngleInDegrees = 30f;
-    [SerializeField] private float handsDistance = 0.4f;
-    [SerializeField] private float handsHeight = 1.5f;
+    [SerializeField, Tooltip("In meters per second")]
+    private float movementSpeed = 5f;
 
-    public float MaxHorizontalAngle_InDegrees => maxHorizontalAngleInDegrees;
-    public float HandsReach => Mathf.Sin(maxHorizontalAngleInDegrees * Mathf.Deg2Rad);
+    public float MaxHorizontalAngle => maxHorizontalAngle;
+    [SerializeField, Range(0, 90), Tooltip("In degrees")]
+    private float maxHorizontalAngle = 30f;
 
+    [Header("Observables")]
+
+    [SerializeField, Tooltip("In meters per second")]
+    private Vector2 directionalVelocity;
+
+    [Tooltip("In meters")]
+    private float gripReach;
+
+    [SerializeField, Tooltip("In degrees")]
+    private float wallDirection;
+
+
+    private PlayerState_Jump jump;
     public override void Initialize()
     {
-        BindInputUpdate(player.Input.Movement, HandleMovement);
+        jump = player.GetState<PlayerState_Jump>();
+
+        gripReach = Mathf.Sin(maxHorizontalAngle * Mathf.Deg2Rad);
+
         BindInputStart(player.Input.Jump, HandleJump);
     }
+
     protected override void EnterState()
     {
-
+        wallDirection = player.transform.rotation.eulerAngles.y;
     }
+
+    private void HandleJump()
+    {
+        player.SwitchState<PlayerState_Jump>();
+    }
+
+    private void Update()
+    {
+        UpdateMovement();
+        UpdateGrip();
+
+        RotatePlayer();
+
+        Vector3 velocity = CalculateVelocity();
+        player.Move(velocity);
+
+        CheckForFall();
+    }
+
+    private void UpdateMovement()
+    {
+        Vector2 directionalInput = player.Input.Movement.Value;
+
+        Vector2 movementVelocity = directionalInput * movementSpeed;
+        directionalVelocity = movementVelocity;
+    }
+
+    private void CalculateGrip(out Ray leftGrip, out Ray rightGrip, out float distanceBetweenGrips)
+    {
+        Transform leftInteractionChecker = player.LeftInteractionChecker;
+        Transform rightInteractionChecker = player.RightInteractionChecker;
+
+        distanceBetweenGrips = Vector3.Distance(leftInteractionChecker.position, rightInteractionChecker.position);
+
+        leftGrip = new(leftInteractionChecker.position, leftInteractionChecker.forward);
+        rightGrip = new(rightInteractionChecker.position, rightInteractionChecker.forward);
+    }
+
+    private void UpdateGrip()
+    {
+        CalculateGrip(out Ray leftGrip, out Ray rightGrip, out float distanceBetweenGrips);
+
+        bool leftGripHits = Physics.Raycast(leftGrip, out RaycastHit leftGripHit, gripReach);
+        bool rightGripHits = Physics.Raycast(rightGrip, out RaycastHit rightGripHit, gripReach);
+
+        if (leftGripHits && rightGripHits)
+        {
+            float angle = Mathf.Atan2((leftGripHit.distance - rightGripHit.distance), (distanceBetweenGrips)) * Mathf.Rad2Deg;
+
+            if (Vector3.Dot(leftGripHit.normal, rightGripHit.normal) > Mathf.Cos(Mathf.Deg2Rad * maxHorizontalAngle))
+            { wallDirection += angle; }
+            else if (Mathf.Sign(directionalVelocity.x) == Mathf.Sign(angle))
+            { directionalVelocity.x = 0; }
+        }
+    }
+
+    private void CheckForFall()
+    {
+        CalculateGrip(out Ray leftGrip, out Ray rightGrip, out _);
+
+        bool leftGripHits = Physics.Raycast(leftGrip, gripReach);
+        bool rightGripHits = Physics.Raycast(rightGrip, gripReach);
+
+        if (!leftGripHits && !rightGripHits)
+        {
+            player.SwitchState<PlayerState_Airbound>();
+            jump.StartCoyoteTimer();
+        }
+    }
+
+    private void RotatePlayer()
+    {
+        Quaternion rotation = Quaternion.Euler(0, wallDirection, 0);
+        player.Look(rotation);
+    }
+
+    private Vector3 CalculateVelocity()
+    {
+        Vector3 velocity = player.transform.rotation * new Vector3()
+        {
+            x = directionalVelocity.x,
+            y = directionalVelocity.y,
+            z = 0,
+        };
+
+        return velocity;
+    }
+
     protected override void ExitState()
     {
 
     }
 
-    private void HandleMovement(Vector2 input)
-    {
-        player.Movement = input * movementSpeedInMetersPerSecond;
-        HandleGrip();
-    }
-
-    private void HandleJump()
-    {
-        player.Gravity = -player.Gravity;
-
-        player.SwitchState<PlayerState_Airbound>();
-    }
-
-    private void HandleGrip()
-    {
-        Vector3 handLeftPosition = player.GetInteractChecks(0).position;
-        Vector3 handRightPosition = player.GetInteractChecks(1).position;
-
-        Ray handLeftGrip = new(handLeftPosition, player.Forward);
-        Ray handRightGrip = new(handRightPosition, player.Forward);
-
-        bool leftHandHit = Physics.Raycast(handLeftGrip, out RaycastHit leftHandInfo, HandsReach);
-        bool rightHandHit = Physics.Raycast(handRightGrip, out RaycastHit rightHandInfo, HandsReach);
-
-        Vector3 grip = player.Forward;
-
-        if (leftHandHit && rightHandHit)
-        {
-            float angle = Mathf.Atan2((rightHandInfo.distance - leftHandInfo.distance), (handsDistance * 2)) * Mathf.Rad2Deg;
-            Quaternion rotation = Quaternion.Euler(0f, angle / 2, 0f);
-            grip = rotation * player.Forward;
-        }
-
-        player.Gravity = grip;
-    }
-
     protected override Vector3 CalculateVelocity(Vector2 movement, Vector3 gravity, Vector3 forward)
     {
-        Quaternion rotation = Quaternion.LookRotation(gravity);
-
-        Vector3 velocityBuffer = new()
-        {
-            x = movement.x,
-            y = movement.y,
-        };
-        velocityBuffer += gravity;
-        velocityBuffer = rotation * velocityBuffer;
-
-        Vector3 velocity = velocityBuffer;
-        return velocity;
+        throw new System.NotImplementedException();
     }
 
     protected override void HandleCollisionUpdate(Player.ControllerCollision collision)
     {
-
+        throw new System.NotImplementedException();
     }
 }

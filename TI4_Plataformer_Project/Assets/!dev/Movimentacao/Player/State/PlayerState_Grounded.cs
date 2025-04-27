@@ -1,38 +1,107 @@
+using System.Collections;
 using UnityEngine;
 
 public class PlayerState_Grounded : PlayerState
 {
-    [SerializeField] private float movementSpeedInMetersPerSecond = 5f;
-    [SerializeField] private float jumpStrengthInMetersPerSecond = 5f;
+    [Header("Values")]
 
-    private readonly Vector3 gravityDirection = Physics.gravity.normalized;
+    [SerializeField, Tooltip("In meters per second")]
+    private float movementSpeed = 5f;
 
+    [Header("Observables")]
+
+    [SerializeField, Tooltip("In meters per second")]
+    private Vector2 directionalVelocity;
+
+    [SerializeField, Tooltip("In meters per second")]
+    private float groundPull;
+
+
+    private PlayerState_Jump jump;
     public override void Initialize()
     {
-        BindInputUpdate(player.Input.Movement, HandleMovement);
+        jump = player.GetState<PlayerState_Jump>();
 
         BindInputStart(player.Input.Jump, HandleJump);
         BindInputStart(player.Input.Interact, HandleInteraction);
     }
+
     protected override void EnterState()
     {
-        HandleGravity();
-    }
-    protected override void ExitState()
-    {
-
+        if (jump.IsBuffered)
+        { HandleJump(); }
     }
 
-    private void HandleMovement(Vector2 input)
+    private void Update()
     {
-        Vector2 movementVelocity = input * movementSpeedInMetersPerSecond;
-        player.Movement = movementVelocity;
+        UpdateMovement();
+        UpdateGroundPull();
+
+        RotatePlayer();
+
+        Vector3 velocity = CalculateVelocity();
+        player.Move(velocity,
+            onFlagsUpdate: HandleCollisionUpdate
+        );
     }
 
-    private void HandleJump()
+    private void UpdateMovement()
     {
-        Debug.Log("Ground Jump");
-        player.SwitchState<PlayerState_Jump>();
+        Vector2 directionalInput = player.Input.Movement.Value;
+
+        Vector3 cameraDirection = Camera.main.transform.forward;
+        cameraDirection.y = 0;
+
+        Quaternion rotation;
+        if (cameraDirection != Vector3.zero)
+        { rotation = Quaternion.Euler(0, 0, -Camera.main.transform.rotation.eulerAngles.y); }
+        else
+        { rotation = Quaternion.identity; }
+
+        Vector2 movementVelocity = rotation * (directionalInput * movementSpeed);
+        directionalVelocity = movementVelocity;
+    }
+
+    private void UpdateGroundPull()
+    {
+        float groundPull = movementSpeed / Mathf.Tan(-player.Slope);
+        this.groundPull = groundPull;
+    }
+
+    private void RotatePlayer()
+    {
+        if (directionalVelocity != Vector2.zero)
+        {
+            Vector3 lookDirection = new()
+            {
+                x = directionalVelocity.x,
+                y = 0,
+                z = directionalVelocity.y,
+            };
+            player.Look(lookDirection);
+        }
+    }
+
+    private Vector3 CalculateVelocity()
+    {
+        Vector3 velocity = new()
+        {
+            x = directionalVelocity.x,
+            y = groundPull,
+            z = directionalVelocity.y,
+        };
+
+        return velocity;
+    }
+
+    protected void HandleCollisionUpdate(CollisionFlags flags, ControllerColliderHit hit)
+    {
+        if (!flags.HasFlag(CollisionFlags.Below))
+        {
+            player.Move(new(0, -groundPull, 0));
+            player.SwitchState<PlayerState_Airbound>();
+            jump.StartCoyoteTimer();
+        }
     }
 
     private void HandleInteraction()
@@ -59,44 +128,23 @@ public class PlayerState_Grounded : PlayerState
         }
     }
 
-    private void HandleGravity()
+    private void HandleJump()
     {
-        float gravityForce = movementSpeedInMetersPerSecond / Mathf.Tan(player.Slope);
+        player.SwitchState<PlayerState_Jump>();
+    }
 
-        Vector3 gravityVelocity = gravityDirection * gravityForce;
-        player.Gravity = gravityVelocity;
+    protected override void ExitState()
+    {
+
     }
 
     protected override Vector3 CalculateVelocity(Vector2 movement, Vector3 gravity, Vector3 forward)
     {
-        Quaternion rotation = Quaternion.LookRotation(forward);
-
-        Vector3 velocityBuffer = new()
-        {
-            x = movement.x,
-            z = movement.y,
-        };
-        velocityBuffer = rotation * velocityBuffer;
-
-        if (movement != Vector2.zero)
-        {
-            Vector3 cameraForward = Camera.main.transform.forward;
-            cameraForward.y = 0;
-            player.Forward = cameraForward;
-            player.Look(velocityBuffer);
-        }
-
-        velocityBuffer += rotation * gravity;
-
-        Vector3 velocity = velocityBuffer;
-        return velocity;
+        throw new System.NotImplementedException();
     }
 
     protected override void HandleCollisionUpdate(Player.ControllerCollision collision)
     {
-        if (!collision.flags.HasFlag(CollisionFlags.Below))
-        {
-            player.SwitchState<PlayerState_Airbound>();
-        }
+        throw new System.NotImplementedException();
     }
 }

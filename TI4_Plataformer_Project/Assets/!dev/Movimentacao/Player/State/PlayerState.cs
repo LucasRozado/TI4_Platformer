@@ -8,19 +8,14 @@ public abstract partial class PlayerState : MonoBehaviour
 {
     protected Player player;
 
-    private Action onEnter;
-    private Action onExit;
+    private Action bindInputs;
+    private Action unbindInputs;
 
     private readonly HashSet<Coroutine> coroutines = new();
 
     private void Awake()
     {
         this.player = GetComponent<Player>();
-
-        onEnter += EnterState;
-
-        onExit += ExitState;
-        onExit += StopCoroutines;
     }
 
     protected void Update()
@@ -31,37 +26,34 @@ public abstract partial class PlayerState : MonoBehaviour
         HandleCollisionUpdate(collision);
     }
 
-    public void Enter(PlayerState state)
-    {
-        this.Exit();
-        state.Enter();
-    }
-
     public void Enter()
     {
-        onEnter();
         this.enabled = true;
+        bindInputs?.Invoke();
+        EnterState();
     }
-    private void Exit()
+    public void Exit()
     {
-        onExit();
         this.enabled = false;
+        unbindInputs?.Invoke();
+        StopCoroutines();
+        ExitState();
     }
 
     protected void BindInputStart<TValue>(PlayerInput.InputHandler<TValue> input, Action handler) where TValue : struct
     {
-        onEnter += () => input.OnStart += handler;
-        onExit += () => input.OnStart -= handler;
+        bindInputs += () => input.OnStart += handler;
+        unbindInputs += () => input.OnStart -= handler;
     }
     protected void BindInputCancel<TValue>(PlayerInput.InputHandler<TValue> input, Action handler) where TValue : struct
     {
-        onEnter += () => input.OnCancel += handler;
-        onExit += () => input.OnCancel -= handler;
+        bindInputs += () => input.OnCancel += handler;
+        unbindInputs += () => input.OnCancel -= handler;
     }
     protected void BindInputUpdate<TValue>(PlayerInput.InputHandler<TValue> input, Action<TValue> handler) where TValue : struct
     {
-        onEnter += () => input.OnUpdate += handler;
-        onExit += () => input.OnUpdate -= handler;
+        bindInputs += () => input.OnUpdate += handler;
+        unbindInputs += () => input.OnUpdate -= handler;
     }
 
     protected void HandleCoroutine(IEnumerator coroutineDefinition)

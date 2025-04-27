@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class PlayerState_Jump : PlayerState
@@ -7,16 +8,23 @@ public class PlayerState_Jump : PlayerState
     [SerializeField, Tooltip("In meters per second")]
     private float movementSpeed = 5f;
 
-    [SerializeField, Tooltip("In seconds")]
-    private float defaultTimeToApex = 0.4f;
-
+    public float DefaultHeight => defaultHeight;
     [SerializeField, Tooltip("In meters")]
     private float defaultHeight = 1.1f;
 
-    public override void Initialize()
-    {
-        BindInputCancel(player.Input.Jump, CancelJump);
-    }
+    [SerializeField, Tooltip("In seconds")]
+    private float defaultTimeToApex = 0.4f;
+
+    public float DefaultFallTime => defaultFallTime;
+    [SerializeField, Tooltip("In seconds")]
+    private float defaultFallTime = 0.3f;
+
+    public float BufferTime => bufferTime;
+    [SerializeField, Tooltip("In seconds")]
+    private float bufferTime = 0.1f;
+
+    [SerializeField, Tooltip("In seconds")]
+    private float coyoteTime = 0.5f;
 
     [Header("Observables")]
 
@@ -32,22 +40,84 @@ public class PlayerState_Jump : PlayerState
     [SerializeField, Tooltip("In meters per second")]
     private float verticalVelocity;
 
+    [SerializeField, Tooltip("In seconds")]
+    private float coyoteTimer;
+
+
+    private PlayerState_Airbound airbound;
+    public override void Initialize()
+    {
+        airbound = player.GetState<PlayerState_Airbound>();
+
+        BindInputCancel(player.Input.Jump, HandleJumpCancel);
+    }
+
     protected override void EnterState()
     {
-        CalculateJumpStrength();
+        CalculateParameters();
 
         verticalVelocity = initialJumpVelocity;
+        coyoteTimer = 0;
+
+        if (IsCancelBuffered)
+        { HandleJumpCancel(); }
     }
 
-    private void CancelJump()
-    {
-        player.SwitchState<PlayerState_Airbound>();
-    }
-
-    private void CalculateJumpStrength()
+    private void CalculateParameters()
     {
         initialJumpVelocity = (2f * defaultHeight) / defaultTimeToApex;
         gravityAcceleration = (2f * defaultHeight) / -Mathf.Pow(defaultTimeToApex, 2);
+    }
+
+    private void HandleJumpCancel()
+    {
+        player.SwitchState(airbound);
+        airbound.verticalVelocity = verticalVelocity;
+    }
+
+    public bool IsBuffered
+    {
+        get
+        {
+            if (player.Input.Jump.LastStart == Time.time) return false;
+
+            float timeSinceLastBuffer = Time.time - player.Input.Jump.LastStart;
+            return timeSinceLastBuffer < bufferTime;
+        }
+    }
+
+    public bool IsCancelBuffered
+    {
+        get
+        {
+            if (!IsBuffered) return false;
+            if (player.Input.Jump.Value != 0) return false;
+
+            float timeSinceLastBuffer = Time.time - player.Input.Jump.LastUpdate;
+            return timeSinceLastBuffer < bufferTime;
+        }
+    }
+
+    public bool IsOnCoyoteTime => coyoteTimer > 0;
+
+    private Coroutine coyoteTimerCoroutine;
+    public void StartCoyoteTimer()
+    {
+        if (coyoteTimerCoroutine != null)
+        { StopCoroutine(coyoteTimerCoroutine); }
+
+        coyoteTimer = coyoteTime;
+        coyoteTimerCoroutine = StartCoroutine(CoyoteTime_Coroutine());
+    }
+    private IEnumerator CoyoteTime_Coroutine()
+    {
+        while (coyoteTimer > 0)
+        {
+            yield return null;
+            coyoteTimer -= Time.deltaTime;
+        }
+        coyoteTimer = 0;
+        coyoteTimerCoroutine = null;
     }
 
     private void Update()
@@ -61,6 +131,35 @@ public class PlayerState_Jump : PlayerState
         player.Move(velocity,
             onCollision: HandleCollision
         );
+    }
+
+    private void UpdateMovement()
+    {
+        Vector2 directionalInput = player.Input.Movement.Value;
+
+        Vector3 cameraDirection = Camera.main.transform.forward;
+        cameraDirection.y = 0;
+
+        Quaternion rotation;
+        if (cameraDirection != Vector3.zero)
+        { rotation = Quaternion.Euler(0, 0, -Camera.main.transform.rotation.eulerAngles.y); }
+        else
+        { rotation = Quaternion.identity; }
+
+        Vector2 movementVelocity = rotation * (directionalInput * movementSpeed);
+        directionalVelocity = movementVelocity;
+    }
+
+    private void UpdateGravity()
+    {
+        if (verticalVelocity > 0)
+        {
+            float velocityFromGravity = gravityAcceleration * Time.deltaTime;
+            verticalVelocity += velocityFromGravity;
+
+            if (verticalVelocity <= 0)
+            { player.SwitchState<PlayerState_Airbound>(); }
+        }
     }
 
     private void RotatePlayer()
@@ -77,38 +176,9 @@ public class PlayerState_Jump : PlayerState
         }
     }
 
-    private void UpdateMovement()
-    {
-        Vector2 directionalInput = player.Input.Directional;
-
-        Vector2 movementVelocity = directionalInput * movementSpeed;
-        directionalVelocity = movementVelocity;
-    }
-
-    private void UpdateGravity()
-    {
-        if (verticalVelocity > 0)
-        {
-            float velocityFromGravity = gravityAcceleration * Time.deltaTime;
-            verticalVelocity += velocityFromGravity;
-
-            if (verticalVelocity <= 0)
-            { player.SwitchState<PlayerState_Airbound>(); }
-        }
-    }
-
     private Vector3 CalculateVelocity()
     {
-        Vector3 cameraDirection = Camera.main.transform.forward;
-        cameraDirection.y = 0;
-
-        Quaternion rotation;
-        if (cameraDirection != Vector3.zero)
-        { rotation = Quaternion.LookRotation(cameraDirection); }
-        else
-        { rotation = Quaternion.identity; }
-
-        Vector3 velocity = rotation * new Vector3()
+        Vector3 velocity = new()
         {
             x = directionalVelocity.x,
             y = verticalVelocity,
@@ -126,20 +196,6 @@ public class PlayerState_Jump : PlayerState
             player.SwitchState<PlayerState_Grounded>();
             return;
         }
-
-        bool hitWall = flags.HasFlag(CollisionFlags.Sides);
-        bool hitClimbable = hit.gameObject.CompareTag("CanClimb");
-        if (hitWall && hitClimbable)
-        {
-            float angle = player.GetState<PlayerState_Climbing>().MaxHorizontalAngle_InDegrees;
-            // Comparando o ângulo entre a frente do jogador e a normal da parede
-            if (Mathf.Abs(Vector3.Dot(player.Forward, hit.normal)) > Mathf.Cos(angle * Mathf.Deg2Rad))
-            {
-                player.Look(-hit.normal);
-                player.SwitchState<PlayerState_Climbing>();
-            }
-            return;
-        }
     }
 
     protected override void ExitState()
@@ -148,7 +204,12 @@ public class PlayerState_Jump : PlayerState
     }
 
     protected override Vector3 CalculateVelocity(Vector2 movement, Vector3 gravity, Vector3 forward)
-    { throw new System.NotImplementedException(); }
+    {
+        throw new System.NotImplementedException();
+    }
+
     protected override void HandleCollisionUpdate(Player.ControllerCollision collision)
-    { throw new System.NotImplementedException(); }
+    {
+        throw new System.NotImplementedException();
+    }
 }
