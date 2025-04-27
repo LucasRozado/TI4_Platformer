@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Reflection;
-using UnityEditor;
-using UnityEngine.InputSystem.LowLevel;
 
 [RequireComponent(typeof(CharacterController))]
 public class Player : MonoBehaviour
@@ -23,6 +20,7 @@ public class Player : MonoBehaviour
     [SerializeField] private Vector3 gravityVelocity;
 
     private PlayerInput input;
+    private Animator animator;
     private CharacterController characterController;
     private readonly Dictionary<Type, PlayerState> states = new();
     private readonly ControllerCollision lastCollision = new();
@@ -35,6 +33,8 @@ public class Player : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         forward = transform.forward;
+
+        animator = GetComponentInChildren<Animator>();
         characterController = GetComponent<CharacterController>();
     }
     private void Start()
@@ -79,6 +79,7 @@ public class Player : MonoBehaviour
 
     public PlayerInput Input => input;
     public PlayerState State => state;
+    public Animator Animator => animator;
     public Vector3 Velocity => velocity;
     public Vector3 Forward { get => forward; set => forward = value; }
     public Vector2 Movement { get => movementVelocity; set => movementVelocity = value; }

@@ -16,41 +16,21 @@ public class PlayerState_Grounded : PlayerState
     }
     protected override void EnterState()
     {
-        player.animator.SetBool("isAirBourne", false);
+        player.Animator.SetBool("isAirBourne", false);
         if (player.Velocity.x != 0 || player.Velocity.z != 0)
         {
-            player.animator.SetBool("isWalking", true);
+            player.Animator.SetBool("isWalking", true);
         }
         else
         {
-            player.animator.SetBool("isIdleGround", true);
+            player.Animator.SetBool("isIdleGround", true);
         }
 
         HandleGravity();
     }
     protected override void ExitState()
     {
-        player.animator.SetBool("isIdleGround", false);
-    }
-
-
-    private void HandleMovement_InputAction(InputAction.CallbackContext context)
-    {
-        Vector2 input = context.ReadValue<Vector2>();
-        HandleMovement(input);
-    }
-    private void HandleJump_InputAction(InputAction.CallbackContext context)
-    {
-        player.animator.SetTrigger("jump");
-        HandleJump();
-    }
-
-    private void HandleCollisionUpdate(ControllerColliderHit hit, CollisionFlags flags)
-    {
-        if (!flags.HasFlag(CollisionFlags.Below))
-        {
-            player.SwitchState<PlayerState_Airbound>();
-        }
+        player.Animator.SetBool("isIdleGround", false);
     }
 
     private void HandleMovement(Vector2 input)
@@ -58,20 +38,20 @@ public class PlayerState_Grounded : PlayerState
         Vector2 movementVelocity = input * movementSpeedInMetersPerSecond;
         if(movementVelocity == Vector2.zero)
         {
-            player.animator.SetBool("isIdleGround", true);
-            player.animator.SetBool("isWalking", false);
+            player.Animator.SetBool("isIdleGround", true);
+            player.Animator.SetBool("isWalking", false);
         }
         else
         {
-            player.animator.SetBool("isIdleGround", false);
-            player.animator.SetBool("isWalking", true);
+            player.Animator.SetBool("isIdleGround", false);
+            player.Animator.SetBool("isWalking", true);
         }
         player.Movement = movementVelocity;
     }
 
     private void HandleJump()
     {
-        Debug.Log("Ground Jump");
+        player.Animator.SetTrigger("jump");
         player.SwitchState<PlayerState_Jump>();
     }
 

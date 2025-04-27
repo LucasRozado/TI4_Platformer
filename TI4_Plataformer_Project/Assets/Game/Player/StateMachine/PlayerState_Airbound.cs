@@ -14,9 +14,9 @@ public class PlayerState_Airbound : PlayerState
     }
     protected override void EnterState()
     {
-        player.animator.SetBool("isAirBourne", true);
-        player.animator.SetBool("isIdleGround", false);
-        player.animator.SetBool("isWalking", false);
+        player.Animator.SetBool("isAirBourne", true);
+        player.Animator.SetBool("isIdleGround", false);
+        player.Animator.SetBool("isWalking", false);
         //movementVelocity = new()
         //{
         //    x = player.Velocity.x,
@@ -28,32 +28,8 @@ public class PlayerState_Airbound : PlayerState
     }
     protected override void ExitState()
     {
-        player.animator.SetBool("isAirBourne", false);
-        player.animator.SetTrigger("land");
-    }
-
-    private void HandleCollisionUpdate(ControllerColliderHit hit, CollisionFlags flags)
-    {
-        if (flags.HasFlag(CollisionFlags.Below))
-        {
-            player.SwitchState<PlayerState_Grounded>();
-        }
-        else if (hit != null && hit.gameObject.CompareTag("CanClimb"))
-        {
-            float angle = player.GetState<PlayerState_Climbing>().MaxHorizontalAngle_InDegrees;
-            // Comparando o �ngulo entre a frente do jogador e a normal da parede
-            if (Mathf.Abs(Vector3.Dot(player.Forward, hit.normal)) > Mathf.Cos(angle * Mathf.Deg2Rad))
-            {
-                player.Look(-hit.normal);
-                player.SwitchState<PlayerState_Climbing>();
-            }
-        }
-    }
-
-    private void HandleMovement_InputAction(InputAction.CallbackContext context)
-    {
-        Vector2 input = context.ReadValue<Vector2>();
-        HandleMovement(input);
+        player.Animator.SetBool("isAirBourne", false);
+        player.Animator.SetTrigger("land");
     }
 
     private void HandleMovement(Vector2 input)
@@ -82,7 +58,7 @@ public class PlayerState_Airbound : PlayerState
         {
             float currentGravity = Vector3.Dot(player.Gravity, gravityDirection);
             
-            player.animator.SetBool("isAirBourne", true);
+            player.Animator.SetBool("isAirBourne", true);
 
             if (currentGravity < terminalVelocityInMetersPerSecond)
             {
