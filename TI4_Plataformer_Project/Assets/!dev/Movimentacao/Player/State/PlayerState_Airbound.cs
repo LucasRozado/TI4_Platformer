@@ -150,7 +150,12 @@ public class PlayerState_Airbound : PlayerState
         bool hitGround = flags.HasFlag(CollisionFlags.Below);
         if (hitGround)
         {
-            if (isSprinting)
+            if (hit.gameObject.layer == LayerMask.NameToLayer("Water"))
+            {
+                player.SwitchState<PlayerState_Swim>();
+                return;
+            }
+            else if (isSprinting)
             {
                 if (player.Velocity.x != 0f || player.Velocity.z != 0f)
                 {

@@ -86,7 +86,7 @@ public class PlayerState_Climbing : PlayerState
         {
             float angle = Mathf.Atan2((leftGripHit.distance - rightGripHit.distance), (distanceBetweenGrips)) * Mathf.Rad2Deg;
 
-            if (Vector3.Dot(leftGripHit.normal, rightGripHit.normal) > Mathf.Cos(Mathf.Deg2Rad * maxHorizontalAngle))
+            if (Vector3.Dot(leftGripHit.normal, rightGripHit.normal) >= Mathf.Cos(Mathf.Deg2Rad * maxHorizontalAngle))
             { wallDirection += angle; }
             else if (Mathf.Sign(directionalVelocity.x) == Mathf.Sign(angle))
             { directionalVelocity.x = 0; }

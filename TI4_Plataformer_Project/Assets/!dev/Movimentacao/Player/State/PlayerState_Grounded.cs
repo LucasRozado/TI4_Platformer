@@ -42,7 +42,7 @@ public class PlayerState_Grounded : PlayerState
 
         Vector3 velocity = CalculateVelocity();
         player.Move(velocity,
-            onFlagsUpdate: HandleCollisionUpdate
+            onCollision: HandleCollision
         );
     }
 
@@ -117,13 +117,20 @@ public class PlayerState_Grounded : PlayerState
         return velocity;
     }
 
-    protected void HandleCollisionUpdate(CollisionFlags flags, ControllerColliderHit hit)
+    protected void HandleCollision(CollisionFlags flags, ControllerColliderHit hit)
     {
         if (!flags.HasFlag(CollisionFlags.Below))
         {
             player.Move(new(0, -groundPull, 0));
             player.SwitchState<PlayerState_Airbound>();
             jump.StartCoyoteTimer();
+            return;
+        }
+
+        else if (hit.gameObject.layer == LayerMask.NameToLayer("Water"))
+        {
+            player.SwitchState<PlayerState_Swim>();
+            return;
         }
     }
 

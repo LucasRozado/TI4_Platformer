@@ -196,12 +196,45 @@ public class PlayerState_Jump : PlayerState
         bool hitGround = flags.HasFlag(CollisionFlags.Below);
         if (hitGround)
         {
-            if (isSprinting)
+            if (hit.gameObject.layer == LayerMask.NameToLayer("Water"))
             {
+                player.SwitchState<PlayerState_Swim>();
+                return;
+            }
+            else if (isSprinting)
+            {
+                if (player.Velocity.x != 0f || player.Velocity.z != 0f)
+                {
+                    player.Animator.SetBool("isSprintingIdle", false);
+                    player.Animator.SetBool("isSprinting", true);
+                    player.Animator.SetBool("isWalking", false);
+                    player.Animator.SetBool("isIdleGround", false);
+                }
+                else
+                {
+                    player.Animator.SetBool("isSprintingIdle", true);
+                    player.Animator.SetBool("isSprinting", false);
+                    player.Animator.SetBool("isWalking", false);
+                    player.Animator.SetBool("isIdleGround", false);
+                }
+
+                player.Animator.SetTrigger("land");
+                player.Animator.SetBool("isAirBourne", false);
                 player.SwitchState<PlayerState_GroundedRunning>();
             }
             else
             {
+                player.Animator.SetBool("isSprinting", false);
+                player.Animator.SetBool("isSprintingIdle", false);
+
+                if (player.Velocity.x != 0 || player.Velocity.z != 0)
+                { player.Animator.SetBool("isWalking", true); player.Animator.SetBool("isIdleGround", false); }
+                else
+                { player.Animator.SetBool("isWalking", false); player.Animator.SetBool("isIdleGround", true); }
+
+                player.Animator.SetTrigger("land");
+                player.Animator.SetBool("isAirBourne", false);
+
                 player.SwitchState<PlayerState_Grounded>();
             }
             return;
