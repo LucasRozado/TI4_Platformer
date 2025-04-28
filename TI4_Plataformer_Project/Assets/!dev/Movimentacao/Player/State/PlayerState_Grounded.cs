@@ -23,6 +23,7 @@ public class PlayerState_Grounded : PlayerState
         jump = player.GetState<PlayerState_Jump>();
 
         BindInputStart(player.Input.Jump, HandleJump);
+        BindInputStart(player.Input.Sprint, HandleSprint);
         BindInputStart(player.Input.Interact, HandleInteraction);
     }
 
@@ -45,6 +46,17 @@ public class PlayerState_Grounded : PlayerState
         );
     }
 
+    private void HandleSprint()
+    {
+        Debug.Log("Sprint");
+        player.Animator.SetBool("isWalking", false);
+        player.Animator.SetBool("isIdleGround", false);
+        player.Animator.SetBool("isSprintingIdle", true);
+        player.Animator.SetTrigger("fall");
+        
+        player.SwitchState<PlayerState_GroundedRunning>();
+    }
+    
     private void UpdateMovement()
     {
         Vector2 directionalInput = player.Input.Movement.Value;
@@ -57,6 +69,17 @@ public class PlayerState_Grounded : PlayerState
         { rotation = Quaternion.Euler(0, 0, -Camera.main.transform.rotation.eulerAngles.y); }
         else
         { rotation = Quaternion.identity; }
+
+        if (directionalInput != Vector2.zero)
+        {
+            player.Animator.SetBool("isWalking", true);
+            player.Animator.SetBool("isIdleGround", false);
+        }
+        else
+        {
+            player.Animator.SetBool("isWalking", false);
+            player.Animator.SetBool("isIdleGround", true);
+        }
 
         Vector2 movementVelocity = rotation * (directionalInput * movementSpeed);
         directionalVelocity = movementVelocity;
@@ -130,6 +153,12 @@ public class PlayerState_Grounded : PlayerState
 
     private void HandleJump()
     {
+        player.Animator.SetBool("isWalking", false);
+        player.Animator.SetBool("isIdleGround", false);
+        player.Animator.SetBool("isSprinting", false);
+        player.Animator.SetBool("isSprintingIdle", false);
+
+        player.Animator.SetTrigger("jump");
         player.SwitchState<PlayerState_Jump>();
     }
 

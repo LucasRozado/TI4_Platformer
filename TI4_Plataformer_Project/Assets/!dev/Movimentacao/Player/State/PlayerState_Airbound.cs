@@ -22,12 +22,15 @@ public class PlayerState_Airbound : PlayerState
     [Tooltip("In meters per second")]
     public float verticalVelocity;
 
+    [SerializeField]
+    private bool isSprinting = false;
 
     private PlayerState_Jump jump;
     public override void Initialize()
     {
         player.GetState(out jump);
 
+        BindInputUpdate(player.Input.Sprint, HandleSprint);
         BindInputStart(player.Input.Jump, HandleCoyoteJump);
     }
 
@@ -36,6 +39,8 @@ public class PlayerState_Airbound : PlayerState
         CalculateParameters();
 
         verticalVelocity = 0;
+
+        player.Animator.SetBool("isAirBourne", true);
     }
 
     private void CalculateParameters()
@@ -61,8 +66,19 @@ public class PlayerState_Airbound : PlayerState
             onCollision: HandleCollision
         );
     }
+    private void HandleSprint(float input)
+    {
+        if (input >= 1f)
+        {
+            isSprinting = true;
+        }
+        else
+        {
+            isSprinting = false;
+        }
+    }
 
-    private void UpdateMovement()
+    private void HandleForward()
     {
         Vector2 directionalInput = player.Input.Movement.Value;
 
@@ -122,7 +138,42 @@ public class PlayerState_Airbound : PlayerState
         bool hitGround = flags.HasFlag(CollisionFlags.Below);
         if (hitGround)
         {
-            player.SwitchState<PlayerState_Grounded>();
+            if (isSprinting)
+            {
+                if (player.Velocity.x != 0f || player.Velocity.z != 0f)
+                {
+                    player.Animator.SetBool("isSprintingIdle", false);
+                    player.Animator.SetBool("isSprinting", true);
+                    player.Animator.SetBool("isWalking", false);
+                    player.Animator.SetBool("isIdleGround", false);
+                }
+                else
+                {
+                    player.Animator.SetBool("isSprintingIdle", true);
+                    player.Animator.SetBool("isSprinting", false);
+                    player.Animator.SetBool("isWalking", false);
+                    player.Animator.SetBool("isIdleGround", false);
+                }
+                
+                player.Animator.SetTrigger("land");
+                player.Animator.SetBool("isAirBourne", false);
+                player.SwitchState<PlayerState_GroundedRunning>();
+            }
+            else
+            {
+                player.Animator.SetBool("isSprinting", false);
+                player.Animator.SetBool("isSprintingIdle", false);
+
+                if (player.Velocity.x != 0 || player.Velocity.z != 0)
+                { player.Animator.SetBool("isWalking", true); player.Animator.SetBool("isIdleGround", false); }
+                else
+                { player.Animator.SetBool("isWalking", false); player.Animator.SetBool("isIdleGround", true); }
+                
+                player.Animator.SetTrigger("land");
+                player.Animator.SetBool("isAirBourne", false);
+
+                player.SwitchState<PlayerState_Grounded>();
+            }
             return;
         }
 

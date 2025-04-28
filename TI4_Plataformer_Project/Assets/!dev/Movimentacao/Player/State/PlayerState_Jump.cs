@@ -43,6 +43,9 @@ public class PlayerState_Jump : PlayerState
     [SerializeField, Tooltip("In seconds")]
     private float coyoteTimer;
 
+    [SerializeField]
+    private bool isSprinting = false;
+    
 
     private PlayerState_Airbound airbound;
     public override void Initialize()
@@ -193,7 +196,14 @@ public class PlayerState_Jump : PlayerState
         bool hitGround = flags.HasFlag(CollisionFlags.Below);
         if (hitGround)
         {
-            player.SwitchState<PlayerState_Grounded>();
+            if (isSprinting)
+            {
+                player.SwitchState<PlayerState_GroundedRunning>();
+            }
+            else
+            {
+                player.SwitchState<PlayerState_Grounded>();
+            }
             return;
         }
     }
