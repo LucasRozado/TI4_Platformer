@@ -48,6 +48,18 @@ public class PlayerState_Airbound : PlayerState
         gravityAcceleration = (2f * jump.DefaultHeight) / -Mathf.Pow(jump.DefaultFallTime, 2);
     }
 
+    private void HandleSprint(float input)
+    {
+        if (input >= 1f)
+        {
+            isSprinting = true;
+        }
+        else
+        {
+            isSprinting = false;
+        }
+    }
+
     private void HandleCoyoteJump()
     {
         if (jump.IsOnCoyoteTime)
@@ -66,19 +78,8 @@ public class PlayerState_Airbound : PlayerState
             onCollision: HandleCollision
         );
     }
-    private void HandleSprint(float input)
-    {
-        if (input >= 1f)
-        {
-            isSprinting = true;
-        }
-        else
-        {
-            isSprinting = false;
-        }
-    }
 
-    private void HandleForward()
+    private void UpdateMovement()
     {
         Vector2 directionalInput = player.Input.Movement.Value;
 
@@ -90,6 +91,17 @@ public class PlayerState_Airbound : PlayerState
         { rotation = Quaternion.Euler(0, 0, -Camera.main.transform.rotation.eulerAngles.y); }
         else
         { rotation = Quaternion.identity; }
+
+        if (directionalInput != Vector2.zero)
+        {
+            player.Animator.SetBool("isWalking", true);
+            player.Animator.SetBool("isIdleGround", false);
+        }
+        else
+        {
+            player.Animator.SetBool("isWalking", false);
+            player.Animator.SetBool("isIdleGround", true);
+        }
 
         Vector2 movementVelocity = rotation * (directionalInput * movementSpeed);
         directionalVelocity = movementVelocity;

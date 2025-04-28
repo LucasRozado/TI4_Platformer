@@ -19,7 +19,7 @@ public class PlayerInput
 
         Movement = new(this.actions.Move);
         Jump = new(this.actions.Jump);
-        Sprint = new(actions.Sprint);
+        Sprint = new(this.actions.Sprint);
         Interact = new(this.actions.Interact);
     }
 
