@@ -6,6 +6,7 @@ public class PushableObject : Interactable
     [SerializeField] private float height;
     public override void InteractWith(Player player)
     {
+        player.GetState<PlayerState_Pushing>().HandleObject(this);
         player.SwitchState<PlayerState_Pushing>();
     }
 
@@ -13,7 +14,6 @@ public class PushableObject : Interactable
     { 
         Vector3 castPosition = transform.position;
         castPosition.y += height;
-        Debug.Log(Physics.Raycast(castPosition, player.Forward, size/2));
         return Physics.Raycast(castPosition, player.Forward, size/2);
     }
 }

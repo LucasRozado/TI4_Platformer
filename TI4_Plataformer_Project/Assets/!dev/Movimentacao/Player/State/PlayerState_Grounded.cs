@@ -145,6 +145,7 @@ public class PlayerState_Grounded : PlayerState
             Debug.Log("Target acquired");
             if (hitL.collider.TryGetComponent(out Interactable interactable))
             {
+                player.Look(-hitL.normal);
                 interactable.InteractWith(player);
                 Debug.Log("Interact Done");
             }

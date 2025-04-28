@@ -14,7 +14,7 @@ public class PlayerState_Pushing : PlayerState
     }
     protected override void EnterState()
     {
-        HandleObject();
+        player.Forward = player.transform.forward;
         HandleGravity();
     }
     protected override void ExitState()
@@ -43,14 +43,9 @@ public class PlayerState_Pushing : PlayerState
         player.Gravity = gravityVelocity;
     }
 
-    public void HandleObject()
+    public void HandleObject(PushableObject pushable)
     {
-        RaycastHit hit;
-        Vector3 playerCenter = (player.GetInteractChecks(0).position - player.GetInteractChecks(1).position) / 2;
-        playerCenter += player.GetInteractChecks(1).position;
-        Physics.Raycast(playerCenter, player.Forward, out hit, player.InteractDistance, player.CanInteract);
-        player.Forward = -hit.normal;
-        pushable = hit.collider.gameObject.GetComponent<PushableObject>();
+        this.pushable = pushable;
         pushable.transform.parent = player.transform;
     }
 
