@@ -2,9 +2,11 @@ using UnityEngine;
 
 public class DamagingPlatform : MonoBehaviour
 {
+    [SerializeField] float delay = 0f;
     [SerializeField] float radius;
     [SerializeField] Transform sphereOrigin;
     [SerializeField] Collider platformCollider;
+    Animator animator;
     public void DealDamage()
     {
         platformCollider.enabled = false;
@@ -16,6 +18,17 @@ public class DamagingPlatform : MonoBehaviour
                 Debug.Log("Player hit");
             }
         }
+    }
+
+    private void Awake()
+    {
+        animator = GetComponent<Animator>();
+    }
+
+    private void Update()
+    {
+        delay -= Time.deltaTime;
+        animator.SetFloat("Delay", delay);
     }
 
     public void EnablePlatform()
