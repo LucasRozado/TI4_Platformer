@@ -3,11 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Reflection;
 using UnityEditor;
+using UnityEngine.InputSystem.LowLevel;
 
 [RequireComponent(typeof(CharacterController))]
 public class Player : MonoBehaviour
 {
-    [SerializeField] private PlayerState[] possibleStates;
+    public static Player instance;
+
+    [Header("Interaction")]
+    [SerializeField] private Transform[] interactChecksLR;
+    [SerializeField] private float interactDistance = 0.3f;
+    [SerializeField] private LayerMask canInteract;
 
     [Header("Observables")]
     [SerializeField] private PlayerState state;
@@ -15,105 +21,157 @@ public class Player : MonoBehaviour
     [SerializeField] private Vector3 forward;
     [SerializeField] private Vector2 movementVelocity;
     [SerializeField] private Vector3 gravityVelocity;
-    [SerializeField] private ControllerColliderHit collisionHit;
-    [SerializeField] private Transform[] interactChecksLR;
-    [SerializeField] private float interactDistance = 0.3f;
-    [SerializeField] private LayerMask canInteract;
 
-    private Dictionary<Type, PlayerState> stateInstances;
-    private InputSystem_Actions.PlayerActions actions;
+    private PlayerInput input;
     private CharacterController characterController;
-    private void Start()
+    private Animator animator;
+    private readonly Dictionary<Type, PlayerState> states = new();
+    private readonly ControllerCollision lastCollision = new();
+    private ControllerColliderHit collisionHitBuffer;
+    private void Awake()
     {
-        stateInstances = new();
-        foreach (PlayerState state in possibleStates)
-        {
-            Type stateType = state.GetType();
-            PlayerState stateInstance = ScriptableObject.CreateInstance(stateType) as PlayerState;
-            stateInstances.Add(stateType, stateInstance);
-            stateInstance.Configure(this);
-        }
-
-        actions = GameManager.Instance.Actions.Player;
-        actions.Enable();
-
-        characterController = GetComponent<CharacterController>();
-
-        if (possibleStates != null && possibleStates.Length > 0)
-        {
-            PlayerState initialStateDefinition = possibleStates[0];
-            PlayerState initialState = stateInstances[initialStateDefinition.GetType()];
-            initialState.Enter();
-            state = initialState;
-        }
+        if (instance == null)
+        { instance = this; }
+        else
+        { Destroy(gameObject); }
+        DontDestroyOnLoad(gameObject);
 
         forward = transform.forward;
+        characterController = GetComponent<CharacterController>();
+        animator = GetComponentInChildren<Animator>();
     }
-    
+    private void Start()
+    {
+        input = new PlayerInput(GameManager.Instance.Actions);
+        
+        // Inicializando a m�quina de estados
+        PlayerState[] states = GetComponents<PlayerState>();
+        if (states.Length > 0)
+        {
+            foreach (PlayerState state in states)
+            {
+                // Guardando a referencia para cada estado
+                this.states[state.GetType()] = state;
+
+                // Iniciando com o primeiro estado marcado como ativo e desabilitando os outros
+                if (this.state != null)
+                { state.enabled = false; }
+                else if (state.enabled)
+                { this.state = state; }
+            }
+
+            // Se nenhum estado estava ativo, inicia com o primeiro da lista
+            if (this.state != null)
+            {
+                this.state = states[0];
+            }
+
+            // Inicializando os estados
+            // (Precisa ser em outro loop para caso os estados precisem acessar uns aos outros)
+            foreach (PlayerState state in states)
+            { state.Initialize(); }
+
+            // Iniciando o primeiro estado
+            state.Enter();
+        }
+        else
+        { this.state = null; }
+
+    }
+
     public Action<ControllerColliderHit, CollisionFlags> collisionUpdate;
 
-
-    public InputSystem_Actions.PlayerActions Actions => actions;
-    public PlayerState State => stateInstances[state.GetType()];
+    public PlayerInput Input => input;
+    public PlayerState State => state;
     public Vector3 Velocity => velocity;
     public Vector3 Forward { get => forward; set => forward = value; }
     public Vector2 Movement { get => movementVelocity; set => movementVelocity = value; }
     public Vector3 Gravity { get => gravityVelocity; set => gravityVelocity = value; }
+    public Animator Animator { get => animator; set => animator = value; }
     public float InteractDistance => interactDistance;
     public LayerMask CanInteract => canInteract;
+    public float Slope => characterController.slopeLimit;
 
-    public Transform GetInteractChecks (int i)
+    public Transform LeftInteractionChecker => interactChecksLR[0];
+    public Transform RightInteractionChecker => interactChecksLR[1];
+    public Transform GetInteractChecks(int i)
     {
         return interactChecksLR[i];
     }
 
+    public void Look(Quaternion forward)
+    {
+        transform.rotation = forward;
+    }
     public void Look(Vector3 forward)
     {
-        transform.rotation = Quaternion.LookRotation(forward);
+        Look(Quaternion.LookRotation(forward));
     }
-    public float Slope => characterController.slopeLimit;
 
-
-    public State GetState<State>() where State : PlayerState
+    public T GetState<T>() where T : PlayerState
     {
-        State stateInstance = stateInstances[typeof(State)] as State;
+        T stateInstance = states[typeof(T)] as T;
         return stateInstance;
     }
-    public void SwitchState<State>() where State : PlayerState
+    public void GetState<T>(out T state) where T : PlayerState
     {
-        PlayerState oldState = stateInstances[state.GetType()];
-        PlayerState newState = GetState<State>();
-
-        oldState.Enter(newState);
-        state = newState;
+        state = GetState<T>();
+    }
+    public void SwitchState<T>() where T : PlayerState
+    {
+        PlayerState state = GetState<T>();
+        SwitchState(state);
+    }
+    public void SwitchState(PlayerState state)
+    {
+        this.state.Exit();
+        this.state = state;
+        this.state.Enter();
     }
 
-    private void Update()
+    public ControllerCollision Move(Vector3 velocity)
     {
-        Vector3 velocity = CalculateVelocity(movementVelocity, gravityVelocity, forward);
-        Move(velocity);
+        this.velocity = velocity;
+
+        CollisionFlags collisionFlags = characterController.Move(velocity * Time.deltaTime);
+        // [OnControllerColliderHit] � chamado no [Move] caso haja colis�o
+        lastCollision.flags = collisionFlags;
+
+        return lastCollision;
+    }
+    public delegate void CollisionHandler(CollisionFlags flags, ControllerColliderHit hit);
+    public void Move(Vector3 velocity, CollisionHandler onFlagsUpdate = null, CollisionHandler onCollision = null)
+    {
+        this.velocity = velocity;
+
+        CollisionFlags lastCollisionFlags = characterController.collisionFlags;
+        CollisionFlags collisionFlags = characterController.Move(velocity * Time.deltaTime);
+        // [OnControllerColliderHit] eh chamado no [Move] caso haja colisao
+
+        if (lastCollisionFlags != collisionFlags && onFlagsUpdate != null)
+        {
+            onFlagsUpdate(collisionFlags, collisionHitBuffer);
+        }
+        else if (collisionHitBuffer != null && onCollision != null)
+        {
+            onCollision(collisionFlags, collisionHitBuffer);
+            collisionHitBuffer = null;
+        }
     }
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
-        collisionHit = hit;
+        lastCollision.hit = hit;
+        collisionHitBuffer = hit;
     }
 
-    private Vector3 CalculateVelocity(Vector2 movement, Vector3 gravity, Vector3 forward)
+    public class ControllerCollision
     {
-        velocity = state.CalculateVelocity(movement, gravity, forward);
-        return velocity;
+        public CollisionFlags flags;
+        public ControllerColliderHit hit;
     }
 
-    private void Move(Vector3 velocity)
+    public void ToggleController(bool toggle)
     {
-        CollisionFlags oldCollision = characterController.collisionFlags;
-        CollisionFlags newCollision = characterController.Move(velocity * Time.deltaTime);
-
-        bool didCollisionUpdate = collisionHit != null || oldCollision != newCollision;
-        if (didCollisionUpdate)
-        {
-            collisionUpdate?.Invoke(collisionHit, newCollision);
-            collisionHit = null;
-        }
+        characterController.enabled = toggle;
     }
 }

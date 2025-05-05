@@ -1,112 +1,140 @@
+using System.Collections;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.Windows;
 
-
-[CreateAssetMenu(fileName = nameof(PlayerState_Grounded), menuName = "Scriptable Objects/" + nameof(PlayerState) + "/" + nameof(PlayerState_Grounded))]
 public class PlayerState_Grounded : PlayerState
 {
-    [SerializeField] private float movementSpeedInMetersPerSecond = 5f;
-    [SerializeField] private float jumpStrengthInMetersPerSecond = 5f;
+    [Header("Values")]
 
-    private readonly Vector3 gravityDirection = Physics.gravity.normalized;
+    [SerializeField, Tooltip("In meters per second")]
+    private float movementSpeed = 5f;
+
+    [Header("Observables")]
+
+    [SerializeField, Tooltip("In meters per second")]
+    private Vector2 directionalVelocity;
+
+    [SerializeField, Tooltip("In meters per second")]
+    private float groundPull;
+
+
+    private PlayerState_Jump jump;
+    public override void Initialize()
+    {
+        jump = player.GetState<PlayerState_Jump>();
+
+        BindInputStart(player.Input.Jump, HandleJump);
+        BindInputStart(player.Input.Sprint, HandleSprint);
+        BindInputStart(player.Input.Interact, HandleInteraction);
+    }
 
     protected override void EnterState()
     {
-        player.Actions.Move.performed += HandleMovement_InputAction;
-        player.Actions.Move.canceled += HandleMovement_InputAction;
-
-        player.Actions.Jump.performed += HandleJump_InputAction;
-
-        player.Actions.Interact.performed += HandleInteraction;
-
-        player.collisionUpdate += HandleCollisionUpdate;
-
-
-        HandleGravity();
+        if (jump.IsBuffered)
+        { HandleJump(); }
     }
 
-    protected override void ExitState()
+    private void Update()
     {
-        player.Actions.Move.performed -= HandleMovement_InputAction;
-        player.Actions.Move.canceled -= HandleMovement_InputAction;
+        UpdateMovement();
+        UpdateGroundPull();
 
-        player.Actions.Interact.performed -= HandleInteraction;
+        RotatePlayer();
 
-        player.Actions.Jump.performed -= HandleJump_InputAction;
-
-        player.collisionUpdate -= HandleCollisionUpdate;
+        Vector3 velocity = CalculateVelocity();
+        player.Move(velocity,
+            onCollision: HandleCollision
+        );
     }
 
-
-    private void HandleMovement_InputAction(InputAction.CallbackContext context)
+    private void HandleSprint()
     {
-        Vector2 input = context.ReadValue<Vector2>();
-        HandleMovement(input);
-    }
-    private void HandleJump_InputAction(InputAction.CallbackContext context)
-    {
-        HandleJump();
-    }
-
-    private void HandleCollisionUpdate(ControllerColliderHit hit, CollisionFlags flags)
-    {
-        if (!flags.HasFlag(CollisionFlags.Below))
-        {
-            player.SwitchState<PlayerState_Airbound>();
-        }
-    }
-
-    private void HandleMovement(Vector2 input)
-    {      
-        Vector2 movementVelocity = input * movementSpeedInMetersPerSecond;
-        player.Movement = movementVelocity;
-    }
-
-    private void HandleGravity()
-    {
-        float gravityForce = movementSpeedInMetersPerSecond / Mathf.Tan(player.Slope);
-
-        Vector3 gravityVelocity = gravityDirection * gravityForce;
-        player.Gravity = gravityVelocity;
-    }
-
-    private void HandleJump()
-    {
-        Vector3 gravityVelocity = gravityDirection * -jumpStrengthInMetersPerSecond;
-        player.Gravity = gravityVelocity;
-
-        player.SwitchState<PlayerState_Airbound>();
-    }
-
-    public override Vector3 CalculateVelocity(Vector2 movement, Vector3 gravity, Vector3 forward)
-    {
-        Quaternion rotation = Quaternion.LookRotation(forward);
-
-        Vector3 velocityBuffer = new()
-        {
-            x = movement.x,
-            z = movement.y,
-        };
-        velocityBuffer = rotation * velocityBuffer;
-
+        Debug.Log("Sprint");
+        player.Animator.SetBool("isWalking", false);
+        player.Animator.SetBool("isIdleGround", false);
+        player.Animator.SetBool("isSprintingIdle", true);
+        player.Animator.SetTrigger("fall");
         
+        player.SwitchState<PlayerState_GroundedRunning>();
+    }
+    
+    private void UpdateMovement()
+    {
+        Vector2 directionalInput = player.Input.Movement.Value;
 
-        if (movement != Vector2.zero)
+        Vector3 cameraDirection = Camera.main.transform.forward;
+        cameraDirection.y = 0;
+
+        Quaternion rotation;
+        if (cameraDirection != Vector3.zero)
+        { rotation = Quaternion.Euler(0, 0, -Camera.main.transform.rotation.eulerAngles.y); }
+        else
+        { rotation = Quaternion.identity; }
+
+        if (directionalInput != Vector2.zero)
         {
-            Vector3 cameraForward = Camera.main.transform.forward;
-            cameraForward.y = 0;
-            player.Forward = cameraForward; 
-            player.Look(velocityBuffer);
+            player.Animator.SetBool("isWalking", true);
+            player.Animator.SetBool("isIdleGround", false);
+        }
+        else
+        {
+            player.Animator.SetBool("isWalking", false);
+            player.Animator.SetBool("isIdleGround", true);
         }
 
-        velocityBuffer += rotation * gravity;
+        Vector2 movementVelocity = rotation * (directionalInput * movementSpeed);
+        directionalVelocity = movementVelocity;
+    }
 
-        Vector3 velocity = velocityBuffer;
+    private void UpdateGroundPull()
+    {
+        float groundPull = movementSpeed / Mathf.Tan(-player.Slope);
+        this.groundPull = groundPull;
+    }
+
+    private void RotatePlayer()
+    {
+        if (directionalVelocity != Vector2.zero)
+        {
+            Vector3 lookDirection = new()
+            {
+                x = directionalVelocity.x,
+                y = 0,
+                z = directionalVelocity.y,
+            };
+            player.Look(lookDirection);
+        }
+    }
+
+    private Vector3 CalculateVelocity()
+    {
+        Vector3 velocity = new()
+        {
+            x = directionalVelocity.x,
+            y = groundPull,
+            z = directionalVelocity.y,
+        };
+
         return velocity;
     }
 
-    private void HandleInteraction(InputAction.CallbackContext context)
+    protected void HandleCollision(CollisionFlags flags, ControllerColliderHit hit)
+    {
+        if (!flags.HasFlag(CollisionFlags.Below))
+        {
+            player.Move(new(0, -groundPull, 0));
+            player.SwitchState<PlayerState_Airbound>();
+            jump.StartCoyoteTimer();
+            return;
+        }
+
+        else if (hit.gameObject.layer == LayerMask.NameToLayer("Water"))
+        {
+            player.SwitchState<PlayerState_Swim>();
+            return;
+        }
+    }
+
+    private void HandleInteraction()
     {
         Debug.Log("Interaction");
         Transform checkL = player.GetInteractChecks(0);
@@ -122,11 +150,38 @@ public class PlayerState_Grounded : PlayerState
         if (hitL.collider != null && hitL.collider == hitR.collider)
         {
             Debug.Log("Target acquired");
-            if (hitL.collider.TryGetComponent<Interactable>(out Interactable interactable))
+            if (hitL.collider.TryGetComponent(out Interactable interactable))
             {
+                player.Look(-hitL.normal);
                 interactable.InteractWith(player);
                 Debug.Log("Interact Done");
             }
         }
+    }
+
+    private void HandleJump()
+    {
+        player.Animator.SetBool("isWalking", false);
+        player.Animator.SetBool("isIdleGround", false);
+        player.Animator.SetBool("isSprinting", false);
+        player.Animator.SetBool("isSprintingIdle", false);
+
+        player.Animator.SetTrigger("jump");
+        player.SwitchState<PlayerState_Jump>();
+    }
+
+    protected override void ExitState()
+    {
+
+    }
+
+    protected override Vector3 CalculateVelocity(Vector2 movement, Vector3 gravity, Vector3 forward)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    protected override void HandleCollisionUpdate(Player.ControllerCollision collision)
+    {
+        throw new System.NotImplementedException();
     }
 }

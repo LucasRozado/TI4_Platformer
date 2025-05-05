@@ -7,6 +7,8 @@ public class GameManager : MonoBehaviour
 
     private InputSystem_Actions actions;
 
+    public static Vector3 playerSpawnPosition;
+
     private void Awake()
     {
         if (instance != null)
@@ -21,5 +23,9 @@ public class GameManager : MonoBehaviour
         actions = new InputSystem_Actions();
     }
 
+    public static void SetSpawnPosition(Vector3 newSpawnPosition)
+    {
+        playerSpawnPosition = newSpawnPosition;
+    }
     public InputSystem_Actions Actions => actions;
 }

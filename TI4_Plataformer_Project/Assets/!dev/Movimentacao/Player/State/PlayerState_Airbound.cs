@@ -1,120 +1,219 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
+using System.Collections;
 
-
-[CreateAssetMenu(fileName = nameof(PlayerState_Airbound), menuName = "Scriptable Objects/" + nameof(PlayerState) + "/" + nameof(PlayerState_Airbound))]
 public class PlayerState_Airbound : PlayerState
 {
-    [SerializeField] private float movementSpeedInMetersPerSecond = 5f;
-    [SerializeField] private float rotationSpeedInDegreesPerSeconds = 270f;
-    [SerializeField] private float terminalVelocityInMetersPerSecond = 10f;
+    [Header("Values")]
+
+    [SerializeField, Tooltip("In meters per second")]
+    private float movementSpeed = 5f;
+
+    [SerializeField, Tooltip("In meters per seconds")]
+    private float terminalVelocity = 10f;
+
+    [Header("Observables")]
+
+    [Tooltip("In meters per second per second")]
+    private float gravityAcceleration;
+
+    [SerializeField, Tooltip("In meters per second")]
+    private Vector2 directionalVelocity;
+
+    [Tooltip("In meters per second")]
+    public float verticalVelocity;
+
+    [SerializeField]
+    private bool isSprinting = false;
+
+    private PlayerState_Jump jump;
+    public override void Initialize()
+    {
+        player.GetState(out jump);
+
+        BindInputUpdate(player.Input.Sprint, HandleSprint);
+        BindInputStart(player.Input.Jump, HandleCoyoteJump);
+    }
 
     protected override void EnterState()
     {
-        player.Actions.Move.performed += HandleMovement_InputAction;
-        player.Actions.Move.canceled += HandleMovement_InputAction;
+        CalculateParameters();
 
-        player.collisionUpdate += HandleCollisionUpdate;
+        verticalVelocity = 0;
 
-        //movementVelocity = new()
-        //{
-        //    x = player.Velocity.x,
-        //    y = player.Velocity.z,
-        //};
-        //gravityVelocity = player.Velocity.y;
+        player.Animator.SetBool("isAirBourne", true);
+    }
 
-        CoroutineUntilLeaveState(HandleGravity_Coroutine());
+    private void CalculateParameters()
+    {
+        gravityAcceleration = (2f * jump.DefaultHeight) / -Mathf.Pow(jump.DefaultFallTime, 2);
+    }
+
+    private void HandleSprint(float input)
+    {
+        if (input >= 1f)
+        {
+            isSprinting = true;
+        }
+        else
+        {
+            isSprinting = false;
+        }
+    }
+
+    private void HandleCoyoteJump()
+    {
+        if (jump.IsOnCoyoteTime)
+        { player.SwitchState(jump); }
+    }
+
+    private void Update()
+    {
+        UpdateMovement();
+        UpdateGravity();
+
+        RotatePlayer();
+
+        Vector3 velocity = CalculateVelocity();
+        player.Move(velocity,
+            onCollision: HandleCollision
+        );
+    }
+
+    private void UpdateMovement()
+    {
+        Vector2 directionalInput = player.Input.Movement.Value;
+
+        Vector3 cameraDirection = Camera.main.transform.forward;
+        cameraDirection.y = 0;
+
+        Quaternion rotation;
+        if (cameraDirection != Vector3.zero)
+        { rotation = Quaternion.Euler(0, 0, -Camera.main.transform.rotation.eulerAngles.y); }
+        else
+        { rotation = Quaternion.identity; }
+
+        if (directionalInput != Vector2.zero)
+        {
+            player.Animator.SetBool("isWalking", true);
+            player.Animator.SetBool("isIdleGround", false);
+        }
+        else
+        {
+            player.Animator.SetBool("isWalking", false);
+            player.Animator.SetBool("isIdleGround", true);
+        }
+
+        Vector2 movementVelocity = rotation * (directionalInput * movementSpeed);
+        directionalVelocity = movementVelocity;
+    }
+
+    private void UpdateGravity()
+    {
+        if (verticalVelocity > -terminalVelocity)
+        {
+            float velocityFromGravity = gravityAcceleration * Time.deltaTime;
+            verticalVelocity += velocityFromGravity;
+
+            if (verticalVelocity < -terminalVelocity)
+            { verticalVelocity = -terminalVelocity; }
+        }
+    }
+
+    private void RotatePlayer()
+    {
+        if (directionalVelocity != Vector2.zero)
+        {
+            Vector3 lookDirection = new()
+            {
+                x = directionalVelocity.x,
+                y = 0,
+                z = directionalVelocity.y,
+            };
+            player.Look(lookDirection);
+        }
+    }
+
+    private Vector3 CalculateVelocity()
+    {
+        Vector3 velocity = new()
+        {
+            x = directionalVelocity.x,
+            y = verticalVelocity,
+            z = directionalVelocity.y,
+        };
+
+        return velocity;
+    }
+
+    private void HandleCollision(CollisionFlags flags, ControllerColliderHit hit)
+    {
+        bool hitGround = flags.HasFlag(CollisionFlags.Below);
+        if (hitGround)
+        {
+            if (hit.gameObject.layer == LayerMask.NameToLayer("Water"))
+            {
+                player.SwitchState<PlayerState_Swim>();
+                return;
+            }
+            else if (isSprinting)
+            {
+                if (player.Velocity.x != 0f || player.Velocity.z != 0f)
+                {
+                    player.Animator.SetBool("isSprintingIdle", false);
+                    player.Animator.SetBool("isSprinting", true);
+                    player.Animator.SetBool("isWalking", false);
+                    player.Animator.SetBool("isIdleGround", false);
+                }
+                else
+                {
+                    player.Animator.SetBool("isSprintingIdle", true);
+                    player.Animator.SetBool("isSprinting", false);
+                    player.Animator.SetBool("isWalking", false);
+                    player.Animator.SetBool("isIdleGround", false);
+                }
+                
+                player.Animator.SetTrigger("land");
+                player.Animator.SetBool("isAirBourne", false);
+                player.SwitchState<PlayerState_GroundedRunning>();
+            }
+            else
+            {
+                player.Animator.SetBool("isSprinting", false);
+                player.Animator.SetBool("isSprintingIdle", false);
+
+                if (player.Velocity.x != 0 || player.Velocity.z != 0)
+                { player.Animator.SetBool("isWalking", true); player.Animator.SetBool("isIdleGround", false); }
+                else
+                { player.Animator.SetBool("isWalking", false); player.Animator.SetBool("isIdleGround", true); }
+                
+                player.Animator.SetTrigger("land");
+                player.Animator.SetBool("isAirBourne", false);
+
+                player.SwitchState<PlayerState_Grounded>();
+            }
+            return;
+        }
+
+        bool hitWall = flags.HasFlag(CollisionFlags.Sides);
+        if (hitWall && hit.gameObject.TryGetComponent<ClimbWall>(out _))
+        {
+            player.Look(-hit.normal);
+            player.SwitchState<PlayerState_Climbing>();
+        }
     }
 
     protected override void ExitState()
     {
-        player.Actions.Move.performed -= HandleMovement_InputAction;
-        player.Actions.Move.canceled -= HandleMovement_InputAction;
 
-        player.collisionUpdate -= HandleCollisionUpdate;
     }
 
-    private void HandleCollisionUpdate(ControllerColliderHit hit, CollisionFlags flags)
+    protected override Vector3 CalculateVelocity(Vector2 movement, Vector3 gravity, Vector3 forward)
     {
-        if (flags.HasFlag(CollisionFlags.Below))
-        {
-            player.SwitchState<PlayerState_Grounded>();
-        }
-        else if (hit != null && hit.gameObject.CompareTag("CanClimb"))
-        {
-            float angle = player.GetState<PlayerState_Climbing>().MaxHorizontalAngle_InDegrees;
-            // Comparando o ângulo entre a frente do jogador e a normal da parede
-            if (Mathf.Abs(Vector3.Dot(player.Forward, hit.normal)) > Mathf.Cos(angle * Mathf.Deg2Rad))
-            {
-                player.Look(-hit.normal);
-                player.SwitchState<PlayerState_Climbing>();
-            }
-        }
+        throw new System.NotImplementedException();
     }
 
-    private void HandleMovement_InputAction(InputAction.CallbackContext context)
+    protected override void HandleCollisionUpdate(Player.ControllerCollision collision)
     {
-        Vector2 input = context.ReadValue<Vector2>();
-        HandleMovement(input);
-    }
-
-    private void HandleMovement(Vector2 input)
-    {
-        if (player.Forward == Vector3.zero)
-        { HandleForward(); }
-
-        Vector2 movementVelocity = input * movementSpeedInMetersPerSecond;
-        player.Movement = movementVelocity;
-    }
-
-    private void HandleForward()
-    {
-        Vector3 forward = Camera.main.transform.forward;
-        forward.y = 0;
-        player.Forward = forward;
-    }
-
-    private IEnumerator HandleGravity_Coroutine()
-    {
-        float gravityStrength = Physics.gravity.magnitude;
-        Vector3 gravityDirection = Physics.gravity.normalized;
-
-        while (true)
-        {
-            float currentGravity = Vector3.Dot(player.Gravity, gravityDirection);
-            if (currentGravity < terminalVelocityInMetersPerSecond)
-            {
-                float gravityAcceleration = gravityStrength * Time.deltaTime;
-                currentGravity += gravityAcceleration;
-                if (currentGravity > terminalVelocityInMetersPerSecond)
-                { currentGravity = terminalVelocityInMetersPerSecond; }
-
-                player.Gravity = currentGravity * gravityDirection;
-            }
-
-            yield return null;
-        }
-    }
-
-    public override Vector3 CalculateVelocity(Vector2 movement, Vector3 gravity, Vector3 forward)
-    {
-        Quaternion rotation = Quaternion.LookRotation(forward);
-
-        Vector3 velocityBuffer = new()
-        {
-            x = movement.x,
-            z = movement.y,
-        };
-        velocityBuffer = rotation * velocityBuffer;
-
-        if (movement != Vector2.zero)
-        { player.Look(velocityBuffer); }
-
-        velocityBuffer += rotation * gravity;
-
-        Vector3 velocity = velocityBuffer;
-        return velocity;
+        throw new System.NotImplementedException();
     }
 }

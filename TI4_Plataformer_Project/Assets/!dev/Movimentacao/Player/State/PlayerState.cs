@@ -3,56 +3,75 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract partial class PlayerState : ScriptableObject
+[RequireComponent(typeof(Player))]
+public abstract partial class PlayerState : MonoBehaviour
 {
     protected Player player;
-    private HashSet<Coroutine> coroutines;
 
+    private Action bindInputs;
+    private Action unbindInputs;
 
-    public void Configure(Player player)
+    private readonly HashSet<Coroutine> coroutines = new();
+
+    private void Awake()
     {
-        this.player = player;
-        coroutines = new();
+        this.player = GetComponent<Player>();
     }
 
-
-    protected void CoroutineUntilLeaveState(IEnumerator coroutineDefinition)
+    protected void Update()
     {
-        StartCoroutine(coroutineDefinition);
+        Vector3 velocity = CalculateVelocity(player.Movement, player.Gravity, player.Forward);
+        Player.ControllerCollision collision = player.Move(velocity);
+
+        HandleCollisionUpdate(collision);
     }
 
-    public void Enter(PlayerState state)
-    {
-        this.Exit();
-        state.Enter();
-    }
     public void Enter()
     {
+        this.enabled = true;
+        bindInputs?.Invoke();
         EnterState();
     }
-
-    private void Exit()
+    public void Exit()
     {
-        ExitState();
+        this.enabled = false;
+        unbindInputs?.Invoke();
         StopCoroutines();
+        ExitState();
     }
 
-    protected virtual void EnterState() { }
-    protected virtual void ExitState() { }
-    public abstract Vector3 CalculateVelocity(Vector2 movement, Vector3 gravity, Vector3 forward);
-
-
-    private void StartCoroutine(IEnumerator coroutineDefinition)
+    protected void BindInputStart<TValue>(PlayerInput.InputHandler<TValue> input, Action handler) where TValue : struct
     {
-        Coroutine coroutine = player.StartCoroutine(coroutineDefinition);
+        bindInputs += () => input.OnStart += handler;
+        unbindInputs += () => input.OnStart -= handler;
+    }
+    protected void BindInputCancel<TValue>(PlayerInput.InputHandler<TValue> input, Action handler) where TValue : struct
+    {
+        bindInputs += () => input.OnCancel += handler;
+        unbindInputs += () => input.OnCancel -= handler;
+    }
+    protected void BindInputUpdate<TValue>(PlayerInput.InputHandler<TValue> input, Action<TValue> handler) where TValue : struct
+    {
+        bindInputs += () => input.OnUpdate += handler;
+        unbindInputs += () => input.OnUpdate -= handler;
+    }
+
+    protected void HandleCoroutine(IEnumerator coroutineDefinition)
+    {
+        Coroutine coroutine = StartCoroutine(coroutineDefinition);
         coroutines.Add(coroutine);
     }
-
     private void StopCoroutines()
     {
         foreach (Coroutine coroutine in coroutines)
-        { player.StopCoroutine(coroutine); }
+        { StopCoroutine(coroutine); }
 
         coroutines.Clear();
     }
+
+    public abstract void Initialize();
+    protected abstract void EnterState();
+    protected abstract void ExitState();
+    protected abstract Vector3 CalculateVelocity(Vector2 movement, Vector3 gravity, Vector3 forward);
+    protected abstract void HandleCollisionUpdate(Player.ControllerCollision collision);
 }
