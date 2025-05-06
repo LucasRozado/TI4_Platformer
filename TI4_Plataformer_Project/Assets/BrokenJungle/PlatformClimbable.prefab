@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2818001316602289344}
   - component: {fileID: 8724475703464257531}
   - component: {fileID: 4854765084580045801}
+  - component: {fileID: 1747399607120725489}
   m_Layer: 0
   m_Name: PlatformClimbable
   m_TagString: Untagged
@@ -29,7 +30,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 162.30661, y: 4.9788632, z: -75.01946}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 1, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -65,7 +66,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: ad679a3a2dacf7848a4c41449ed69e37, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -109,3 +110,15 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -5232630701603609255, guid: 892c7a0f598e19f4ba388584779b7486, type: 3}
+--- !u!114 &1747399607120725489
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4783126317189825723}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3628b7d2c6179a40b773f972a4aab7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

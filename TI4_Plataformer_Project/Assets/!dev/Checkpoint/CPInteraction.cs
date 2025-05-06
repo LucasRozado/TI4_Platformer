@@ -11,6 +11,8 @@ public class CPInteraction : Interactable
         if (!isActive)
         {
             isActive = true;
+            MeshRenderer mesh = gameObject.GetComponent<MeshRenderer>();
+            mesh.material.color = Color.red;
             CPManager.instance.AddCheckPoint(info);
         }
         else
@@ -30,6 +32,8 @@ public class CPInteraction : Interactable
         if (CPManager.instance.VerifyCheckPoint(info))
         {
             isActive = true;    
+            MeshRenderer mesh = gameObject.GetComponent<MeshRenderer>();
+            mesh.material.color = Color.red;
         }
     }
 }

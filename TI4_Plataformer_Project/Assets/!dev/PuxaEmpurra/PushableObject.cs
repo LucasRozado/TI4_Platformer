@@ -6,8 +6,11 @@ public class PushableObject : Interactable
     [SerializeField] private float height;
     public override void InteractWith(Player player)
     {
-        player.GetState<PlayerState_Pushing>().HandleObject(this);
-        player.SwitchState<PlayerState_Pushing>();
+        if (player.GetPowerUp(PowerUps.Push))
+        {
+            player.GetState<PlayerState_Pushing>().HandleObject(this);
+            player.SwitchState<PlayerState_Pushing>();
+        }        
     }
 
     public bool CheckCollision(Player player)
