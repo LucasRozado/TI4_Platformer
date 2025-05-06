@@ -84,9 +84,7 @@ public class BittingPlant : MonoBehaviour
     private void Start()
     {
         startPosition = transform.position;
-        Debug.Log(startPosition);
         newPosition = startPosition;
-        Debug.Log(newPosition);
     }
 
     private void Update()
