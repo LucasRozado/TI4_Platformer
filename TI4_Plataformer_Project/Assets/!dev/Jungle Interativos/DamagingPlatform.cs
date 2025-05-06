@@ -15,7 +15,7 @@ public class DamagingPlatform : MonoBehaviour
         {
             if (col.gameObject.TryGetComponent<Player>(out Player player))
             {
-                Debug.Log("Player hit");
+                Debug.Log("Player hit");                
             }
         }
     }
