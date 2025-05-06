@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class ButtonGate : MonoBehaviour
+public class ButtonGate : ButtonActivated
 {
     bool isActive;
     [SerializeField] float duration = 3f;
@@ -14,7 +14,7 @@ public class ButtonGate : MonoBehaviour
         startPosition = transform.position;
         newPosition = transform.position - Vector3.down * positionDistance;
     }
-    public void GateOpen()
+    public override void Activate()
     {
         if (!isActive)
         { 

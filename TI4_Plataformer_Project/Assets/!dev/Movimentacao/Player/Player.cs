@@ -4,7 +4,7 @@ using UnityEngine;
 using System.Reflection;
 using UnityEditor;
 using UnityEngine.InputSystem.LowLevel;
-
+public enum PowerUps { Push, Torch, Climb, Spirit}
 [RequireComponent(typeof(CharacterController))]
 public class Player : MonoBehaviour
 {
@@ -21,6 +21,9 @@ public class Player : MonoBehaviour
     [SerializeField] private Vector3 forward;
     [SerializeField] private Vector2 movementVelocity;
     [SerializeField] private Vector3 gravityVelocity;
+
+    [Header("PowerUps")]
+    [SerializeField] private bool[] hasPowerUp = new bool[4];
 
     private PlayerInput input;
     private CharacterController characterController;
@@ -173,5 +176,15 @@ public class Player : MonoBehaviour
     public void ToggleController(bool toggle)
     {
         characterController.enabled = toggle;
+    }
+
+    public bool GetPowerUp(PowerUps type)
+    {
+        return hasPowerUp[(int)type];
+    }
+
+    public void AcquirePowerUp(PowerUps type)
+    {
+        hasPowerUp[(int)type] = true;
     }
 }

@@ -1,8 +1,9 @@
+using System;
 using UnityEngine;
 
 public class ButtonPlatform : MonoBehaviour
 {
-    [SerializeField] ButtonGate gate;
+    [SerializeField] ButtonActivated[] activated;
     [SerializeField] Animator animator;
     bool isActive;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -11,8 +12,14 @@ public class ButtonPlatform : MonoBehaviour
         if (!isActive)
         {
             isActive = true;
-            animator.SetBool("IsActive", true);
-            gate.GateOpen();
+            if (animator != null)
+            {
+                animator.SetBool("IsActive", true);
+            }
+            foreach (ButtonActivated act in activated)
+            {
+                act.Activate();
+            }
         }
     }
 }
