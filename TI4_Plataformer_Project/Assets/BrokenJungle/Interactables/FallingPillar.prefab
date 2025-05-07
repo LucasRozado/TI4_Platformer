@@ -12,7 +12,8 @@ GameObject:
   - component: {fileID: 7682414909742226452}
   - component: {fileID: 6437492073574072369}
   - component: {fileID: 764592753032501129}
-  m_Layer: 0
+  - component: {fileID: 5010613524326171636}
+  m_Layer: 6
   m_Name: FallingPillar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -108,3 +109,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2, y: 7.717879, z: 1}
   m_Center: {x: 0, y: 3.8589394, z: -0.5}
+--- !u!114 &5010613524326171636
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7552179673594711291}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e2c4b41647049146894b01d9ea8a5ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  duration: 1.5
+  isFixed: 1
+  hasFallen: 0
+  drops: []

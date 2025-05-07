@@ -7,6 +7,7 @@ public class PlayerState_Spin : PlayerState
     float rotationDirection;
     private GameObject spinable;
     private readonly Vector3 gravityDirection = Physics.gravity.normalized;
+    private Vector3 direction;
     public override void Initialize()
     {
         BindInputStart(player.Input.Interact, HandleInteraction);
@@ -27,6 +28,7 @@ public class PlayerState_Spin : PlayerState
         this.spinable = spinable;
         rotationSpeed = speed;
         player.transform.parent = spinable.transform;
+        direction = Vector3.Cross(spinable.transform.right, player.transform.forward);
     }
 
     protected override Vector3 CalculateVelocity(Vector2 movement, Vector3 gravity, Vector3 forward)
@@ -76,7 +78,6 @@ public class PlayerState_Spin : PlayerState
 
     public void Update()
     {
-
-        spinable.transform.Rotate(Vector3.up, rotationDirection * Time.deltaTime);
+        spinable.transform.Rotate(direction.normalized, rotationDirection * Time.deltaTime);
     }
 }

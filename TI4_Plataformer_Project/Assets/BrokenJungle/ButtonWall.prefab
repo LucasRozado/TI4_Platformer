@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7960266286268486965}
   - component: {fileID: 1275959790800674111}
   - component: {fileID: 941447495391048082}
+  - component: {fileID: 7338432242185436757}
   m_Layer: 0
   m_Name: ButtonWall
   m_TagString: Untagged
@@ -106,5 +107,19 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.3560051, y: 7.6166506, z: 9.11056}
-  m_Center: {x: 0.000015258789, y: 3.8083253, z: -0.13441467}
+  m_Size: {x: 1.3560051, y: 4.76712, z: 9.11056}
+  m_Center: {x: 0.000015258789, y: 2.38356, z: -0.13441467}
+--- !u!114 &7338432242185436757
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5681362623271148000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92980982c6deab04aa3eeda4b01803aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  duration: 3
+  positionDistance: -6
