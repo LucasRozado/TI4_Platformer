@@ -151,6 +151,11 @@ public class PlayerState_Airbound : PlayerState
                 player.SwitchState<PlayerState_Swim>();
                 return;
             }
+            else if (hit.gameObject.TryGetComponent(out BoostMushroom boostMushroom))
+            {
+                boostMushroom.Boost(player);
+                return;
+            }
             else if (isSprinting)
             {
                 player.SwitchState<PlayerState_GroundedRunning>();

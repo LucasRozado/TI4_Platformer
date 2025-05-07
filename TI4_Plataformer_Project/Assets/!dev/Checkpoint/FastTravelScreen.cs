@@ -31,7 +31,8 @@ public class FastTravelScreen : MonoBehaviour
         travel.gameObject.SetActive(false);
         foreach (CPButton button in fastTravelButtons)
         {
-            button.gameObject.SetActive(CPManager.instance.VerifyCheckPoint(button.checkpoint));
+            bool set = GameManager.checkpointManager.VerifyCheckPoint(button.checkpoint);
+            button.gameObject.SetActive(set);
         }
     }
 }

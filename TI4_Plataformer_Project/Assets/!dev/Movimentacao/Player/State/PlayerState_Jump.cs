@@ -10,10 +10,10 @@ public class PlayerState_Jump : PlayerState
 
     public float DefaultHeight => defaultHeight;
     [SerializeField, Tooltip("In meters")]
-    private float defaultHeight = 1.1f;
+    public float defaultHeight = 1.1f;
 
     [SerializeField, Tooltip("In seconds")]
-    private float defaultTimeToApex = 0.4f;
+    public float defaultTimeToApex = 0.4f;
 
     public float DefaultFallTime => defaultFallTime;
     [SerializeField, Tooltip("In seconds")]
@@ -201,6 +201,47 @@ public class PlayerState_Jump : PlayerState
             {
                 player.SwitchState<PlayerState_Swim>();
                 return;
+            }
+            else if (hit.gameObject.TryGetComponent(out BoostMushroom boostMushroom))
+            {
+                boostMushroom.Boost(player);
+                return;
+            }
+            else if (isSprinting)
+            {
+                if (player.Velocity.x != 0f || player.Velocity.z != 0f)
+                {
+                    player.Animator.SetBool("isSprintingIdle", false);
+                    player.Animator.SetBool("isSprinting", true);
+                    player.Animator.SetBool("isWalking", false);
+                    player.Animator.SetBool("isIdleGround", false);
+                }
+                else
+                {
+                    player.Animator.SetBool("isSprintingIdle", true);
+                    player.Animator.SetBool("isSprinting", false);
+                    player.Animator.SetBool("isWalking", false);
+                    player.Animator.SetBool("isIdleGround", false);
+                }
+
+                player.Animator.SetTrigger("land");
+                player.Animator.SetBool("isAirBourne", false);
+                player.SwitchState<PlayerState_GroundedRunning>();
+            }
+            else
+            {
+                player.Animator.SetBool("isSprinting", false);
+                player.Animator.SetBool("isSprintingIdle", false);
+
+                if (player.Velocity.x != 0 || player.Velocity.z != 0)
+                { player.Animator.SetBool("isWalking", true); player.Animator.SetBool("isIdleGround", false); }
+                else
+                { player.Animator.SetBool("isWalking", false); player.Animator.SetBool("isIdleGround", true); }
+
+                player.Animator.SetTrigger("land");
+                player.Animator.SetBool("isAirBourne", false);
+
+                player.SwitchState<PlayerState_Grounded>();
             }
             return;
         }
