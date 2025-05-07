@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 public class LoadTrigger : MonoBehaviour
 {
     [SerializeField] int sceneToGo;
+    [SerializeField] LoadSceneMode loadSceneMode;
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.layer == 7)
@@ -15,7 +16,7 @@ public class LoadTrigger : MonoBehaviour
 
     public IEnumerator LoadScene()
     {
-        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneToGo);
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneToGo, loadSceneMode);
 
         // Wait until the asynchronous scene fully loads
         while (!asyncLoad.isDone)
