@@ -4,6 +4,7 @@ public class CPInteraction : Interactable
 {
     [SerializeField] Transform spawnPosition;
     [SerializeField] CPInfo info;
+    [SerializeField] bool isFirstCheckpoint;
     bool isActive;
     public override void InteractWith(Player player)
     {
@@ -22,6 +23,10 @@ public class CPInteraction : Interactable
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        if (isFirstCheckpoint)
+        {
+            GameManager.SetSpawnPosition(spawnPosition.position);
+        }
         info.spawnPosition = spawnPosition.position;
         CheckActivation(); //TODO change game object sprite do include drawing
     }

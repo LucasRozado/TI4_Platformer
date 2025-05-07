@@ -48,4 +48,9 @@ public class GameManager : MonoBehaviour
         collectableManager.SaveCollectables();
         checkpointManager.SaveCheckPoints();
     }
+
+    public void ResetToCheckPoint()
+    {
+
+    }
 }
