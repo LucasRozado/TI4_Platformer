@@ -35,7 +35,17 @@ public class PlayerState_Climbing : PlayerState
 
     protected override void EnterState()
     {
+        player.Animator.SetBool("isClimbing", true);
         wallDirection = player.transform.rotation.eulerAngles.y;
+    }
+
+    protected override void ExitState()
+    {
+        player.Animator.SetBool("isClimbing", false);
+        player.Animator.SetBool("climbRight", false);
+        player.Animator.SetBool("climbLeft", false);
+        player.Animator.SetBool("climbUp", false);
+        player.Animator.SetBool("climbDown", false);
     }
 
     private void HandleJump()
@@ -122,12 +132,43 @@ public class PlayerState_Climbing : PlayerState
             z = 0,
         };
 
+        if (directionalVelocity.x > 0 && directionalVelocity.x > directionalVelocity.y)
+        {
+            player.Animator.SetBool("climbRight", true);
+            player.Animator.SetBool("climbLeft", false);
+            player.Animator.SetBool("climbUp", false);
+            player.Animator.SetBool("climbDown", false);
+        }
+        else if (directionalVelocity.x < 0 && directionalVelocity.x < directionalVelocity.y)
+        {
+            player.Animator.SetBool("climbLeft", true);
+            player.Animator.SetBool("climbRight", false);
+            player.Animator.SetBool("climbUp", false);
+            player.Animator.SetBool("climbDown", false);
+        }
+        else if (directionalVelocity.y > 0 && directionalVelocity.y > directionalVelocity.x)
+        {
+            player.Animator.SetBool("climbUp", true);
+            player.Animator.SetBool("climbDown", false);
+            player.Animator.SetBool("climbLeft", false);
+            player.Animator.SetBool("climbRight", false);
+        }
+        else if (directionalVelocity.y < 0 && directionalVelocity.y < directionalVelocity.x)
+        {
+            player.Animator.SetBool("climbDown", true);
+            player.Animator.SetBool("climbUp", false);
+            player.Animator.SetBool("climbLeft", false);
+            player.Animator.SetBool("climbRight", false);
+        }
+        else
+        {
+            player.Animator.SetBool("climbRight", false);
+            player.Animator.SetBool("climbLeft", false);
+            player.Animator.SetBool("climbUp", false);
+            player.Animator.SetBool("climbDown", false);
+        }
+
         return velocity;
-    }
-
-    protected override void ExitState()
-    {
-
     }
 
     protected override Vector3 CalculateVelocity(Vector2 movement, Vector3 gravity, Vector3 forward)

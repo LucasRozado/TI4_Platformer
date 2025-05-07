@@ -31,12 +31,14 @@ public class PlayerState_Swim : PlayerState
 
     protected override void EnterState()
     {
+        player.Animator.SetBool("isSwimming", true);
         currentVelocity = player.Velocity * 0.7f;
         currentVelocity.y = 0;
     }
 
     protected override void ExitState()
     {
+        player.Animator.SetBool("isSwimming", false);
     }
 
     private void HandleMovementInput(Vector2 input)
@@ -62,9 +64,9 @@ public class PlayerState_Swim : PlayerState
         cameraRight.y = 0;
         cameraRight.Normalize();
 
-        Vector3 targetDirection = (cameraForward * swimInputDirection.z + cameraRight * swimInputDirection.x).normalized; //Direção
+        Vector3 targetDirection = (cameraForward * swimInputDirection.z + cameraRight * swimInputDirection.x).normalized; //Direï¿½ï¿½o
 
-        if (targetDirection != Vector3.zero) //Direção Att
+        if (targetDirection != Vector3.zero) //Direï¿½ï¿½o Att
         {
             Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
             player.transform.rotation = Quaternion.Slerp(player.transform.rotation, targetRotation, turnSpeed * Time.deltaTime);
@@ -72,14 +74,24 @@ public class PlayerState_Swim : PlayerState
 
         Vector3 targetVelocity = targetDirection * maxSwimSpeed; //Velocidade
 
-        float currentAccel = swimInputDirection.magnitude > 0.1f ? acceleration : deceleration; //Aceleração ou desaceleração se magntude for maior que .1
+        float currentAccel = swimInputDirection.magnitude > 0.1f ? acceleration : deceleration; //Aceleraï¿½ï¿½o ou desaceleraï¿½ï¿½o se magntude for maior que .1
         currentVelocity = Vector3.MoveTowards(currentVelocity, targetVelocity, currentAccel * Time.deltaTime);
 
-        currentVelocity *= (1f - waterDrag * Time.deltaTime); //Resistência da agua
+        currentVelocity *= (1f - waterDrag * Time.deltaTime); //Resistï¿½ncia da agua
 
-        //currentVelocity.y = Mathf.Lerp(currentVelocity.y, 0, surfaceFloatForce * Time.deltaTime); //Flutuação (Ignoravel)
+        //currentVelocity.y = Mathf.Lerp(currentVelocity.y, 0, surfaceFloatForce * Time.deltaTime); //Flutuaï¿½ï¿½o (Ignoravel)
         currentVelocity.y = -5f;
 
+        if(Mathf.Abs(currentVelocity.x) > Mathf.Abs(currentVelocity.z)) //Se a velocidade x for maior que a z, entï¿½o a animaï¿½ï¿½o de nado serï¿½ de lado
+        {
+            player.Animator.SetFloat("swimVelocity", Mathf.Abs(currentVelocity.x)); //Animaï¿½ï¿½o de nado
+        }
+        else
+        {
+            player.Animator.SetFloat("swimVelocity", Mathf.Abs(currentVelocity.z)); //Animaï¿½ï¿½o de nado
+        }
+
+        
         return currentVelocity;
     }
 
