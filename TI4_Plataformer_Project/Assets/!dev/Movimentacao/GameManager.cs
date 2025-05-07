@@ -33,7 +33,7 @@ public class GameManager : MonoBehaviour
         collectableManager.LoadCollectables();
 
         checkpointManager = new CPManager();
-        checkpointManager.SaveCheckPoints();
+        //checkpointManager.SaveCheckPoints();
         checkpointManager.StartManager();
     }
 

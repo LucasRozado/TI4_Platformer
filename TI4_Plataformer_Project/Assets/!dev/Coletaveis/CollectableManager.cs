@@ -12,21 +12,29 @@ public class CollectableManager
     public bool[] spiritualCollected = new bool[100];
     private string collectablesPath = Application.persistentDataPath + "/collectables.json";
 
-    public void SaveCollectables()
+    public string SaveCollectables()
     {
-        var content = JsonUtility.ToJson(this, true);
+        string content = JsonUtility.ToJson(this, true);
         string path = collectablesPath;
         File.WriteAllText(path, content);
         Debug.Log("Collectables save");
         Debug.Log(collectablesPath);
+        return content;
     }
 
     public void LoadCollectables()
     {
         string path = collectablesPath;
-        var content = File.ReadAllText(path);
-
-        var p = JsonUtility.FromJson<CollectableManager>(content);
+        string content;
+        try
+        {
+            content = File.ReadAllText(path);
+        }
+        catch
+        {            
+            content = SaveCollectables();
+        }        
+        CollectableManager p = JsonUtility.FromJson<CollectableManager>(content);
         collectableScore = p.collectableScore;
         jungleCollected = p.jungleCollected;
         caveCollected = p.caveCollected;
@@ -101,5 +109,10 @@ public class CollectableManager
             }
         }
         Debug.Log("UpdateDone");
+    }
+
+    public int GetScore(CollectableType type)
+    {
+        return collectableScore[(int)type];
     }
 }

@@ -14,21 +14,35 @@ public class CPManager
     public void StartManager()
     {
         CreateDictionary();
+        LoadCheckPoints();
         UpdateList(); //TODO check save files for List<int> of available checkpoints
     }
 
-    public void SaveCheckPoints()
+    public string SaveCheckPoints()
     {
-        var content = JsonUtility.ToJson(this, true);
+        string content = JsonUtility.ToJson(this, true);
         string path = checkpointsPath;
         File.WriteAllText(path, content);
+
+        Debug.Log("Checkpoint save");
+        Debug.Log(checkpointsPath);
+        return content;
     }
     public void LoadCheckPoints()
     {
         string path = checkpointsPath;
-        var content = File.ReadAllText(path);
+        string content;
 
-        var p = JsonUtility.FromJson<CPManager>(content);
+        try
+        {
+            content = File.ReadAllText(path);
+        }
+        catch
+        {
+            content = SaveCheckPoints();
+        }
+
+        CPManager p = JsonUtility.FromJson<CPManager>(content);
 
         availableIDs = p.availableIDs;
         Debug.Log("Loaded Checkpoins");
