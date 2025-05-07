@@ -10,7 +10,7 @@ public class CollectableManager
     public bool[] caveCollected = new bool[100];
     public bool[] canionCollected = new bool[100];
     public bool[] spiritualCollected = new bool[100];
-    public string collectablesPath = Application.persistentDataPath + "/collectables.json";
+    private string collectablesPath = Application.persistentDataPath + "/collectables.json";
 
     public void SaveCollectables()
     {

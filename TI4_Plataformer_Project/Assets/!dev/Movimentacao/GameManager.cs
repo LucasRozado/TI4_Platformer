@@ -1,4 +1,6 @@
+using NUnit.Framework;
 using UnityEngine;
+using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour
 {
@@ -10,6 +12,9 @@ public class GameManager : MonoBehaviour
     public static Vector3 playerSpawnPosition;
 
     public static CollectableManager collectableManager;
+    public static CPManager checkpointManager;
+    [Header("All Checkpoints to Add")]
+    public List<CPInfo> allCheckpointsToAdd;
 
     private void Awake()
     {
@@ -24,8 +29,12 @@ public class GameManager : MonoBehaviour
 
         actions = new InputSystem_Actions();
         collectableManager = new CollectableManager();
-        //collectableManager.SaveCollectables();
+        //collectableManager.SaveCollectables(); //Ligar e desligar se for recomecar o arquivo
         collectableManager.LoadCollectables();
+
+        checkpointManager = new CPManager();
+        checkpointManager.SaveCheckPoints();
+        checkpointManager.StartManager();
     }
 
     public static void SetSpawnPosition(Vector3 newSpawnPosition)
@@ -33,4 +42,10 @@ public class GameManager : MonoBehaviour
         playerSpawnPosition = newSpawnPosition;
     }
     public InputSystem_Actions Actions => actions;
+
+    private void OnDestroy()
+    {
+        collectableManager.SaveCollectables();
+        checkpointManager.SaveCheckPoints();
+    }
 }
