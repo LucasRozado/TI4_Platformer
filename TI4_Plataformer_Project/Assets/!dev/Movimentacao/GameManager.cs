@@ -9,6 +9,8 @@ public class GameManager : MonoBehaviour
 
     public static Vector3 playerSpawnPosition;
 
+    public static CollectableManager collectableManager;
+
     private void Awake()
     {
         if (instance != null)
@@ -21,6 +23,9 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         actions = new InputSystem_Actions();
+        collectableManager = new CollectableManager();
+        //collectableManager.SaveCollectables();
+        collectableManager.LoadCollectables();
     }
 
     public static void SetSpawnPosition(Vector3 newSpawnPosition)
