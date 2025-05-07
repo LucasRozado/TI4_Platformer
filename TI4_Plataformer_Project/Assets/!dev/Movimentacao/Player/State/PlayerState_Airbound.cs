@@ -42,6 +42,10 @@ public class PlayerState_Airbound : PlayerState
 
         player.Animator.SetBool("isAirBourne", true);
     }
+    protected override void ExitState()
+    {
+        player.Animator.SetBool("isAirBourne", false);
+    }
 
     private void CalculateParameters()
     {
@@ -92,17 +96,6 @@ public class PlayerState_Airbound : PlayerState
         else
         { rotation = Quaternion.identity; }
 
-        if (directionalInput != Vector2.zero)
-        {
-            player.Animator.SetBool("isWalking", true);
-            player.Animator.SetBool("isIdleGround", false);
-        }
-        else
-        {
-            player.Animator.SetBool("isWalking", false);
-            player.Animator.SetBool("isIdleGround", true);
-        }
-
         Vector2 movementVelocity = rotation * (directionalInput * movementSpeed);
         directionalVelocity = movementVelocity;
     }
@@ -150,6 +143,9 @@ public class PlayerState_Airbound : PlayerState
         bool hitGround = flags.HasFlag(CollisionFlags.Below);
         if (hitGround)
         {
+            player.Animator.SetBool("isAirBourne", false);
+            player.Animator.SetTrigger("land");
+
             if (hit.gameObject.layer == LayerMask.NameToLayer("Water"))
             {
                 player.SwitchState<PlayerState_Swim>();
@@ -162,37 +158,14 @@ public class PlayerState_Airbound : PlayerState
             }
             else if (isSprinting)
             {
-                if (player.Velocity.x != 0f || player.Velocity.z != 0f)
-                {
-                    player.Animator.SetBool("isSprintingIdle", false);
-                    player.Animator.SetBool("isSprinting", true);
-                    player.Animator.SetBool("isWalking", false);
-                    player.Animator.SetBool("isIdleGround", false);
-                }
-                else
-                {
-                    player.Animator.SetBool("isSprintingIdle", true);
-                    player.Animator.SetBool("isSprinting", false);
-                    player.Animator.SetBool("isWalking", false);
-                    player.Animator.SetBool("isIdleGround", false);
-                }
-                
-                player.Animator.SetTrigger("land");
-                player.Animator.SetBool("isAirBourne", false);
                 player.SwitchState<PlayerState_GroundedRunning>();
             }
             else
             {
-                player.Animator.SetBool("isSprinting", false);
-                player.Animator.SetBool("isSprintingIdle", false);
-
                 if (player.Velocity.x != 0 || player.Velocity.z != 0)
                 { player.Animator.SetBool("isWalking", true); player.Animator.SetBool("isIdleGround", false); }
                 else
                 { player.Animator.SetBool("isWalking", false); player.Animator.SetBool("isIdleGround", true); }
-                
-                player.Animator.SetTrigger("land");
-                player.Animator.SetBool("isAirBourne", false);
 
                 player.SwitchState<PlayerState_Grounded>();
             }
@@ -205,11 +178,6 @@ public class PlayerState_Airbound : PlayerState
             player.Look(-hit.normal);
             player.SwitchState<PlayerState_Climbing>();
         }
-    }
-
-    protected override void ExitState()
-    {
-
     }
 
     protected override Vector3 CalculateVelocity(Vector2 movement, Vector3 gravity, Vector3 forward)

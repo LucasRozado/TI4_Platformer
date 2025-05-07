@@ -16,7 +16,6 @@ public class PlayerState_Grounded : PlayerState
     [SerializeField, Tooltip("In meters per second")]
     private float groundPull;
 
-
     private PlayerState_Jump jump;
     public override void Initialize()
     {
@@ -41,19 +40,12 @@ public class PlayerState_Grounded : PlayerState
         RotatePlayer();
 
         Vector3 velocity = CalculateVelocity();
-        player.Move(velocity,
-            onCollision: HandleCollision
-        );
+        player.Move(velocity, onCollision: HandleCollision);
     }
 
     private void HandleSprint()
     {
         Debug.Log("Sprint");
-        player.Animator.SetBool("isWalking", false);
-        player.Animator.SetBool("isIdleGround", false);
-        player.Animator.SetBool("isSprintingIdle", true);
-        player.Animator.SetTrigger("fall");
-        
         player.SwitchState<PlayerState_GroundedRunning>();
     }
     
@@ -163,16 +155,13 @@ public class PlayerState_Grounded : PlayerState
     {
         player.Animator.SetBool("isWalking", false);
         player.Animator.SetBool("isIdleGround", false);
-        player.Animator.SetBool("isSprinting", false);
-        player.Animator.SetBool("isSprintingIdle", false);
-
-        player.Animator.SetTrigger("jump");
         player.SwitchState<PlayerState_Jump>();
     }
 
     protected override void ExitState()
     {
-
+        player.Animator.SetBool("isWalking", false);
+        player.Animator.SetBool("isIdleGround", false);
     }
 
     protected override Vector3 CalculateVelocity(Vector2 movement, Vector3 gravity, Vector3 forward)
