@@ -10,10 +10,10 @@ public class PlayerState_Jump : PlayerState
 
     public float DefaultHeight => defaultHeight;
     [SerializeField, Tooltip("In meters")]
-    private float defaultHeight = 1.1f;
+    public float defaultHeight = 1.1f;
 
     [SerializeField, Tooltip("In seconds")]
-    private float defaultTimeToApex = 0.4f;
+    public float defaultTimeToApex = 0.4f;
 
     public float DefaultFallTime => defaultFallTime;
     [SerializeField, Tooltip("In seconds")]
@@ -199,6 +199,11 @@ public class PlayerState_Jump : PlayerState
             if (hit.gameObject.layer == LayerMask.NameToLayer("Water"))
             {
                 player.SwitchState<PlayerState_Swim>();
+                return;
+            }
+            else if (hit.gameObject.TryGetComponent(out BoostMushroom boostMushroom))
+            {
+                boostMushroom.Boost(player);
                 return;
             }
             else if (isSprinting)
