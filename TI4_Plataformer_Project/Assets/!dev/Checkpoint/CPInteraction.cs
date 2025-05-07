@@ -11,9 +11,7 @@ public class CPInteraction : Interactable
         if (!isActive)
         {
             isActive = true;
-            MeshRenderer mesh = gameObject.GetComponent<MeshRenderer>();
-            mesh.material.color = Color.red;
-            CPManager.instance.AddCheckPoint(info);
+            GameManager.checkpointManager.AddCheckPoint(info);
         }
         else
         {
@@ -25,15 +23,13 @@ public class CPInteraction : Interactable
     void Start()
     {
         info.spawnPosition = spawnPosition.position;
-        CheckActivation(); //TODO change sprite do include drawing
+        CheckActivation(); //TODO change game object sprite do include drawing
     }
     public void CheckActivation()
     {
-        if (CPManager.instance.VerifyCheckPoint(info))
+        if (GameManager.checkpointManager.VerifyCheckPoint(info))
         {
-            isActive = true;    
-            MeshRenderer mesh = gameObject.GetComponent<MeshRenderer>();
-            mesh.material.color = Color.red;
+            isActive = true;
         }
     }
 }

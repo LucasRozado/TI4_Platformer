@@ -1,28 +1,51 @@
 using System.Collections.Generic;
 using UnityEngine;
-
-public class CPManager : MonoBehaviour
+using System.IO;
+using System;
+[Serializable]
+public class CPManager
 {
     public static CPManager instance;
-    [SerializeField] List<CPInfo> availableCheckpoints;
-    [SerializeField] List<int> availableIDs;
+    List<CPInfo> availableCheckpoints = new List<CPInfo>();
+    [SerializeField] List<int> availableIDs = new List<int>();
     private Dictionary<int,  CPInfo> allCheckpoints = new Dictionary<int, CPInfo>();
-    [Header("Add all checkpoint info")]
-    [SerializeField] List<CPInfo> allCheckpointsToAdd;
+    private string checkpointsPath = Application.persistentDataPath + "/checkpoints.json";
 
-    private void Awake()
+    public void StartManager()
     {
-        if (instance == null)
-        {
-            instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-        DontDestroyOnLoad(gameObject);
         CreateDictionary();
+        LoadCheckPoints();
         UpdateList(); //TODO check save files for List<int> of available checkpoints
+    }
+
+    public string SaveCheckPoints()
+    {
+        string content = JsonUtility.ToJson(this, true);
+        string path = checkpointsPath;
+        File.WriteAllText(path, content);
+
+        Debug.Log("Checkpoint save");
+        Debug.Log(checkpointsPath);
+        return content;
+    }
+    public void LoadCheckPoints()
+    {
+        string path = checkpointsPath;
+        string content;
+
+        try
+        {
+            content = File.ReadAllText(path);
+        }
+        catch
+        {
+            content = SaveCheckPoints();
+        }
+
+        CPManager p = JsonUtility.FromJson<CPManager>(content);
+
+        availableIDs = p.availableIDs;
+        Debug.Log("Loaded Checkpoins");
     }
 
     public void AddCheckPoint(CPInfo info)
@@ -51,7 +74,7 @@ public class CPManager : MonoBehaviour
 
     public void UpdateList()
     {
-        foreach (int i  in availableIDs)
+        foreach (int i in availableIDs)
         {
             if (allCheckpoints.ContainsKey(i))
             {
@@ -62,10 +85,10 @@ public class CPManager : MonoBehaviour
 
     public void CreateDictionary()
     {
-        foreach (CPInfo info in allCheckpointsToAdd)
+        foreach (CPInfo info in GameManager.Instance.allCheckpointsToAdd)
         {
             Debug.Log(info.ID + " " + info.name);
             allCheckpoints.Add(info.ID, info);
         }
-    }
+    }    
 }

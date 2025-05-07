@@ -26,7 +26,7 @@ public class CPButton : MonoBehaviour
 
     private void OnEnable()
     {
-        if (!CPManager.instance.VerifyCheckPoint(checkpoint))
+        if (!GameManager.checkpointManager.VerifyCheckPoint(checkpoint))
         {
             gameObject.SetActive(false);
         }
