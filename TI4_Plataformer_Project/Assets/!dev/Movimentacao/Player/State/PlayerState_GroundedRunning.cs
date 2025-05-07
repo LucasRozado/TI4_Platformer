@@ -78,7 +78,7 @@ public class PlayerState_GroundedRunning : PlayerState
         float groundPull =  movementSpeed / Mathf.Tan(-player.Slope);
         this.groundPull = groundPull;
     }
-    private void HandleStop()
+    private Vector3 HandleStop()
     {
         /*
         Vector2 directionalInput = Vector2.zero;
@@ -103,11 +103,45 @@ public class PlayerState_GroundedRunning : PlayerState
             //player.Movement = movementVelocity;
         }
         */
+        Vector3 cameraForward = Camera.main.transform.forward;
+        cameraForward.y = 0;
+        cameraForward.Normalize();
+
+        Vector3 cameraRight = Camera.main.transform.right;
+        cameraRight.y = 0;
+        cameraRight.Normalize();
+
+        Vector3 targetDirection = (cameraForward * inputDirection.z + cameraRight * inputDirection.x).normalized; //Dire��o
+
+        if (targetDirection != Vector3.zero) //Dire��o Att
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
+            player.transform.rotation = Quaternion.Slerp(player.transform.rotation, targetRotation, turnSpeed * Time.deltaTime);
+        }
+
+        Vector3 targetVelocity = targetDirection; //Velocidade
+
+        float currentAccel = inputDirection.magnitude > 0.1f ? acceleration : deceleration; //Acelera��o ou desacelera��o se magntude for maior que .1
+        currentVelocity = Vector3.MoveTowards(currentVelocity, targetVelocity, currentAccel * Time.deltaTime);
+
+        currentVelocity *= (1f - drag * Time.deltaTime); //Resist�ncia do chão
+
+        //currentVelocity.y = Mathf.Lerp(currentVelocity.y, 0, surfaceFloatForce * Time.deltaTime); //Flutua��o (Ignoravel)
+        currentVelocity.y = -5f;
+
+
+        speedMultiplier = Mathf.MoveTowards(speedMultiplier, 1f, currentAccel * Time.deltaTime);
+        speedMultiplier *= (1f - drag * Time.deltaTime);
+
+        player.Animator.SetFloat("sprintVelocity", speedMultiplier);
+
+        Debug.Log(currentVelocity * speedMultiplier);
         if (speedMultiplier <= 1f) 
         { 
             speedMultiplier = 1f; lastInput = Vector2.zero; inputDirection = Vector2.zero; 
             if(!isSprinting) {player.SwitchState<PlayerState_Grounded>();}
         }
+        return currentVelocity * speedMultiplier; 
         //Vector2 movementVelocity = rotation * (inputDirection * movementSpeed);
         //directionalVelocity = movementVelocity;
     }
@@ -238,44 +272,47 @@ public class PlayerState_GroundedRunning : PlayerState
     protected override Vector3 CalculateVelocity(Vector2 movement, Vector3 gravity, Vector3 forward)
     {
 
-        Vector3 cameraForward = Camera.main.transform.forward;
-        cameraForward.y = 0;
-        cameraForward.Normalize();
-
-        Vector3 cameraRight = Camera.main.transform.right;
-        cameraRight.y = 0;
-        cameraRight.Normalize();
-
-        Vector3 targetDirection = (cameraForward * inputDirection.z + cameraRight * inputDirection.x).normalized; //Dire��o
-
-        if (targetDirection != Vector3.zero) //Dire��o Att
+        if (!isSprinting || !isInputing)
         {
-            Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
-            player.transform.rotation = Quaternion.Slerp(player.transform.rotation, targetRotation, turnSpeed * Time.deltaTime);
+            return HandleStop();
         }
-
-        Vector3 targetVelocity = targetDirection * maxSpeed; //Velocidade
-
-        float currentAccel = inputDirection.magnitude > 0.1f ? acceleration : deceleration; //Acelera��o ou desacelera��o se magntude for maior que .1
-        currentVelocity = Vector3.MoveTowards(currentVelocity, targetVelocity, currentAccel * Time.deltaTime);
-
-        currentVelocity *= (1f - drag * Time.deltaTime); //Resist�ncia do chão
-
-        //currentVelocity.y = Mathf.Lerp(currentVelocity.y, 0, surfaceFloatForce * Time.deltaTime); //Flutua��o (Ignoravel)
-        currentVelocity.y = -5f;
-
-
-        speedMultiplier = Mathf.MoveTowards(speedMultiplier, maxSpeed, currentAccel * Time.deltaTime);
-        speedMultiplier *= (1f - drag * Time.deltaTime);
-
-        player.Animator.SetFloat("sprintVelocity", speedMultiplier);
-
-        if (!isInputing || !isSprinting)
+        else
         {
-            HandleStop();
+            Vector3 cameraForward = Camera.main.transform.forward;
+            cameraForward.y = 0;
+            cameraForward.Normalize();
+
+            Vector3 cameraRight = Camera.main.transform.right;
+            cameraRight.y = 0;
+            cameraRight.Normalize();
+
+            Vector3 targetDirection = (cameraForward * inputDirection.z + cameraRight * inputDirection.x).normalized; //Dire��o
+
+            if (targetDirection != Vector3.zero) //Dire��o Att
+            {
+                Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
+                player.transform.rotation = Quaternion.Slerp(player.transform.rotation, targetRotation, turnSpeed * Time.deltaTime);
+            }
+
+            Vector3 targetVelocity = targetDirection * maxSpeed; //Velocidade
+
+            float currentAccel = inputDirection.magnitude > 0.1f ? acceleration : deceleration; //Acelera��o ou desacelera��o se magntude for maior que .1
+            currentVelocity = Vector3.MoveTowards(currentVelocity, targetVelocity, currentAccel * Time.deltaTime);
+
+            currentVelocity *= (1f - drag * Time.deltaTime); //Resist�ncia do chão
+
+            //currentVelocity.y = Mathf.Lerp(currentVelocity.y, 0, surfaceFloatForce * Time.deltaTime); //Flutua��o (Ignoravel)
+            currentVelocity.y = -5f;
+
+
+            speedMultiplier = Mathf.MoveTowards(speedMultiplier, maxSpeed, currentAccel * Time.deltaTime);
+            speedMultiplier *= (1f - drag * Time.deltaTime);
+
+            player.Animator.SetFloat("sprintVelocity", speedMultiplier);
+
+            Debug.Log(currentVelocity * speedMultiplier);
+            return currentVelocity * speedMultiplier;   
         }
-        Debug.Log(currentVelocity * speedMultiplier);
-        return currentVelocity * speedMultiplier;
     }
 
     protected void HandleCollision(CollisionFlags flags, ControllerColliderHit hit)
