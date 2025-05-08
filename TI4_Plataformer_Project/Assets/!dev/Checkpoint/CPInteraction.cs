@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class CPInteraction : Interactable
 {
-    [SerializeField] Transform spawnPosition;
+    [SerializeField] public Transform spawnPosition;
     [SerializeField] CPInfo info;
     [SerializeField] bool isFirstCheckpoint;
     bool isActive;

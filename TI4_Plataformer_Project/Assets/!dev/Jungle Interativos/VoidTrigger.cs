@@ -8,6 +8,10 @@ public class VoidTrigger : MonoBehaviour
         if (other.CompareTag("Player"))
         {            
             GameManager.Instance.ResetToCheckPoint();
+
+            Player.instance.ToggleController(false);
+            Player.instance.gameObject.transform.position = firstCheckpoint.spawnPosition.position;
+            Player.instance.ToggleController(true);
         }
     }
 }
