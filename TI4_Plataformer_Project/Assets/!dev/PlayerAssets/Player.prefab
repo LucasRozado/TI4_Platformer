@@ -46,6 +46,7 @@ GameObject:
   - component: {fileID: 2357994208751721710}
   - component: {fileID: 1929290976145929163}
   - component: {fileID: 3414085757564275078}
+  - component: {fileID: 3700570784867488159}
   - component: {fileID: 5117446561807197320}
   - component: {fileID: 8965749133753995687}
   - component: {fileID: 5142344863161798831}
@@ -201,6 +202,28 @@ MonoBehaviour:
   maxHorizontalAngle: 45
   directionalVelocity: {x: 0, y: 0}
   wallDirection: 0
+--- !u!114 &3700570784867488159
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1972300195213588809}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57c0c68000fbcb2459094ac7f336555e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  movementSpeed: 5
+  defaultHeight: 2.4
+  defaultTimeToApex: 0.4
+  defaultFallTime: 0.3
+  bufferTime: 0.1
+  coyoteTime: 0.5
+  directionalVelocity: {x: 0, y: 0}
+  verticalVelocity: 0
+  coyoteTimer: 0
+  isSprinting: 0
 --- !u!114 &5117446561807197320
 MonoBehaviour:
   m_ObjectHideFlags: 0
