@@ -8,6 +8,15 @@ public class Enemy : MonoBehaviour
 {
     [SerializeField] private EnemyAggroArea aggroArea;
 
+    [Header("Idle")]
+    [SerializeField] private float idleDurationMin = 3f;
+    [SerializeField] private float idleDurationMax = 5f;
+
+    [Header("Patrol")]
+    [SerializeField] private float patrolDistanceMin = 4f;
+    [SerializeField] private float patrolDistanceMax = 8f;
+
+    [Header("Attack")]
     [SerializeField] private float attackDistance;
 
     private NavMeshAgent agent;
@@ -21,29 +30,9 @@ public class Enemy : MonoBehaviour
         Idle();
     }
 
-    private Vector3 GetRandomPosition()
-    {
-        // Calculando uma direcao aleatoria na borda de um cilindro
-        Vector3 randomDirection = UnityEngine.Random.onUnitSphere;
-        randomDirection.y = 0;
-        randomDirection.Normalize();
-        randomDirection.y = UnityEngine.Random.value;
-
-        const float minMovement = 4f;
-        const float maxMovement = 8f;
-
-        Vector3 offset = transform.rotation * randomDirection * UnityEngine.Random.Range(minMovement, maxMovement);
-        Vector3 randomPosition = transform.position + offset;
-
-        return randomPosition;
-    }
-
     private void Idle()
     {
-        const float durationMin = 3f;
-        const float durationMax = 5f;
-
-        float duration = UnityEngine.Random.Range(durationMin, durationMax);
+        float duration = UnityEngine.Random.Range(idleDurationMin, idleDurationMax);
 
         StartCoroutine(Idle_Coroutine(duration));
     }
@@ -66,14 +55,24 @@ public class Enemy : MonoBehaviour
 
     private void Patrol()
     {
-        Vector3 position = GetRandomPosition();
+        Vector3 position = GetRandomPatrolPoint();
         StartCoroutine(Patrol_Coroutine(position));
     }
     private IEnumerator Patrol_Coroutine(Vector3 position)
     {
         agent.SetDestination(position);
+        
+        // Tratando para nao preferir ficar nos cantos
+        while (agent.pathPending)
+        { yield return null; }
+        if (Vector3.Distance(agent.destination, transform.position) < patrolDistanceMin)
+        {
+            Debug.Log("Recalculating patrol");
+            Patrol();
+            yield break;
+        }
 
-        while (agent.pathPending || Vector3.Distance(transform.position, agent.destination) > agent.stoppingDistance)
+        while (Vector3.Distance(transform.position, agent.destination) > agent.stoppingDistance)
         {
             if (aggroArea.HasAggro)
             {
@@ -86,6 +85,19 @@ public class Enemy : MonoBehaviour
 
         Idle();
     }
+    private Vector3 GetRandomPatrolPoint()
+    {
+        // Calculando uma direcao aleatoria na superficie de um tubo
+        Vector3 randomDirection = UnityEngine.Random.onUnitSphere;
+        randomDirection.y = 0;
+        randomDirection.Normalize();
+        randomDirection.y = UnityEngine.Random.value;
+
+        Vector3 offset = transform.rotation * randomDirection * UnityEngine.Random.Range(patrolDistanceMin, patrolDistanceMax);
+        Vector3 randomPosition = transform.position + offset;
+
+        return randomPosition;
+    }
 
     private void Follow()
     {
@@ -97,12 +109,17 @@ public class Enemy : MonoBehaviour
         {
             GameObject target = aggroArea.GetClosestTarget(transform.position);
 
-            if (Vector3.Distance(transform.position, target.transform.position) <= attackDistance)
+            Vector3 directionVector = target.transform.position - transform.position;
+            if (directionVector.magnitude <= attackDistance)
             {
-                Attack();
+                agent.SetDestination(transform.position);
+                Quaternion direction = Quaternion.LookRotation(directionVector, transform.up);
+                Attack(direction);
                 yield break;
             }
 
+            //Vector3 targetDistance = target.transform.position - transform.position;
+            //Vector3 attackPosition = targetDistance * (targetDistance.magnitude - attackDistance);
             agent.SetDestination(target.transform.position);
             yield return null;
         }
@@ -110,14 +127,20 @@ public class Enemy : MonoBehaviour
         Idle();
     }
 
-    private void Attack()
+    private void Attack(Quaternion direction)
     {
         const float duration = 1f;
-        StartCoroutine(Attack_Coroutine(duration));
+        StartCoroutine(Attack_Coroutine(direction, duration));
     }
-    private IEnumerator Attack_Coroutine(float duration)
+    private IEnumerator Attack_Coroutine(Quaternion direction, float duration)
     {
-        yield return new WaitForSeconds(duration);
+        while (duration > 0)
+        {
+            transform.rotation = Quaternion.Lerp(transform.rotation, direction, Time.deltaTime * 5f);
+
+            duration -= Time.deltaTime;
+            yield return null;
+        }
 
         if (aggroArea.HasAggro)
         { Follow(); }
