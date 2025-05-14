@@ -4,6 +4,8 @@ using UnityEngine;
 using System.Reflection;
 using UnityEditor;
 using UnityEngine.InputSystem.LowLevel;
+using Unity.Cinemachine;
+
 public enum PowerUps { Push, Torch, Climb, Spirit}
 [RequireComponent(typeof(CharacterController))]
 public class Player : MonoBehaviour
