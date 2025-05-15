@@ -46,8 +46,8 @@ public class PlayerState_Airbound : PlayerState
     }
     protected override void ExitState()
     {
-        player.Animator.SetBool("isAirBourne", false);
         player.Animator.SetTrigger("land");
+        player.Animator.SetBool("isAirBourne", false);
     }
 
     private void CalculateParameters()
