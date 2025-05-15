@@ -8,7 +8,7 @@ public class Crystal : Interactable
 
     [SerializeField] private Crystal[] alsoToggle;
 
-    public UnityEvent turnedOn;
+    public UnityEvent onInteractionFinish;
 
     Material material;
     private void Awake()
@@ -18,14 +18,12 @@ public class Crystal : Interactable
 
     public bool IsOn => isLit;
 
-    private void TurnOn()
+    public void TurnOn()
     {
         isLit = true;
         material.color = Color.white;
-
-        turnedOn.Invoke();
     }
-    private void TurnOff()
+    public void TurnOff()
     {
         isLit = false;
         material.color = Color.gray;
@@ -40,6 +38,10 @@ public class Crystal : Interactable
         { TurnOn(); }
     }
 
+    public void EnableToggle()
+    {
+        canBeToggled = true;
+    }
     public void DisableToggle()
     {
         canBeToggled = false;
@@ -51,5 +53,7 @@ public class Crystal : Interactable
         { crystal.ToggleOnOff(); }
 
         ToggleOnOff();
+
+        onInteractionFinish.Invoke();
     }
 }

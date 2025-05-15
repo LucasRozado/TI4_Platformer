@@ -1,8 +1,10 @@
 using UnityEngine;
 
-public class CrystalPuzzle : MonoBehaviour
+public class CrystalLightPuzzle : MonoBehaviour
 {
     bool isSolved = false;
+
+    [SerializeField] private Activated onSolveActivate;
 
     private Crystal[] crystals;
     void Start()
@@ -10,7 +12,7 @@ public class CrystalPuzzle : MonoBehaviour
         crystals = GetComponentsInChildren<Crystal>();
 
         foreach (Crystal crystal in crystals)
-        { crystal.turnedOn.AddListener(Validate); }
+        { crystal.onInteractionFinish.AddListener(Validate); }
 
         if (isSolved)
         { HandleSolve(); }
@@ -32,8 +34,10 @@ public class CrystalPuzzle : MonoBehaviour
 
         foreach (Crystal crystal in crystals)
         {
-            crystal.turnedOn.RemoveListener(Validate);
+            crystal.onInteractionFinish.RemoveListener(Validate);
             crystal.DisableToggle();
         }
+
+        onSolveActivate.Activate();
     }
 }
