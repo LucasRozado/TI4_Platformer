@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEditor;
+using System;
+using Unity.VisualScripting;
 [CustomEditor(typeof(CollectablesList))]
 public class CollectableAutoNumber : Editor
 {
@@ -14,7 +16,22 @@ public class CollectableAutoNumber : Editor
         base.OnInspectorGUI();
         if (GUILayout.Button("Listar Collectables"))
         {
-            cod.NumberCollectables();
+            NumberCollectables();
         }
+    }
+
+    public void NumberCollectables()
+    {
+        Undo.SetCurrentGroupName("Set Collectables");
+        int i = Undo.GetCurrentGroup();
+        int count = 0;
+        foreach (Collectable collectable in cod.levelCollectables)
+        {
+            Undo.RecordObject(collectable, "Collectable: " + count);
+            collectable.number = count;
+            collectable.gameObject.name = "Collectable: " + count.ToString();
+            count++;
+        }
+        Undo.CollapseUndoOperations(i);
     }
 }

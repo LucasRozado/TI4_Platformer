@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class CollectablesList : MonoBehaviour
 {
     public static CollectablesList instance;
-    [SerializeField] Collectable[] levelCollectables;
+    public Collectable[] levelCollectables;
 
     private void Awake()
     {
