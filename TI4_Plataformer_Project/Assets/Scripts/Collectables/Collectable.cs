@@ -14,6 +14,7 @@ public class Collectable : MonoBehaviour
     public void SetNumber(int number)
     {
         this.number = number;
+        gameObject.name = "Collectable: " + number.ToString();
     }
 
     public int GetNumber()

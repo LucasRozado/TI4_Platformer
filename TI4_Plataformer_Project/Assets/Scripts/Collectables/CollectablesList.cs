@@ -19,12 +19,17 @@ public class CollectablesList : MonoBehaviour
 
     private void Start()
     {
+        NumberCollectables();
+        GameManager.collectableManager.UpdateCollectables(levelCollectables);
+    }
+
+    public void NumberCollectables()
+    {
         int count = 0;
         foreach (Collectable collectable in levelCollectables)
         {
             collectable.SetNumber(count);
             count++;
         }
-        GameManager.collectableManager.UpdateCollectables(levelCollectables);
     }
 }
