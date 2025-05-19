@@ -38,16 +38,14 @@ public class PlayerState_Airbound : PlayerState
 
     protected override void EnterState()
     {
+        player.PlayerAnimations.AirbourneAnimation(true);
         CalculateParameters();
 
         verticalVelocity = 0;
-
-        player.Animator.SetBool("isAirBourne", true);
     }
     protected override void ExitState()
     {
-        player.Animator.SetTrigger("land");
-        player.Animator.SetBool("isAirBourne", false);
+        player.PlayerAnimations.AirbourneAnimation(false);
     }
 
     private void CalculateParameters()
@@ -162,11 +160,6 @@ public class PlayerState_Airbound : PlayerState
             }
             else
             {
-                if (player.Velocity.x != 0 || player.Velocity.z != 0)
-                { player.Animator.SetBool("isWalking", true); player.Animator.SetBool("isIdleGround", false); }
-                else
-                { player.Animator.SetBool("isWalking", false); player.Animator.SetBool("isIdleGround", true); }
-
                 player.SwitchState<PlayerState_Grounded>();
             }
             return;

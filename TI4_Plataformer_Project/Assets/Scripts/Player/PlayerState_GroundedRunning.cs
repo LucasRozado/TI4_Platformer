@@ -51,16 +51,15 @@ public class PlayerState_GroundedRunning : PlayerState
     }
     protected override void EnterState()
     {
-        player.Animator.SetBool("isWalking", false);
-        player.Animator.SetBool("isIdleGround", false);
-
+        player.PlayerAnimations.RunningAnimation(true);
+        player.PlayerAnimations.RunningSpeedAnimation(1f);
         if (jump.IsBuffered)
         { HandleJump(); }
-        player.Animator.SetTrigger("fall");
         speedMultiplier = 1f;
     }
     protected override void ExitState()
     {
+        player.PlayerAnimations.RunningSpeedAnimation(1f);
         isInputing = false;
         isSprinting = false;
         speedMultiplier = 1f;
@@ -68,6 +67,7 @@ public class PlayerState_GroundedRunning : PlayerState
     
     private void Update()
     {
+        player.PlayerAnimations.RunningSpeedAnimation(speedMultiplier);
         UpdateMovement();
         UpdateGroundPull();
 
@@ -107,8 +107,6 @@ public class PlayerState_GroundedRunning : PlayerState
 
         speedMultiplier = Mathf.MoveTowards(speedMultiplier, 1f, currentAccel * Time.deltaTime);
         speedMultiplier *= (1f - drag * Time.deltaTime);
-
-        player.Animator.SetFloat("sprintVelocity", speedMultiplier);
 
         Debug.Log(currentVelocity * speedMultiplier);
         if (speedMultiplier <= 1f) 
@@ -204,8 +202,6 @@ public class PlayerState_GroundedRunning : PlayerState
 
             speedMultiplier = Mathf.MoveTowards(speedMultiplier, maxSpeed, currentAccel * Time.deltaTime);
             speedMultiplier *= (1f - drag * Time.deltaTime);
-
-            player.Animator.SetFloat("sprintVelocity", speedMultiplier);
 
             Debug.Log(currentVelocity * speedMultiplier);
             return currentVelocity * speedMultiplier;   

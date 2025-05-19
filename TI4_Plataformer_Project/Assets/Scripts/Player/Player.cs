@@ -29,10 +29,11 @@ public class Player : MonoBehaviour
 
     private PlayerInput input;
     private CharacterController characterController;
-    private Animator animator;
     private readonly Dictionary<Type, PlayerState> states = new();
     private readonly ControllerCollision lastCollision = new();
     private ControllerColliderHit collisionHitBuffer;
+
+    private PlayerAnimations playerAnimations;
     private void Awake()
     {
         if (instance == null)
@@ -43,7 +44,7 @@ public class Player : MonoBehaviour
 
         forward = transform.forward;
         characterController = GetComponent<CharacterController>();
-        animator = GetComponentInChildren<Animator>();
+        playerAnimations = GetComponent<PlayerAnimations>();
     }
     private void Start()
     {
@@ -86,13 +87,13 @@ public class Player : MonoBehaviour
 
     public Action<ControllerColliderHit, CollisionFlags> collisionUpdate;
 
+    public PlayerAnimations PlayerAnimations => playerAnimations;
     public PlayerInput Input => input;
     public PlayerState State => state;
     public Vector3 Velocity => velocity;
     public Vector3 Forward { get => forward; set => forward = value; }
     public Vector2 Movement { get => movementVelocity; set => movementVelocity = value; }
     public Vector3 Gravity { get => gravityVelocity; set => gravityVelocity = value; }
-    public Animator Animator { get => animator; set => animator = value; }
     public float InteractDistance => interactDistance;
     public LayerMask CanInteract => canInteract;
     public float Slope => characterController.slopeLimit;
