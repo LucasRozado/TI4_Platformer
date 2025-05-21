@@ -29,6 +29,7 @@ public class PlayerState_Grounded : PlayerState
 
     protected override void EnterState()
     {
+        player.PlayerAnimations.RunningAnimation(false);
         if (jump.IsBuffered)
         { HandleJump(); }
     }
@@ -49,7 +50,7 @@ public class PlayerState_Grounded : PlayerState
         Debug.Log("Sprint");
         player.SwitchState<PlayerState_GroundedRunning>();
     }
-    
+
     private void UpdateMovement()
     {
         Vector2 directionalInput = player.Input.Movement.Value;
@@ -63,19 +64,17 @@ public class PlayerState_Grounded : PlayerState
         else
         { rotation = Quaternion.identity; }
 
-        if (directionalInput != Vector2.zero)
+        Vector2 movementVelocity = rotation * (directionalInput * movementSpeed);
+        directionalVelocity = movementVelocity;
+        
+        if (directionalVelocity != Vector2.zero)
         {
-            player.Animator.SetBool("isWalking", true);
-            player.Animator.SetBool("isIdleGround", false);
+            player.PlayerAnimations.WalkAnimation(true);
         }
         else
         {
-            player.Animator.SetBool("isWalking", false);
-            player.Animator.SetBool("isIdleGround", true);
+            player.PlayerAnimations.WalkAnimation(false);
         }
-
-        Vector2 movementVelocity = rotation * (directionalInput * movementSpeed);
-        directionalVelocity = movementVelocity;
     }
 
     private void UpdateGroundPull()
@@ -154,15 +153,12 @@ public class PlayerState_Grounded : PlayerState
 
     private void HandleJump()
     {
-        player.Animator.SetBool("isWalking", false);
-        player.Animator.SetBool("isIdleGround", false);
         player.SwitchState<PlayerState_Jump>();
     }
 
     protected override void ExitState()
     {
-        player.Animator.SetBool("isWalking", false);
-        player.Animator.SetBool("isIdleGround", false);
+
     }
 
     protected override Vector3 CalculateVelocity(Vector2 movement, Vector3 gravity, Vector3 forward)

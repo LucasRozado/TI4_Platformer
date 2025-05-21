@@ -31,14 +31,15 @@ public class PlayerState_Swim : PlayerState
 
     protected override void EnterState()
     {
-        player.Animator.SetBool("isSwimming", true);
+        player.PlayerAnimations.SwimAnimation(true);
         currentVelocity = player.Velocity * 0.7f;
         currentVelocity.y = 0;
     }
 
     protected override void ExitState()
     {
-        player.Animator.SetBool("isSwimming", false);
+        player.PlayerAnimations.SwimAnimation(false);
+        player.PlayerAnimations.SwimSpeedAnimation(0f);
     }
 
     private void HandleMovementInput(Vector2 input)
@@ -81,14 +82,17 @@ public class PlayerState_Swim : PlayerState
 
         //currentVelocity.y = Mathf.Lerp(currentVelocity.y, 0, surfaceFloatForce * Time.deltaTime); //Flutua��o (Ignoravel)
         currentVelocity.y = -5f;
-
-        if(Mathf.Abs(currentVelocity.x) > Mathf.Abs(currentVelocity.z)) //Se a velocidade x for maior que a z, ent�o a anima��o de nado ser� de lado
+        if (Mathf.Abs(player.Input.Movement.Value.y) > Mathf.Abs(player.Input.Movement.Value.x))
         {
-            player.Animator.SetFloat("swimVelocity", Mathf.Abs(currentVelocity.x)); //Anima��o de nado
+            player.PlayerAnimations.SwimSpeedAnimation(Mathf.Abs(currentVelocity.z));
+        }
+        else if (Mathf.Abs(player.Input.Movement.Value.x) > Mathf.Abs(player.Input.Movement.Value.y))
+        {
+            player.PlayerAnimations.SwimSpeedAnimation(Mathf.Abs(currentVelocity.x));
         }
         else
         {
-            player.Animator.SetFloat("swimVelocity", Mathf.Abs(currentVelocity.z)); //Anima��o de nado
+            player.PlayerAnimations.SwimSpeedAnimation(Mathf.Abs(currentVelocity.x));
         }
 
         

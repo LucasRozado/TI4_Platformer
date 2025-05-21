@@ -35,17 +35,15 @@ public class PlayerState_Climbing : PlayerState
 
     protected override void EnterState()
     {
-        player.Animator.SetBool("isClimbing", true);
+        player.PlayerAnimations.ClimbAnimation(true);
+        player.PlayerAnimations.ClimbTypeAnimation(0);
         wallDirection = player.transform.rotation.eulerAngles.y;
     }
 
     protected override void ExitState()
     {
-        player.Animator.SetBool("isClimbing", false);
-        player.Animator.SetBool("climbRight", false);
-        player.Animator.SetBool("climbLeft", false);
-        player.Animator.SetBool("climbUp", false);
-        player.Animator.SetBool("climbDown", false);
+        player.PlayerAnimations.ClimbAnimation(false);
+        player.PlayerAnimations.ClimbTypeAnimation(0);
     }
 
     private void HandleJump()
@@ -72,6 +70,34 @@ public class PlayerState_Climbing : PlayerState
 
         Vector2 movementVelocity = directionalInput * movementSpeed;
         directionalVelocity = movementVelocity;
+
+        if (directionalVelocity != Vector2.zero)
+        {
+            if (player.Input.Movement.Value.y > 0)
+            {
+                player.PlayerAnimations.ClimbTypeAnimation(1);
+            }
+            else if (player.Input.Movement.Value.x < 0)
+            {
+                player.PlayerAnimations.ClimbTypeAnimation(2);
+            }
+            else if (player.Input.Movement.Value.y < 0)
+            {
+                player.PlayerAnimations.ClimbTypeAnimation(3);
+            }
+            else if (player.Input.Movement.Value.x > 0)
+            {
+                player.PlayerAnimations.ClimbTypeAnimation(4);
+            }
+            else
+            {
+                player.PlayerAnimations.ClimbTypeAnimation(0);
+            }
+        }
+        else
+        {
+            player.PlayerAnimations.ClimbTypeAnimation(0);
+        }
     }
 
     private void CalculateGrip(out Ray leftGrip, out Ray rightGrip, out float distanceBetweenGrips)
@@ -131,43 +157,6 @@ public class PlayerState_Climbing : PlayerState
             y = directionalVelocity.y,
             z = 0,
         };
-
-        if (directionalVelocity.x > 0 && directionalVelocity.x > directionalVelocity.y)
-        {
-            player.Animator.SetBool("climbRight", true);
-            player.Animator.SetBool("climbLeft", false);
-            player.Animator.SetBool("climbUp", false);
-            player.Animator.SetBool("climbDown", false);
-        }
-        else if (directionalVelocity.x < 0 && directionalVelocity.x < directionalVelocity.y)
-        {
-            player.Animator.SetBool("climbLeft", true);
-            player.Animator.SetBool("climbRight", false);
-            player.Animator.SetBool("climbUp", false);
-            player.Animator.SetBool("climbDown", false);
-        }
-        else if (directionalVelocity.y > 0 && directionalVelocity.y > directionalVelocity.x)
-        {
-            player.Animator.SetBool("climbUp", true);
-            player.Animator.SetBool("climbDown", false);
-            player.Animator.SetBool("climbLeft", false);
-            player.Animator.SetBool("climbRight", false);
-        }
-        else if (directionalVelocity.y < 0 && directionalVelocity.y < directionalVelocity.x)
-        {
-            player.Animator.SetBool("climbDown", true);
-            player.Animator.SetBool("climbUp", false);
-            player.Animator.SetBool("climbLeft", false);
-            player.Animator.SetBool("climbRight", false);
-        }
-        else
-        {
-            player.Animator.SetBool("climbRight", false);
-            player.Animator.SetBool("climbLeft", false);
-            player.Animator.SetBool("climbUp", false);
-            player.Animator.SetBool("climbDown", false);
-        }
-
         return velocity;
     }
 

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Unity.Cinemachine;
 
 public class PlayerState_GroundedRunning : PlayerState
 {
@@ -13,7 +14,7 @@ public class PlayerState_GroundedRunning : PlayerState
 
     [Header("Values")]
 
-    private Vector3 currentVelocity;
+    [SerializeField]private Vector3 currentVelocity;
 
     [Header("Observables")]
 
@@ -37,6 +38,7 @@ public class PlayerState_GroundedRunning : PlayerState
 
     [SerializeField, Tooltip("In meters per second")]
     private float groundPull;
+    [SerializeField] private CinemachineCamera forwardCamera;
 
     private PlayerState_Jump jump;
     public override void Initialize()
@@ -49,16 +51,15 @@ public class PlayerState_GroundedRunning : PlayerState
     }
     protected override void EnterState()
     {
-        player.Animator.SetBool("isWalking", false);
-        player.Animator.SetBool("isIdleGround", false);
-
+        player.PlayerAnimations.RunningAnimation(true);
+        player.PlayerAnimations.RunningSpeedAnimation(1f);
         if (jump.IsBuffered)
         { HandleJump(); }
-        player.Animator.SetTrigger("fall");
         speedMultiplier = 1f;
     }
     protected override void ExitState()
     {
+        player.PlayerAnimations.RunningSpeedAnimation(1f);
         isInputing = false;
         isSprinting = false;
         speedMultiplier = 1f;
@@ -66,13 +67,11 @@ public class PlayerState_GroundedRunning : PlayerState
     
     private void Update()
     {
+        player.PlayerAnimations.RunningSpeedAnimation(speedMultiplier);
         UpdateMovement();
         UpdateGroundPull();
 
         RotatePlayer();
-
-        //Vector3 velocity = CalculateVelocity();
-        //player.Move(velocity, onCollision: HandleCollision);
     }
     private void UpdateGroundPull()
     {
@@ -81,34 +80,11 @@ public class PlayerState_GroundedRunning : PlayerState
     }
     private Vector3 HandleStop()
     {
-        /*
-        Vector2 directionalInput = Vector2.zero;
-  
-        Vector3 cameraDirection = Camera.main.transform.forward;
-        cameraDirection.y = 0;
-
-        Quaternion rotation;
-        if (cameraDirection != Vector3.zero)
-        { rotation = Quaternion.Euler(0, 0, -Camera.main.transform.rotation.eulerAngles.y); }
-        else
-        { rotation = Quaternion.identity; }
-
-        if (isInputing)
-        {
-            inputDirection =  speedMultiplier * player.Input.Movement.Value;
-            //player.Movement = movementVelocity;
-        }
-        else
-        {
-            inputDirection =  speedMultiplier * lastInput;
-            //player.Movement = movementVelocity;
-        }
-        */
-        Vector3 cameraForward = Camera.main.transform.forward;
+        Vector3 cameraForward = forwardCamera.transform.forward;
         cameraForward.y = 0;
         cameraForward.Normalize();
 
-        Vector3 cameraRight = Camera.main.transform.right;
+        Vector3 cameraRight = forwardCamera.transform.right;
         cameraRight.y = 0;
         cameraRight.Normalize();
 
@@ -127,14 +103,10 @@ public class PlayerState_GroundedRunning : PlayerState
 
         currentVelocity *= (1f - drag * Time.deltaTime); //Resist�ncia do chão
 
-        //currentVelocity.y = Mathf.Lerp(currentVelocity.y, 0, surfaceFloatForce * Time.deltaTime); //Flutua��o (Ignoravel)
         currentVelocity.y = -5f;
-
 
         speedMultiplier = Mathf.MoveTowards(speedMultiplier, 1f, currentAccel * Time.deltaTime);
         speedMultiplier *= (1f - drag * Time.deltaTime);
-
-        player.Animator.SetFloat("sprintVelocity", speedMultiplier);
 
         Debug.Log(currentVelocity * speedMultiplier);
         if (speedMultiplier <= 1f) 
@@ -143,8 +115,6 @@ public class PlayerState_GroundedRunning : PlayerState
             if(!isSprinting) {player.SwitchState<PlayerState_Grounded>();}
         }
         return currentVelocity * speedMultiplier; 
-        //Vector2 movementVelocity = rotation * (inputDirection * movementSpeed);
-        //directionalVelocity = movementVelocity;
     }
     private void HandleSprint(float input)
     {
@@ -160,62 +130,7 @@ public class PlayerState_GroundedRunning : PlayerState
     }
     private void UpdateMovement()
     {
-        player.Move(CalculateVelocity(inputDirection, gravityDirection, Camera.main.transform.forward));
-        /*
-        Vector2 directionalInput = Vector2.zero;
-
-        Vector3 cameraDirection = Camera.main.transform.forward;
-        cameraDirection.y = 0;
-
-        Quaternion rotation;
-        if (cameraDirection != Vector3.zero)
-        { rotation = Quaternion.Euler(0, 0, -Camera.main.transform.rotation.eulerAngles.y); }
-        else
-        { rotation = Quaternion.identity; }
-
-        player.Animator.SetFloat("sprintVelocity", speedMultiplier);
-
-        if (speedMultiplier <= 1f)
-        {
-            lastInput = Vector2.zero;
-        }
-        if (isSprinting)
-        {
-            if (isInputing)
-            {
-                speedMultiplier += Time.fixedDeltaTime * accelerationRate;
-                directionalInput =  speedMultiplier * player.Input.Movement.Value;
-                lastInput = directionalInput.normalized;
-                //player.Movement = movementVelocity;
-                if (speedMultiplier > maxSpeed) { speedMultiplier = maxSpeed; }
-            }
-            else
-            {
-                directionalInput =  speedMultiplier * lastInput;
-                //player.Movement = movementVelocity;
-                HandleStop();
-            }
-        }
-        else
-        {
-            if (isInputing)
-            {
-                directionalInput =  speedMultiplier * player.Input.Movement.Value;
-                lastInput = directionalInput.normalized;
-                //player.Movement = movementVelocity;
-                HandleStop();
-            }
-            else
-            {
-                directionalInput =  speedMultiplier * lastInput;
-                //player.Movement = movementVelocity;
-                HandleStop();
-            }
-            HandleStop();
-        }
-        Vector2 movementVelocity = rotation * (directionalInput * movementSpeed);
-        directionalVelocity = movementVelocity;
-        */
+        player.Move(CalculateVelocity(inputDirection, gravityDirection, forwardCamera.transform.forward));
     }
     private void RotatePlayer()
     {
@@ -250,26 +165,6 @@ public class PlayerState_GroundedRunning : PlayerState
         runningJump.SetLastVelocity(lastVelocity);
         player.SwitchState(runningJump);
     }
-    /*
-    private void HandleGravity()
-    {
-        float gravityForce = movementSpeed / Mathf.Tan(player.Slope);
-
-        Vector3 gravityVelocity = gravityDirection * gravityForce;
-        player.Gravity = gravityVelocity;
-    }
-    private Vector3 CalculateVelocity()
-    {
-        Vector3 velocity = new()
-        {
-            x = directionalVelocity.x,
-            y = groundPull,
-            z = directionalVelocity.y,
-        };
-
-        return velocity;
-    }
-    */
     protected override Vector3 CalculateVelocity(Vector2 movement, Vector3 gravity, Vector3 forward)
     {
 
@@ -279,11 +174,11 @@ public class PlayerState_GroundedRunning : PlayerState
         }
         else
         {
-            Vector3 cameraForward = Camera.main.transform.forward;
+            Vector3 cameraForward = forwardCamera.transform.forward;
             cameraForward.y = 0;
             cameraForward.Normalize();
 
-            Vector3 cameraRight = Camera.main.transform.right;
+            Vector3 cameraRight = forwardCamera.transform.right;
             cameraRight.y = 0;
             cameraRight.Normalize();
 
@@ -302,14 +197,11 @@ public class PlayerState_GroundedRunning : PlayerState
 
             currentVelocity *= (1f - drag * Time.deltaTime); //Resist�ncia do chão
 
-            //currentVelocity.y = Mathf.Lerp(currentVelocity.y, 0, surfaceFloatForce * Time.deltaTime); //Flutua��o (Ignoravel)
             currentVelocity.y = -5f;
 
 
             speedMultiplier = Mathf.MoveTowards(speedMultiplier, maxSpeed, currentAccel * Time.deltaTime);
             speedMultiplier *= (1f - drag * Time.deltaTime);
-
-            player.Animator.SetFloat("sprintVelocity", speedMultiplier);
 
             Debug.Log(currentVelocity * speedMultiplier);
             return currentVelocity * speedMultiplier;   
