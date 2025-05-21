@@ -51,7 +51,6 @@ GameObject:
   - component: {fileID: 8965749133753995687}
   - component: {fileID: 5142344863161798831}
   - component: {fileID: 8705405052902869010}
-  - component: {fileID: 7993544670175899783}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -97,7 +96,7 @@ CharacterController:
   m_Enabled: 1
   serializedVersion: 3
   m_Height: 1.84
-  m_Radius: 0.69
+  m_Radius: 0.65
   m_SlopeLimit: 45
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
@@ -143,6 +142,7 @@ MonoBehaviour:
   movementSpeed: 5
   directionalVelocity: {x: 0, y: 0}
   groundPull: 0
+  forwardCamera: {fileID: 0}
 --- !u!114 &2357994208751721710
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -293,28 +293,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementSpeedInMetersPerSecond: 4
   rotationSpeed: 40
---- !u!114 &7993544670175899783
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1972300195213588809}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 57c0c68000fbcb2459094ac7f336555e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  movementSpeed: 5
-  defaultHeight: 1.1
-  defaultTimeToApex: 0.4
-  defaultFallTime: 0.3
-  bufferTime: 0.1
-  coyoteTime: 0.5
-  directionalVelocity: {x: 0, y: 0}
-  verticalVelocity: 0
-  coyoteTimer: 0
-  isSprinting: 0
 --- !u!1 &4050215357455946936
 GameObject:
   m_ObjectHideFlags: 0

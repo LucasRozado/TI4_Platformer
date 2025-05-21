@@ -52,7 +52,7 @@ public class CraterExplosion : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.layer == LayerMask.NameToLayer("Player")) // Check if the object that entered the trigger is in the "Player" layer
+        if (other.gameObject.layer == 7) // Check if the object that entered the trigger is in the "Player" layer
         {
             ActivateTimer(); // Call the method to start the countdown timer
         }
