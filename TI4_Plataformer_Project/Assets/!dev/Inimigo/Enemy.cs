@@ -107,9 +107,9 @@ public class Enemy : MonoBehaviour
     {
         while (aggroArea.HasAggro)
         {
-            GameObject target = aggroArea.GetClosestTarget(transform.position);
+            Player player = aggroArea.Target.GetComponent<Player>();
 
-            Vector3 directionVector = target.transform.position - transform.position;
+            Vector3 directionVector = player.transform.position - transform.position;
             if (directionVector.magnitude <= attackDistance)
             {
                 agent.SetDestination(transform.position);
@@ -120,7 +120,7 @@ public class Enemy : MonoBehaviour
 
             //Vector3 targetDistance = target.transform.position - transform.position;
             //Vector3 attackPosition = targetDistance * (targetDistance.magnitude - attackDistance);
-            agent.SetDestination(target.transform.position);
+            agent.SetDestination(player.transform.position);
             yield return null;
         }
 
