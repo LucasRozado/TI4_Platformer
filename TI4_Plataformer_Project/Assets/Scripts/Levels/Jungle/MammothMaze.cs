@@ -19,6 +19,7 @@ public class MammothMaze : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         currentWaypoint = firstWaypoint.position;
         speed = baseSpeed;
+        gameObject.SetActive(false);
     }
 
     private void FixedUpdate()
