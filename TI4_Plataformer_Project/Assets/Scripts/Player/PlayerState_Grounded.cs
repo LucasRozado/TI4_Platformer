@@ -25,6 +25,7 @@ public class PlayerState_Grounded : PlayerState
         BindInputStart(player.Input.Jump, HandleJump);
         BindInputStart(player.Input.Sprint, HandleSprint);
         BindInputStart(player.Input.Interact, HandleInteraction);
+        BindInputStart(player.Input.Spirit, SwitchReality);
     }
 
     protected override void EnterState()

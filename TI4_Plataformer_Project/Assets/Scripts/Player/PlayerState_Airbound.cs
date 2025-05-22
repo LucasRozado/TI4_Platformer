@@ -34,6 +34,7 @@ public class PlayerState_Airbound : PlayerState
 
         BindInputUpdate(player.Input.Sprint, HandleSprint);
         BindInputStart(player.Input.Jump, HandleCoyoteJump);
+        BindInputStart(player.Input.Spirit, SwitchReality);
     }
 
     protected override void EnterState()

@@ -11,6 +11,7 @@ public class PlayerState_Pushing : PlayerState
     {
         BindInputUpdate(player.Input.Movement, HandleMovement);
         BindInputStart(player.Input.Interact, HandleInteraction);
+        BindInputStart(player.Input.Spirit, SwitchReality);
     }
     protected override void EnterState()
     {

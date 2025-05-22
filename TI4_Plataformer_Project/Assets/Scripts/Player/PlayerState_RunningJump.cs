@@ -54,6 +54,7 @@ public class PlayerState_RunningJump : PlayerState
         airbound = player.GetState<PlayerState_Airbound>();
 
         BindInputCancel(player.Input.Jump, HandleJumpCancel);
+        BindInputStart(player.Input.Spirit, SwitchReality);
     }
 
     protected override void EnterState()
