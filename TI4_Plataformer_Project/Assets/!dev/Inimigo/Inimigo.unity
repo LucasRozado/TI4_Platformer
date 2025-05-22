@@ -492,7 +492,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1972300195213588809, guid: a0389ca322586644da7c46d738d54167, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1040938970}
   m_SourcePrefab: {fileID: 100100000, guid: a0389ca322586644da7c46d738d54167, type: 3}
 --- !u!1 &214341428
 GameObject:
@@ -1628,6 +1631,29 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 934747880}
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1040938957 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1972300195213588809, guid: a0389ca322586644da7c46d738d54167, type: 3}
+  m_PrefabInstance: {fileID: 177066746}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1040938970
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1040938957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c61c01bc82e017841a212641fa9f867b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  movementSpeed: 2.5
+  enemyDistance: 3
+  cooldown: 5
+  forwardCamera: {fileID: 847345848}
+  directionalVelocity: {x: 0, y: 0}
+  groundPull: 0
 --- !u!1001 &1071157516
 PrefabInstance:
   m_ObjectHideFlags: 0

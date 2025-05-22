@@ -24,7 +24,8 @@ public class EnemyAggroArea : MonoBehaviour
         // Testando se a layer está entre as layers alvo
         if (((1 << other.gameObject.layer) & targetLayers) != 0)
         {
-            target = other.gameObject;
+            if (target == other.gameObject)
+            { target = null; }
         }
     }
 }

@@ -110,7 +110,17 @@ public class Enemy : MonoBehaviour
             Player player = aggroArea.Target.GetComponent<Player>();
 
             Vector3 directionVector = player.transform.position - transform.position;
-            if (directionVector.magnitude <= attackDistance)
+            float distance = directionVector.magnitude;
+
+            PlayerState_Torch torchState = player.GetState<PlayerState_Torch>();
+            if (player.State == torchState
+                && distance <= torchState.EnemyDistance)
+            {
+                agent.SetDestination(transform.position);
+                Idle();
+                yield break;
+            }
+            else if (distance <= attackDistance)
             {
                 agent.SetDestination(transform.position);
                 Quaternion direction = Quaternion.LookRotation(directionVector, transform.up);
