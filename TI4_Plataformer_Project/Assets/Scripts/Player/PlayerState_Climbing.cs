@@ -31,6 +31,7 @@ public class PlayerState_Climbing : PlayerState
         gripReach = Mathf.Sin(maxHorizontalAngle * Mathf.Deg2Rad);
 
         BindInputStart(player.Input.Jump, HandleJump);
+        BindInputStart(player.Input.Spirit, SwitchReality);
     }
 
     protected override void EnterState()

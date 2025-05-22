@@ -48,6 +48,7 @@ public class PlayerState_GroundedRunning : PlayerState
         BindInputUpdate(player.Input.Sprint, HandleSprint);
         BindInputUpdate(player.Input.Movement, HandleMovement);
         BindInputStart(player.Input.Jump, HandleJump);
+        BindInputStart(player.Input.Spirit, SwitchReality);
     }
     protected override void EnterState()
     {
