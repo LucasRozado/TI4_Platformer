@@ -14,37 +14,35 @@ public class PlayerState_Pushing : PlayerState
     }
     protected override void EnterState()
     {
-        player.Animator.SetBool("isHolding", true);
+        player.PlayerAnimations.HoldAnimation(true);
+        player.PlayerAnimations.HoldTypeAnimation(0);
         player.Forward = player.transform.forward;
         HandleGravity();
     }
     protected override void ExitState()
     {
-        player.Animator.SetBool("isHolding", false);
-        player.Animator.SetBool("isPushing", false);
-        player.Animator.SetBool("isPulling", false);
+        player.PlayerAnimations.HoldAnimation(false);
+        player.PlayerAnimations.HoldTypeAnimation(0);
         pushable.transform.parent = null;
     }
 
     private void HandleMovement(Vector2 input)
     {
-        input.x = 0;
-        
         if (input.y > 0)
         {
-            player.Animator.SetBool("isPushing", false);
-            player.Animator.SetBool("isPulling", true);
+            player.PlayerAnimations.HoldTypeAnimation(1);
         }
         else if (input.y < 0)
         {
-            player.Animator.SetBool("isPulling", false);
-            player.Animator.SetBool("isPushing", true);
+            player.PlayerAnimations.HoldTypeAnimation(-1);
         }
         else
         {
-            player.Animator.SetBool("isPushing", false);
-            player.Animator.SetBool("isPulling", false);
+            player.PlayerAnimations.HoldTypeAnimation(0);
         }
+
+        input.x = 0;
+        
         Vector2 movementVelocity = input * movementSpeedInMetersPerSecond;
         player.Movement = movementVelocity;
     }
