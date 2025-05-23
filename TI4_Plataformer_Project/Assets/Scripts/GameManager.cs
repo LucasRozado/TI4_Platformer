@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
     public static CPManager checkpointManager;
     [Header("All Checkpoints to Add")]
     public List<CPInfo> allCheckpointsToAdd;
+    [SerializeField] LevelProgress[] levelProgresses;
 
     private void Awake()
     {
@@ -47,6 +48,10 @@ public class GameManager : MonoBehaviour
     {
         collectableManager.SaveCollectables();
         checkpointManager.SaveCheckPoints();
+        foreach (LevelProgress progress in levelProgresses)
+        {
+            progress.SaveProgress();
+        }
     }
 
     public void ResetToCheckPoint()
