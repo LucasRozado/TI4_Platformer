@@ -7,7 +7,7 @@ using System;
 public class LevelProgress : ScriptableObject
 {
     public bool[] levelProgress;
-    [SerializeField] private string[] namesForReference;
+    public string[] elementName;
     [SerializeField] private string fileBaseName = "progress";
 
     private void Awake()

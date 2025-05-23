@@ -1,17 +1,15 @@
 using System;
 using UnityEngine;
 
-public class ButtonPlatform : MonoBehaviour
+public class ButtonPlatform : Progress
 {
-    [SerializeField] LevelProgress level;
-    [SerializeField] int levelBool;
     [SerializeField] ButtonActivated[] activated;
     [SerializeField] Animator animator;
     bool isActive;
 
     private void OnEnable()
     {
-        if (level.levelProgress[levelBool])
+        if (levelProgress.levelProgress[intReference])
         {
             Activate();
         }
@@ -36,6 +34,6 @@ public class ButtonPlatform : MonoBehaviour
         {
             act.Activate();
         }
-        level.levelProgress[levelBool] = true;
+        levelProgress.levelProgress[intReference] = true;
     }
 }
