@@ -952,8 +952,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefabsToSpawn:
   - {fileID: 4633126916441174217, guid: f215dbada777c8e47b6a1c5ffb821985, type: 3}
+  - {fileID: 2300747717177358900, guid: 8e1592aa84870b849ac61282c1b0e0e4, type: 3}
+  - {fileID: 2758530302291856435, guid: 401e7beaf3bece449a609085029c783d, type: 3}
+  - {fileID: 6871740487252684423, guid: 55a3e15f24eccba408a0efb782c40ae7, type: 3}
+  - {fileID: 7375761953751350374, guid: c40bc32ce9d666c4f90fee26ee56e9bb, type: 3}
+  - {fileID: 5326589734368548468, guid: b4a861b86d76ac64daa9ebb05abd4f2a, type: 3}
+  - {fileID: 4633126916441174217, guid: f215dbada777c8e47b6a1c5ffb821985, type: 3}
+  - {fileID: 4326822234943956537, guid: 93924ddea398d0a4596e61f879177c3e, type: 3}
+  - {fileID: 375266040927905850, guid: 3fbe7dccf02dd8c4db9a573d68460ef1, type: 3}
   spawnChance: 0.7
-  maxYRotationVariation: 30
+  maxYRotationVariation: 360
   minSpacing: 0.8
   maxSpacing: 3.77
   randomizeSpacing: 1
@@ -961,11 +969,11 @@ MonoBehaviour:
   raycastDistance: 50
   groundLayer:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 16384
   raycastOriginOffset: {x: 0, y: 0, z: 0}
   alignToSurface: 1
-  drawDebugRays: 1
-  drawSpawnPoints: 1
+  drawDebugRays: 0
+  drawSpawnPoints: 0
   spawnPointColor: {r: 0, g: 1, b: 1, a: 1}
 --- !u!65 &766565844
 BoxCollider:
@@ -986,8 +994,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 9.2856865, y: 0.9655172, z: 22.721613}
-  m_Center: {x: -3.1413014, y: -0.44002452, z: 10.860808}
+  m_Size: {x: 47.751236, y: 0.9655172, z: 47.57886}
+  m_Center: {x: 14.911407, y: -0.44002452, z: 13.631865}
 --- !u!33 &766565845
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -1768,7 +1776,7 @@ GameObject:
   - component: {fileID: 1708714365}
   - component: {fileID: 1708714364}
   - component: {fileID: 1708714363}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Quad
   m_TagString: Untagged
   m_Icon: {fileID: 0}
