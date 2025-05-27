@@ -71,7 +71,7 @@ public abstract partial class PlayerState : MonoBehaviour
 
     public void SwitchReality()
     {
-        if (player.GetPowerUp(PowerUps.Spirit))
+        if (GameManager.powerUp.GetPowerUp(PowerUps.Spirit))
         {
             SpiritualObserver.instance.SwitchReality();
         }

@@ -6,7 +6,7 @@ public class PushableObject : Interactable
     [SerializeField] private float height;
     public override void InteractWith(Player player)
     {
-        if (player.GetPowerUp(PowerUps.Push))
+        if (GameManager.powerUp.GetPowerUp(PowerUps.Push))
         {
             player.GetState<PlayerState_Pushing>().HandleObject(this);
             player.SwitchState<PlayerState_Pushing>();

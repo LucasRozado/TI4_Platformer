@@ -12,7 +12,7 @@ public class FallingInteractable : Interactable
     Vector3 pivot;
     public override void InteractWith(Player player)
     {
-        if (player.GetPowerUp(PowerUps.Push) && !hasFallen)
+        if (GameManager.powerUp.GetPowerUp(PowerUps.Push) && !hasFallen)
         {
             //StartCoroutine(Fall());
             if (isFixed)
