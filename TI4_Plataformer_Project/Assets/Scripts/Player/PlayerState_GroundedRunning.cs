@@ -38,7 +38,7 @@ public class PlayerState_GroundedRunning : PlayerState
 
     [SerializeField, Tooltip("In meters per second")]
     private float groundPull;
-    [SerializeField] private CinemachineCamera forwardCamera;
+
 
     private PlayerState_Jump jump;
     public override void Initialize()
@@ -81,11 +81,11 @@ public class PlayerState_GroundedRunning : PlayerState
     }
     private Vector3 HandleStop()
     {
-        Vector3 cameraForward = forwardCamera.transform.forward;
+        Vector3 cameraForward = Camera.main.transform.forward;
         cameraForward.y = 0;
         cameraForward.Normalize();
 
-        Vector3 cameraRight = forwardCamera.transform.right;
+        Vector3 cameraRight = Camera.main.transform.right;
         cameraRight.y = 0;
         cameraRight.Normalize();
 
@@ -131,7 +131,7 @@ public class PlayerState_GroundedRunning : PlayerState
     }
     private void UpdateMovement()
     {
-        player.Move(CalculateVelocity(inputDirection, gravityDirection, forwardCamera.transform.forward));
+        player.Move(CalculateVelocity(inputDirection, gravityDirection, Camera.main.transform.forward));
     }
     private void RotatePlayer()
     {
@@ -175,11 +175,11 @@ public class PlayerState_GroundedRunning : PlayerState
         }
         else
         {
-            Vector3 cameraForward = forwardCamera.transform.forward;
+            Vector3 cameraForward = Camera.main.transform.forward;
             cameraForward.y = 0;
             cameraForward.Normalize();
 
-            Vector3 cameraRight = forwardCamera.transform.right;
+            Vector3 cameraRight = Camera.main.transform.right;
             cameraRight.y = 0;
             cameraRight.Normalize();
 
