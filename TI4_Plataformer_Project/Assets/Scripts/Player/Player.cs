@@ -6,7 +6,7 @@ using UnityEditor;
 using UnityEngine.InputSystem.LowLevel;
 using Unity.Cinemachine;
 
-public enum PowerUps { Push, Torch, Climb, Spirit}
+
 [RequireComponent(typeof(CharacterController))]
 public class Player : MonoBehaviour
 {
@@ -181,11 +181,12 @@ public class Player : MonoBehaviour
         characterController.enabled = toggle;
     }
 
+    [Obsolete("Use GameManager.powerUp.GetPowerUp")]
     public bool GetPowerUp(PowerUps type)
     {
         return hasPowerUp[(int)type];
     }
-
+    [Obsolete("Use GameManager.powerUp.AcquirePowerUp")]
     public void AcquirePowerUp(PowerUps type)
     {
         hasPowerUp[(int)type] = true;
