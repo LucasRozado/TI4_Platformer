@@ -5,6 +5,7 @@ using System.Reflection;
 using UnityEditor;
 using UnityEngine.InputSystem.LowLevel;
 using Unity.Cinemachine;
+using System.Collections;
 
 
 [RequireComponent(typeof(CharacterController))]
@@ -12,20 +13,24 @@ public class Player : MonoBehaviour
 {
     public static Player instance;
 
+    [Header("Stats")]
+    [SerializeField] private int hpBase = 2;
+
     [Header("Interaction")]
     [SerializeField] private Transform[] interactChecksLR;
     [SerializeField] private float interactDistance = 0.3f;
     [SerializeField] private LayerMask canInteract;
 
+    [Header("PowerUps")]
+    [SerializeField] private bool[] hasPowerUp = new bool[4];
+
     [Header("Observables")]
+    [SerializeField] private int hpCurrent;
     [SerializeField] private PlayerState state;
     [SerializeField] private Vector3 velocity;
     [SerializeField] private Vector3 forward;
     [SerializeField] private Vector2 movementVelocity;
     [SerializeField] private Vector3 gravityVelocity;
-
-    [Header("PowerUps")]
-    [SerializeField] private bool[] hasPowerUp = new bool[4];
 
     private PlayerInput input;
     private CharacterController characterController;
@@ -42,6 +47,7 @@ public class Player : MonoBehaviour
         { Destroy(gameObject); }
         DontDestroyOnLoad(gameObject);
 
+        hpCurrent = hpBase;
         forward = transform.forward;
         characterController = GetComponent<CharacterController>();
         playerAnimations = GetComponent<PlayerAnimations>();
@@ -190,5 +196,33 @@ public class Player : MonoBehaviour
     public void AcquirePowerUp(PowerUps type)
     {
         hasPowerUp[(int)type] = true;
+    }
+
+    public void TakeDamage()
+    {
+        hpCurrent -= 1;
+        if (hpCurrent == 0)
+        { Die(); }
+    }
+
+    public void Heal()
+    {
+        hpCurrent = hpBase;
+    }
+
+    public void Die()
+    {
+        // TODO: Animation
+        StartCoroutine(Die_Coroutine());
+    }
+    private IEnumerator Die_Coroutine()
+    {
+        const float respawnDelay = 2f; // TODO: por a duracao da animacao de morte
+
+        yield return new WaitForSeconds(respawnDelay);
+
+        // TODO: animacao de respawn (a mesma de marcar checkpoint, se tiver)
+
+        GameManager.Instance.ResetToCheckPoint();
     }
 }

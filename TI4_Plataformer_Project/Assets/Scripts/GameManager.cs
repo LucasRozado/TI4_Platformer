@@ -85,6 +85,10 @@ public class GameManager : MonoBehaviour
 
     public void ResetToCheckPoint()
     {
+        Player.instance.ToggleController(false);
+        Player.instance.transform.position = playerSpawnPosition;
+        Player.instance.ToggleController(true);
 
+        // TODO: animacao
     }
 }
