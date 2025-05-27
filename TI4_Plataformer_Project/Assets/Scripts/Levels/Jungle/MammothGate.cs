@@ -24,12 +24,10 @@ public class MammothGate : ButtonActivated
             StartCoroutine(CRGateOpen());
             if (firstGate)
             {
-                Debug.Log("first gate");
                 mammoth.firstGate = true;
             }
             else
             {
-                Debug.Log("second gate");
                 mammoth.secondGate = true;
             }
             if (mammoth.firstGate && mammoth.secondGate)
