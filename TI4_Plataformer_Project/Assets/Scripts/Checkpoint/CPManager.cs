@@ -87,7 +87,6 @@ public class CPManager
     {
         foreach (CPInfo info in GameManager.Instance.allCheckpointsToAdd)
         {
-            Debug.Log(info.ID + " " + info.name);
             allCheckpoints.Add(info.ID, info);
         }
     }    
