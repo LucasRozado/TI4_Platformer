@@ -1,7 +1,7 @@
 using System.Linq;
 using UnityEngine;
 
-public class MammothWaypoint : MonoBehaviour
+public class MazeWaypoint : MonoBehaviour
 {
     private void OnTriggerEnter(Collider other)
     {
