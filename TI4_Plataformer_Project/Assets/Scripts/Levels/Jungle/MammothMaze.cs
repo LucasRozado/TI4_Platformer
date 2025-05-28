@@ -66,6 +66,7 @@ public class MammothMaze : MonoBehaviour
 
     public void ReadyCharge()
     {
+        Debug.Log("Ready Charge");
         isCharging = true;
         animator.SetBool("Charge", isCharging);
         agent.speed = 0;
@@ -74,12 +75,14 @@ public class MammothMaze : MonoBehaviour
 
     public void BeginCharge()
     {
+        Debug.Log("Begin Charge");
         agent.speed = chargeSpeed;
         rbSpeed = chargeSpeed;
     }
 
     public void EndCharge()
     {
+        Debug.Log("End Charge");
         rbSpeed = baseSpeed;
         isCharging = false;
         animator.SetBool("Charge", isCharging);

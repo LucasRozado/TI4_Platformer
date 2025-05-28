@@ -31,7 +31,10 @@ public class BossState : MonoBehaviour
 
     public virtual void Trigger(Collider other)
     {
-
+        if (other.CompareTag("Player"))
+        {
+            Debug.Log("Player hit");
+        }
     }
     public virtual void AnimationTrigger()
     {
