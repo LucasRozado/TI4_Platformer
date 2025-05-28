@@ -146,6 +146,17 @@ public class Player : MonoBehaviour
         return lastCollision;
     }
     public delegate void CollisionHandler(CollisionFlags flags, ControllerColliderHit hit);
+    public void Move(Vector3 velocity, CollisionHandler collisionHandler)
+    {
+        this.velocity = velocity;
+
+        CollisionFlags lastCollisionFlags = characterController.collisionFlags;
+        CollisionFlags collisionFlags = characterController.Move(velocity * Time.deltaTime);
+        // [OnControllerColliderHit] eh chamado no [Move] caso haja colisao
+
+        collisionHandler?.Invoke(collisionFlags, collisionHitBuffer);
+        collisionHitBuffer = null;
+    }
     public void Move(Vector3 velocity, CollisionHandler onFlagsUpdate = null, CollisionHandler onCollision = null)
     {
         this.velocity = velocity;
@@ -154,13 +165,13 @@ public class Player : MonoBehaviour
         CollisionFlags collisionFlags = characterController.Move(velocity * Time.deltaTime);
         // [OnControllerColliderHit] eh chamado no [Move] caso haja colisao
 
-        if (lastCollisionFlags != collisionFlags && onFlagsUpdate != null)
+        if (lastCollisionFlags != collisionFlags)
         {
-            onFlagsUpdate(collisionFlags, collisionHitBuffer);
+            onFlagsUpdate?.Invoke(collisionFlags, collisionHitBuffer);
         }
-        else if (collisionHitBuffer != null && onCollision != null)
+        if (collisionHitBuffer != null)
         {
-            onCollision(collisionFlags, collisionHitBuffer);
+            onCollision?.Invoke(collisionFlags, collisionHitBuffer);
             collisionHitBuffer = null;
         }
     }

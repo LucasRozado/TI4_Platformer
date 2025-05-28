@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using Unity.Cinemachine;
+using UnityEngine.Windows;
 
 public class PlayerState_GroundedRunning : PlayerState
 {
@@ -32,7 +33,6 @@ public class PlayerState_GroundedRunning : PlayerState
     [SerializeField] private bool isInputing = false;
     
     [SerializeField] private Vector3 inputDirection;
-    [SerializeField] private Vector3 lastInput;
 
     private readonly Vector3 gravityDirection = Physics.gravity.normalized;
 
@@ -45,7 +45,6 @@ public class PlayerState_GroundedRunning : PlayerState
     {
         jump = player.GetState<PlayerState_Jump>();
 
-        BindInputUpdate(player.Input.Sprint, HandleSprint);
         BindInputUpdate(player.Input.Movement, HandleMovement);
         BindInputStart(player.Input.Jump, HandleJump);
         BindInputStart(player.Input.Spirit, SwitchReality);
@@ -69,6 +68,7 @@ public class PlayerState_GroundedRunning : PlayerState
     private void Update()
     {
         player.PlayerAnimations.RunningSpeedAnimation(speedMultiplier);
+        UpdateSprint();
         UpdateMovement();
         UpdateGroundPull();
 
@@ -109,29 +109,27 @@ public class PlayerState_GroundedRunning : PlayerState
         speedMultiplier = Mathf.MoveTowards(speedMultiplier, 1f, currentAccel * Time.deltaTime);
         speedMultiplier *= (1f - drag * Time.deltaTime);
 
-        Debug.Log(currentVelocity * speedMultiplier);
         if (speedMultiplier <= 1f) 
         { 
-            speedMultiplier = 1f; lastInput = Vector2.zero; inputDirection = Vector2.zero; 
+            speedMultiplier = 1f;
+            inputDirection = Vector2.zero; 
             if(!isSprinting) {player.SwitchState<PlayerState_Grounded>();}
         }
         return currentVelocity * speedMultiplier; 
     }
-    private void HandleSprint(float input)
+    private void UpdateSprint()
     {
-        Debug.Log(input);
-        if (input >= 1f)
-        {
-            isSprinting = true;
-        }
+        if (player.Input.Sprint.Value >= 1f)
+        { isSprinting = true; }
         else
-        {
-            isSprinting = false;
-        }
+        { isSprinting = false; }
     }
     private void UpdateMovement()
     {
-        player.Move(CalculateVelocity(inputDirection, gravityDirection, Camera.main.transform.forward));
+        player.Move(
+            CalculateVelocity(inputDirection, gravityDirection, Camera.main.transform.forward),
+            HandleCollision
+        );
     }
     private void RotatePlayer()
     {
@@ -148,16 +146,6 @@ public class PlayerState_GroundedRunning : PlayerState
     }
     private void HandleMovement(Vector2 input)
     {
-        inputDirection = new Vector3(input.x, 0, input.y).normalized;
-        if (input.x != 0 || input.y != 0)
-        {
-            lastInput = input;
-            isInputing = true;
-        }
-        else
-        {
-            isInputing = false;
-        }
     }
     private void HandleJump()
     {
@@ -168,6 +156,13 @@ public class PlayerState_GroundedRunning : PlayerState
     }
     protected override Vector3 CalculateVelocity(Vector2 movement, Vector3 gravity, Vector3 forward)
     {
+        Vector2 input = player.Input.Movement.Value;
+        if (input != Vector2.zero)
+        { isInputing = true; }
+        else
+        { isInputing = false; }
+
+        inputDirection = new Vector3(input.x, 0, input.y).normalized;
 
         if (!isSprinting || !isInputing)
         {
@@ -204,7 +199,6 @@ public class PlayerState_GroundedRunning : PlayerState
             speedMultiplier = Mathf.MoveTowards(speedMultiplier, maxSpeed, currentAccel * Time.deltaTime);
             speedMultiplier *= (1f - drag * Time.deltaTime);
 
-            Debug.Log(currentVelocity * speedMultiplier);
             return currentVelocity * speedMultiplier;   
         }
     }

@@ -44,7 +44,7 @@ public class PlayerState_Grounded : PlayerState
         RotatePlayer();
 
         Vector3 velocity = CalculateVelocity();
-        player.Move(velocity, onCollision: HandleCollision);
+        player.Move(velocity, HandleCollision);
     }
 
     private void HandleSprint()
