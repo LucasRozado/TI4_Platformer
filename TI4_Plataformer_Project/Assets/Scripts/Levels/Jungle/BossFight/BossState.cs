@@ -1,3 +1,4 @@
+using UnityEditor.Animations;
 using UnityEngine;
 
 public class BossState : MonoBehaviour
@@ -31,5 +32,9 @@ public class BossState : MonoBehaviour
     public virtual void Trigger(Collider other)
     {
 
+    }
+    public virtual void AnimationTrigger()
+    {
+        
     }
 }

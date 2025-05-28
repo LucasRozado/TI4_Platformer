@@ -16,6 +16,11 @@ public class BossMachine : MonoBehaviour
         currentState.EnterState(this);
     }
 
+    public BossState GetCurrentState()
+    {
+        return currentState;
+    }
+
     public virtual void Awake()
     {
         animator = GetComponentInChildren<Animator>();
@@ -40,5 +45,15 @@ public class BossMachine : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         currentState.Trigger(other);
+    }
+
+    public virtual void TakeDamage()
+    {
+        health--;
+    }
+
+    public int GetHealth()
+    {
+        return health;
     }
 }

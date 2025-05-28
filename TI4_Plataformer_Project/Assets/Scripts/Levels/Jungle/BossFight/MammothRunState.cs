@@ -1,8 +1,9 @@
 using UnityEngine;
 
-public class MammothRun : BossState
+public class MammothRunState : BossState
 {
     [SerializeField] BossState triggerState;
+    [SerializeField] BossState crashState;
     [SerializeField] BossState timerState;
     [SerializeField] float speed;
     public override void Trigger(Collider other)
@@ -11,6 +12,11 @@ public class MammothRun : BossState
         if (other.CompareTag("Obstacle"))
         {
             machine.ChangeState(triggerState);
+        }
+        else if (other.CompareTag("Pillar"))
+        {
+            machine.ChangeState(crashState);
+            Destroy(other.gameObject);
         }
     }
 
