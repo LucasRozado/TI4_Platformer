@@ -9,6 +9,7 @@ public class LevelProgress : ScriptableObject
     public bool[] levelProgress;
     public string[] elementName;
     [SerializeField] private string fileBaseName = "progress";
+    public SaveTeste data;
 
     private void Awake()
     {
@@ -36,11 +37,11 @@ public class LevelProgress : ScriptableObject
             content = SaveProgress();
         }
         LevelProgress p = JsonUtility.FromJson<LevelProgress>(content);
-        levelProgress = p.levelProgress;
+       // levelProgress = p.levelProgress;
     }
 
     public void Activate(int i)
     {
-        levelProgress[i] = true;
+       // levelProgress[i] = true;
     }
 }

@@ -158,6 +158,10 @@ public class MammothMaze : MonoBehaviour
         {
             Gizmos.DrawLine(transform.position, t.position);
         }
+        if (currentWaypoint != null)
+        {
+            Gizmos.DrawSphere(currentWaypoint, 1);
+        }
     }
 
     public void EndMaze()
@@ -169,5 +173,6 @@ public class MammothMaze : MonoBehaviour
         firstWaypoint.gameObject.SetActive(true);
         finalWaypoint.gameObject.SetActive(true);
         currentWaypoint = firstWaypoint.position;
+        agent.SetDestination(currentWaypoint);
     }
 }
