@@ -1,6 +1,8 @@
 using UnityEngine;
 using System.IO;
+using System;
 public enum PowerUps { Push, Torch, Climb, Spirit }
+[Serializable]
 public class PlayerPowerUp
 {
     public bool[] hasPowerUp = new bool[4];
