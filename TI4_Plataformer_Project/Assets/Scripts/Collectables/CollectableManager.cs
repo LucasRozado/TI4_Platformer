@@ -17,8 +17,6 @@ public class CollectableManager
         string content = JsonUtility.ToJson(this, true);
         string path = collectablesPath;
         File.WriteAllText(path, content);
-        Debug.Log("Collectables save");
-        Debug.Log(collectablesPath);
         return content;
     }
 
@@ -105,10 +103,8 @@ public class CollectableManager
             if (VerifyIfCollected(list[i].GetCollectableType(), list[i].GetNumber()))
             {
                 list[i].gameObject.SetActive(false);
-                Debug.Log("Collectable " + i + " deactivated");
             }
         }
-        Debug.Log("UpdateDone");
     }
 
     public int GetScore(CollectableType type)

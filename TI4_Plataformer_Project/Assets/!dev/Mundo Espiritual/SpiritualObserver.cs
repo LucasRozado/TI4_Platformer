@@ -13,11 +13,9 @@ public class SpiritualObserver : MonoBehaviour
         if(instance == null) 
         {
             instance = this;
-            Debug.Log(instance.gameObject.name);
         }
         else
         {
-            Debug.Log("no instance");
             Destroy(gameObject);
         }
     }

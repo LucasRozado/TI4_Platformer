@@ -7,6 +7,7 @@ public class DetailPull : MonoBehaviour
     public List<GameObject> prefabsToSpawn;
     public float spawnChance = 0.7f;
     [Range(0f, 360f)] public float maxYRotationVariation = 30f;
+    public bool turnStatic = true;
 
     [Header("Spacing Settings")]
     public float minSpacing = 0.8f;
@@ -93,21 +94,23 @@ public class DetailPull : MonoBehaviour
 
         GameObject prefab = prefabsToSpawn[Random.Range(0, prefabsToSpawn.Count)];
 
-        // Rotação baseada na normal da superfície
         Quaternion surfaceRotation = Quaternion.identity;
         if (alignToSurface)
         {
             surfaceRotation = Quaternion.FromToRotation(Vector3.up, surfaceNormal);
         }
 
-        // Rotação aleatória apenas no eixo Y
         float randomYRotation = Random.Range(-maxYRotationVariation, maxYRotationVariation);
         Quaternion yRotation = Quaternion.Euler(0f, randomYRotation, 0f);
 
-        // Combina as rotações
         Quaternion finalRotation = surfaceRotation * yRotation;
 
-        Instantiate(prefab, position, finalRotation, transform);
+        GameObject spawnedObject = Instantiate(prefab, position, finalRotation, transform);
+
+        if (turnStatic)
+        {
+            spawnedObject.isStatic = true;
+        }
     }
 
     [ContextMenu("Respaw Prefabs")]
