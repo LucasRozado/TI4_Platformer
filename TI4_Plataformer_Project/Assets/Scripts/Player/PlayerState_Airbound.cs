@@ -9,6 +9,7 @@ public class PlayerState_Airbound : PlayerState
     [SerializeField, Tooltip("In meters per second")]
     private float movementSpeed = 5f;
 
+    public float TerminalVelocity => terminalVelocity;
     [SerializeField, Tooltip("In meters per seconds")]
     private float terminalVelocity = 10f;
 

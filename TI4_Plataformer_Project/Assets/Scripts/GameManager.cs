@@ -69,6 +69,7 @@ public class GameManager : MonoBehaviour
     public static void SetSpawnPosition(Vector3 newSpawnPosition)
     {
         playerSpawnPosition = newSpawnPosition;
+        Player.instance.Heal();
     }
     public InputSystem_Actions Actions => actions;
 
@@ -88,6 +89,8 @@ public class GameManager : MonoBehaviour
         Player.instance.ToggleController(false);
         Player.instance.transform.position = playerSpawnPosition;
         Player.instance.ToggleController(true);
+
+        Player.instance.Heal();
 
         // TODO: animacao
     }

@@ -197,6 +197,10 @@ public class Player : MonoBehaviour
     {
         characterController.enabled = toggle;
     }
+    public void ToggleCollider(bool toggle)
+    {
+        characterController.detectCollisions = toggle;
+    }
 
     [Obsolete("Use GameManager.powerUp.GetPowerUp")]
     public bool GetPowerUp(PowerUps type)
@@ -223,17 +227,6 @@ public class Player : MonoBehaviour
 
     public void Die()
     {
-        // TODO: Animation
-        StartCoroutine(Die_Coroutine());
-    }
-    private IEnumerator Die_Coroutine()
-    {
-        const float respawnDelay = 2f; // TODO: por a duracao da animacao de morte
-
-        yield return new WaitForSeconds(respawnDelay);
-
-        // TODO: animacao de respawn (a mesma de marcar checkpoint, se tiver)
-
-        GameManager.Instance.ResetToCheckPoint();
+        SwitchState<PlayerState_Dead>();
     }
 }
