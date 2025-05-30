@@ -31,6 +31,7 @@ public class LevelProgressEditor : Editor
         for (int i = 0; i < progressName.arraySize; i++)
         {
             EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.PropertyField(progressBool.GetArrayElementAtIndex(i),new GUIContent(""));  
             EditorGUILayout.PropertyField(progressName.GetArrayElementAtIndex(i));  
             EditorGUILayout.EndHorizontal();
         }
