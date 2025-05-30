@@ -46,13 +46,15 @@ public class PlayerState_Jump : PlayerState
 
     [SerializeField]
     private bool isSprinting = false;
-    [SerializeField] private CinemachineCamera forwardCamera;
+
+
     private PlayerState_Airbound airbound;
     public override void Initialize()
     {
         airbound = player.GetState<PlayerState_Airbound>();
 
         BindInputCancel(player.Input.Jump, HandleJumpCancel);
+        BindInputStart(player.Input.Spirit, SwitchReality);
     }
 
     protected override void EnterState()
@@ -141,12 +143,12 @@ public class PlayerState_Jump : PlayerState
     {
         Vector2 directionalInput = player.Input.Movement.Value;
 
-        Vector3 cameraDirection = forwardCamera.transform.forward;
+        Vector3 cameraDirection = Camera.main.transform.forward;
         cameraDirection.y = 0;
 
         Quaternion rotation;
         if (cameraDirection != Vector3.zero)
-        { rotation = Quaternion.Euler(0, 0, -forwardCamera.transform.rotation.eulerAngles.y); }
+        { rotation = Quaternion.Euler(0, 0, -Camera.main.transform.rotation.eulerAngles.y); }
         else
         { rotation = Quaternion.identity; }
 

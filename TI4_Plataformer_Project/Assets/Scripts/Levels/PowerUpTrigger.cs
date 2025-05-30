@@ -8,7 +8,7 @@ public class PowerUpTrigger : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            Player.instance.AcquirePowerUp(powerUp);
+            GameManager.powerUp.AcquirePowerUp(powerUp);
             Destroy(gameObject);
         }
     }

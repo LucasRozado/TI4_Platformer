@@ -13,8 +13,10 @@ public class GameManager : MonoBehaviour
 
     public static CollectableManager collectableManager;
     public static CPManager checkpointManager;
+    public static PlayerPowerUp powerUp;
     [Header("All Checkpoints to Add")]
     public List<CPInfo> allCheckpointsToAdd;
+    [SerializeField] LevelProgress[] levelProgresses;
 
     private void Awake()
     {
@@ -35,11 +37,39 @@ public class GameManager : MonoBehaviour
         checkpointManager = new CPManager();
         //checkpointManager.SaveCheckPoints();
         checkpointManager.StartManager();
+
+        powerUp = new PlayerPowerUp();
+        powerUp.LoadPowerUp();
+    }
+
+    public void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            powerUp.AcquirePowerUp(PowerUps.Push);
+            Debug.Log("Push acquired");
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            powerUp.AcquirePowerUp(PowerUps.Torch);
+            Debug.Log("Torch acquired");
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            powerUp.AcquirePowerUp(PowerUps.Climb);
+            Debug.Log("Climb acquired");
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            powerUp.AcquirePowerUp(PowerUps.Spirit);
+            Debug.Log("Spirit acquired");
+        }
     }
 
     public static void SetSpawnPosition(Vector3 newSpawnPosition)
     {
         playerSpawnPosition = newSpawnPosition;
+        Player.instance.Heal();
     }
     public InputSystem_Actions Actions => actions;
 
@@ -47,10 +77,21 @@ public class GameManager : MonoBehaviour
     {
         collectableManager.SaveCollectables();
         checkpointManager.SaveCheckPoints();
+        foreach (LevelProgress progress in levelProgresses)
+        {
+            progress.SaveProgress();
+        }
+        powerUp.SavePowerUp();
     }
 
     public void ResetToCheckPoint()
     {
+        Player.instance.ToggleController(false);
+        Player.instance.transform.position = playerSpawnPosition;
+        Player.instance.ToggleController(true);
 
+        Player.instance.Heal();
+
+        // TODO: animacao
     }
 }

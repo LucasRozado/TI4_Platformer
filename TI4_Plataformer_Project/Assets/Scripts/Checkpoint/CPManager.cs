@@ -24,8 +24,6 @@ public class CPManager
         string path = checkpointsPath;
         File.WriteAllText(path, content);
 
-        Debug.Log("Checkpoint save");
-        Debug.Log(checkpointsPath);
         return content;
     }
     public void LoadCheckPoints()
@@ -45,7 +43,6 @@ public class CPManager
         CPManager p = JsonUtility.FromJson<CPManager>(content);
 
         availableIDs = p.availableIDs;
-        Debug.Log("Loaded Checkpoins");
     }
 
     public void AddCheckPoint(CPInfo info)
@@ -87,7 +84,6 @@ public class CPManager
     {
         foreach (CPInfo info in GameManager.Instance.allCheckpointsToAdd)
         {
-            Debug.Log(info.ID + " " + info.name);
             allCheckpoints.Add(info.ID, info);
         }
     }    

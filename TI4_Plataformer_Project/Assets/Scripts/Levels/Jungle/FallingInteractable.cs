@@ -8,39 +8,58 @@ public class FallingInteractable : Interactable
     [SerializeField] private bool isFixed;
     [SerializeField] bool hasFallen;
     [SerializeField] GameObject[] drops;
+    [SerializeField] Animator animator;
     Vector3 pivot;
     public override void InteractWith(Player player)
     {
-        if (player.GetPowerUp(PowerUps.Push) && !hasFallen)
+        if (GameManager.powerUp.GetPowerUp(PowerUps.Push) && !hasFallen)
         {
-            StartCoroutine(Fall());
-            hasFallen = true;
-            pivot = Vector3.Cross(transform.up, player.transform.forward);
-            foreach (GameObject go in drops)
+            //StartCoroutine(Fall());
+            if (isFixed)
             {
-                go.transform.parent = null;
-                if (go.TryGetComponent<Rigidbody>(out Rigidbody rb))
+                hasFallen = true;
+            }
+            //pivot = Vector3.Cross(transform.up, player.transform.forward);
+            else
+            {
+                foreach (GameObject go in drops)
                 {
-                    rb.useGravity = true;
+                    go.transform.parent = null;
+                    if (go.TryGetComponent<Rigidbody>(out Rigidbody rb))
+                    {
+                        rb.useGravity = true;
+                    }
                 }
             }
+
+            animator.SetTrigger("Pushed");
         }
     }
 
     public IEnumerator Fall()
     {
+        Quaternion initialRotation = transform.localRotation;
+        Quaternion finalRotation;
+        if (isFixed)
+        {
+            finalRotation = transform.localRotation * Quaternion.AngleAxis(90, Vector3.right);
+        }
+        else
+        {
+            finalRotation = transform.rotation * Quaternion.AngleAxis(90, pivot.normalized);
+        }
         float t = 0;
         while (t < duration)
         {
-            if (!isFixed)
+            if (isFixed)
             {
                 t += Time.deltaTime;
-                transform.Rotate(pivot.normalized, (90 / duration) * Time.deltaTime);
+                transform.localRotation = Quaternion.Lerp(initialRotation, finalRotation, t / duration);
             }
             else
             {
                 t += Time.deltaTime;
-                transform.Rotate(transform.right, (90 / duration) * Time.deltaTime);
+                transform.rotation = Quaternion.Lerp(initialRotation, finalRotation, t / duration);
             }
             yield return new WaitForEndOfFrame();
         }

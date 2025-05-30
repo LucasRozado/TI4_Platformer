@@ -16,8 +16,9 @@ public class PlayerState_Grounded : PlayerState
 
     [SerializeField, Tooltip("In meters per second")]
     private float groundPull;
+
+
     private PlayerState_Jump jump;
-    [SerializeField] private CinemachineCamera forwardCamera;
     public override void Initialize()
     {
         jump = player.GetState<PlayerState_Jump>();
@@ -25,6 +26,7 @@ public class PlayerState_Grounded : PlayerState
         BindInputStart(player.Input.Jump, HandleJump);
         BindInputStart(player.Input.Sprint, HandleSprint);
         BindInputStart(player.Input.Interact, HandleInteraction);
+        BindInputStart(player.Input.Spirit, SwitchReality);
     }
 
     protected override void EnterState()
@@ -42,7 +44,7 @@ public class PlayerState_Grounded : PlayerState
         RotatePlayer();
 
         Vector3 velocity = CalculateVelocity();
-        player.Move(velocity, onCollision: HandleCollision);
+        player.Move(velocity, HandleCollision);
     }
 
     private void HandleSprint()
@@ -55,12 +57,12 @@ public class PlayerState_Grounded : PlayerState
     {
         Vector2 directionalInput = player.Input.Movement.Value;
 
-        Vector3 cameraDirection = forwardCamera.transform.forward;
+        Vector3 cameraDirection = Camera.main.transform.forward;
         cameraDirection.y = 0;
 
         Quaternion rotation;
         if (cameraDirection != Vector3.zero)
-        { rotation = Quaternion.Euler(0, 0, -forwardCamera.transform.rotation.eulerAngles.y); }
+        { rotation = Quaternion.Euler(0, 0, -Camera.main.transform.rotation.eulerAngles.y); }
         else
         { rotation = Quaternion.identity; }
 

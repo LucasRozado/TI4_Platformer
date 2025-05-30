@@ -9,6 +9,7 @@ public class PlayerState_Airbound : PlayerState
     [SerializeField, Tooltip("In meters per second")]
     private float movementSpeed = 5f;
 
+    public float TerminalVelocity => terminalVelocity;
     [SerializeField, Tooltip("In meters per seconds")]
     private float terminalVelocity = 10f;
 
@@ -25,7 +26,7 @@ public class PlayerState_Airbound : PlayerState
 
     [SerializeField]
     private bool isSprinting = false;
-    [SerializeField] private CinemachineCamera forwardCamera;
+
 
     private PlayerState_Jump jump;
     public override void Initialize()
@@ -34,6 +35,7 @@ public class PlayerState_Airbound : PlayerState
 
         BindInputUpdate(player.Input.Sprint, HandleSprint);
         BindInputStart(player.Input.Jump, HandleCoyoteJump);
+        BindInputStart(player.Input.Spirit, SwitchReality);
     }
 
     protected override void EnterState()
@@ -88,12 +90,12 @@ public class PlayerState_Airbound : PlayerState
     {
         Vector2 directionalInput = player.Input.Movement.Value;
 
-        Vector3 cameraDirection = forwardCamera.transform.forward;
+        Vector3 cameraDirection = Camera.main.transform.forward;
         cameraDirection.y = 0;
 
         Quaternion rotation;
         if (cameraDirection != Vector3.zero)
-        { rotation = Quaternion.Euler(0, 0, -forwardCamera.transform.rotation.eulerAngles.y); }
+        { rotation = Quaternion.Euler(0, 0, -Camera.main.transform.rotation.eulerAngles.y); }
         else
         { rotation = Quaternion.identity; }
 

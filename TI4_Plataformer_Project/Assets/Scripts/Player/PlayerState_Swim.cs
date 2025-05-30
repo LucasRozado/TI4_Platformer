@@ -27,6 +27,7 @@ public class PlayerState_Swim : PlayerState
         {
             BindInputStart(player.Input.Jump, HandleSwimBoost);
         }
+        BindInputStart(player.Input.Spirit, SwitchReality);
     }
 
     protected override void EnterState()

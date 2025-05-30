@@ -52,6 +52,7 @@ GameObject:
   - component: {fileID: 8965749133753995687}
   - component: {fileID: 5142344863161798831}
   - component: {fileID: 8705405052902869010}
+  - component: {fileID: 3720821574349775797}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -126,6 +127,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32b9717a7a34f464eaee471d1b1c6625, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hpBase: 2
   interactChecksLR:
   - {fileID: 2169309546443379107}
   - {fileID: 6936605765315538404}
@@ -133,12 +135,13 @@ MonoBehaviour:
   canInteract:
     serializedVersion: 2
     m_Bits: 64
+  hasPowerUp: 00000000
+  hpCurrent: 0
   state: {fileID: 1929290976145929163}
   velocity: {x: 0, y: 0, z: 0}
   forward: {x: 0, y: 0, z: 0}
   movementVelocity: {x: 0, y: 0}
   gravityVelocity: {x: 0, y: 0, z: 0}
-  hasPowerUp: 00000000
 --- !u!114 &5832773752726732205
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -154,7 +157,6 @@ MonoBehaviour:
   movementSpeed: 5
   directionalVelocity: {x: 0, y: 0}
   groundPull: 0
-  forwardCamera: {fileID: 0}
 --- !u!114 &2357994208751721710
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -180,9 +182,7 @@ MonoBehaviour:
   isSprinting: 0
   isInputing: 0
   inputDirection: {x: 0, y: 0, z: 0}
-  lastInput: {x: 0, y: 0, z: 0}
   groundPull: 0
-  forwardCamera: {fileID: 0}
 --- !u!114 &1929290976145929163
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -200,7 +200,6 @@ MonoBehaviour:
   directionalVelocity: {x: 0, y: 0}
   verticalVelocity: 0
   isSprinting: 0
-  forwardCamera: {fileID: 0}
 --- !u!114 &3414085757564275078
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -239,7 +238,6 @@ MonoBehaviour:
   verticalVelocity: 0
   coyoteTimer: 0
   isSprinting: 0
-  forwardCamera: {fileID: 0}
 --- !u!114 &5117446561807197320
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -262,7 +260,6 @@ MonoBehaviour:
   verticalVelocity: 0
   coyoteTimer: 0
   isSprinting: 0
-  forwardCamera: {fileID: 0}
 --- !u!114 &8965749133753995687
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -310,6 +307,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementSpeedInMetersPerSecond: 4
   rotationSpeed: 40
+--- !u!114 &3720821574349775797
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1972300195213588809}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc8d42b269986734ebefd09b19c72e96, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  duration: 2
+  remainingDuration: 0
+  verticalVelocity: 0
 --- !u!1 &4050215357455946936
 GameObject:
   m_ObjectHideFlags: 0
