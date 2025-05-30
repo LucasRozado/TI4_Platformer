@@ -12,14 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a89f6aa0587ab754aa24dc3e7f8cc209, type: 3}
   m_Name: Jungle
   m_EditorClassIdentifier: 
-  levelProgress: 0000000000010000
-  elementName:
-  - Entrance
-  - Cinematic
-  - Maze1
-  - Maze2
-  - MazeTrunk
-  - BossDefeat
-  - River
-  - BossFinal
   fileBaseName: JungleProgress
+  data:
+    levelProgress: 000000000000000000
+    elementName:
+    - EntranceGate
+    - Cinematic
+    - Maze1
+    - Maze2
+    - MazeTrunk
+    - BossFight
+    - FallingPillar
+    - River
+    - BossRematch
