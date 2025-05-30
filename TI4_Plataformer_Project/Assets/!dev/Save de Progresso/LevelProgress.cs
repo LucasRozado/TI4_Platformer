@@ -35,11 +35,12 @@ public class LevelProgress : ScriptableObject
             content = SaveProgress();
         }
         ProgressData p = JsonUtility.FromJson<ProgressData>(content);
-       // levelProgress = p.levelProgress;
+        data.levelProgress = p.levelProgress;
+        data.elementName = p.elementName;
     }
 
     public void Activate(int i)
     {
-       // levelProgress[i] = true;
+        data.levelProgress[i] = true;
     }
 }
