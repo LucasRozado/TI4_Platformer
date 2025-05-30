@@ -6,10 +6,8 @@ using System;
 [Serializable]
 public class LevelProgress : ScriptableObject
 {
-    public bool[] levelProgress;
-    public string[] elementName;
     [SerializeField] private string fileBaseName = "progress";
-    public SaveTeste data;
+    public ProgressData data;
 
     private void Awake()
     {
@@ -36,7 +34,7 @@ public class LevelProgress : ScriptableObject
         {
             content = SaveProgress();
         }
-        LevelProgress p = JsonUtility.FromJson<LevelProgress>(content);
+        ProgressData p = JsonUtility.FromJson<ProgressData>(content);
        // levelProgress = p.levelProgress;
     }
 

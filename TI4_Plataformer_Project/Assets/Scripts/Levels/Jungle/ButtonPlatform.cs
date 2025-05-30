@@ -9,7 +9,7 @@ public class ButtonPlatform : Progress
 
     private void OnEnable()
     {
-        if (levelProgress.levelProgress[intReference])
+        if (levelProgress.data.levelProgress[intReference])
         {
             Activate();
         }
@@ -34,6 +34,6 @@ public class ButtonPlatform : Progress
         {
             act.Activate();
         }
-        levelProgress.levelProgress[intReference] = true;
+        levelProgress.data.levelProgress[intReference] = true;
     }
 }

@@ -15,9 +15,7 @@ public class ProgressObjectEditor : Editor
     {
         if (cod.levelProgress != null)
         {
-            Debug.Log(cod.intReference);
-            Debug.Log(cod.levelProgress.name);
-            EditorGUILayout.LabelField(cod.levelProgress.elementName[cod.intReference], GUI.skin.button);
+            EditorGUILayout.LabelField(cod.levelProgress.data.elementName[cod.intReference], GUI.skin.button);
         }        
         base.OnInspectorGUI();        
     }
