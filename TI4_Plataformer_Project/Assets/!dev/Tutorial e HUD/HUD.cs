@@ -7,14 +7,12 @@ public class HUD : MonoBehaviour
     [SerializeField] TextMeshProUGUI[] collectablesText;
     [SerializeField] TextMeshProUGUI screenText;
     [SerializeField] float collectableDuration = 2f;
+    [SerializeField] GameObject[] pauseObjects;
 
     private void Start()
     {
-        foreach(TextMeshProUGUI collectable in collectablesText)
-        {
-            collectable.gameObject.SetActive(false);
-        }
         screenText.gameObject.SetActive(false);
+        HidePause();
         DisplayAllCollectables();
     }
 
@@ -69,5 +67,31 @@ public class HUD : MonoBehaviour
         screenText.text = text;
         yield return new WaitForSeconds(duration);
         screenText.gameObject.SetActive(false);
+    }
+
+    public void HidePause()
+    {
+        foreach(GameObject objs in pauseObjects)
+        {
+            objs.SetActive(false);
+        }
+    }
+
+    public void ShowPause()
+    {
+        foreach (GameObject objs in pauseObjects)
+        {
+            objs.SetActive(true);
+        }
+    }
+
+    public void UnpauseButton()
+    {
+        GameManager.Instance.Unpause();
+    }
+
+    public void Quit()
+    {
+        Application.Quit();
     }
 }

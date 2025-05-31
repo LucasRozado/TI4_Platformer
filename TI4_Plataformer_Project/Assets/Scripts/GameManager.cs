@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     public static CollectableManager collectableManager;
     public static CPManager checkpointManager;
     public static PlayerPowerUp powerUp;
+    bool isPaused;
     [Header("All Checkpoints to Add")]
     public List<CPInfo> allCheckpointsToAdd;
     [SerializeField] LevelProgress[] levelProgresses;
@@ -64,6 +65,31 @@ public class GameManager : MonoBehaviour
             powerUp.AcquirePowerUp(PowerUps.Spirit);
             Debug.Log("Spirit acquired");
         }
+        if (Input.GetKeyDown(KeyCode.Escape))
+        { 
+            if (!isPaused)
+            {
+                Pause();
+            }
+            else
+            {
+                Unpause();
+            }
+        }
+    }
+
+    public void Pause()
+    {
+        isPaused = true;
+        Time.timeScale = 0;
+        UIManager.instance.OpenPause();
+    }
+
+    public void Unpause()
+    {
+        isPaused = false;
+        Time.timeScale = 1f;
+        UIManager.instance.ClosePause();
     }
 
     public static void SetSpawnPosition(Vector3 newSpawnPosition)

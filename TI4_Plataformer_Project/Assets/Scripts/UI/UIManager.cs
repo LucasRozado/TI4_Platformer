@@ -30,12 +30,12 @@ public class UIManager : MonoBehaviour
 
     public void OpenPause()
     {
-        Time.timeScale = 0;
+        hud.ShowPause();
     }
 
     public void ClosePause()
     {
-        Time.timeScale = 1f;
+        hud.HidePause();
     }
     
     public void UpdateCollectable(CollectableType type)
