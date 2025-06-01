@@ -4,7 +4,7 @@ public class MammothDeathState : BossState
 {
     [SerializeField] ButtonActivated[] activated;
     [SerializeField] LevelProgress levelProgress;
-    [SerializeField] int íntReference;
+    [SerializeField] int intReference;
     public override void AnimationTrigger()
     {
         base.AnimationTrigger();
@@ -19,7 +19,7 @@ public class MammothDeathState : BossState
         {
             act.Activate();
         }
-        levelProgress.data.levelProgress[íntReference] = true;
+        levelProgress.Activate(intReference);
     }
 
     public override void EnterState(BossMachine machine)

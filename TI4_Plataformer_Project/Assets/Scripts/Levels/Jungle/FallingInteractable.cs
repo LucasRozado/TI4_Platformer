@@ -39,7 +39,7 @@ public class FallingInteractable : Interactable
 
     private void OnEnable()
     {
-        if (isFixed && levelProgress.data.levelProgress[intReference])
+        if (isFixed && levelProgress.GetProgress(intReference))
         {
             hasFallen = true;
             animator.SetTrigger("Pushed");
