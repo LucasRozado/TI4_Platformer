@@ -12,6 +12,7 @@ public class PlayerState_Spin : PlayerState
     {
         BindInputStart(player.Input.Interact, HandleInteraction);
         BindInputUpdate(player.Input.Movement, HandleMovement);
+        BindInputStart(player.Input.Spirit, SwitchReality);
     }
 
     public void HandleInteraction()

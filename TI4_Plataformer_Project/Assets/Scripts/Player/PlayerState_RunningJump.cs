@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using Unity.Cinemachine;
 
 public class PlayerState_RunningJump : PlayerState
 {
@@ -46,18 +47,20 @@ public class PlayerState_RunningJump : PlayerState
 
     [SerializeField]
     private bool isSprinting = false;
+
+
     private PlayerState_Airbound airbound;
     public override void Initialize()
     {
         airbound = player.GetState<PlayerState_Airbound>();
 
         BindInputCancel(player.Input.Jump, HandleJumpCancel);
+        BindInputStart(player.Input.Spirit, SwitchReality);
     }
 
     protected override void EnterState()
     {
-        player.Animator.SetTrigger("jump");
-
+        player.PlayerAnimations.JumpAnimation(2);
         CalculateParameters();
 
         verticalVelocity = initialJumpVelocity;
@@ -212,7 +215,8 @@ public class PlayerState_RunningJump : PlayerState
 
     protected override void ExitState()
     {
-
+        player.PlayerAnimations.JumpAnimation(0);
+        player.PlayerAnimations.RunningAnimation(false);
     }
 
     protected override Vector3 CalculateVelocity(Vector2 movement, Vector3 gravity, Vector3 forward)

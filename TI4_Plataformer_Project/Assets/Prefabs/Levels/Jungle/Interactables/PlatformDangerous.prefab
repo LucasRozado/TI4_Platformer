@@ -138,6 +138,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Dangerous
       objectReference: {fileID: 0}
+    - target: {fileID: 6479641494504841056, guid: 00bf85084dd77fb4bb013d72e848d2b9, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: d38580880a4ffa84fadb1b46495d8827, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -166,6 +170,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29ae4bcd7f69fe14bb9129012e1c6d5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delay: 0
   radius: 0.7
   sphereOrigin: {fileID: 3241379840404802353}
   platformCollider: {fileID: 5285088900462608285}

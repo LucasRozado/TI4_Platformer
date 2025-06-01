@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using Unity.Cinemachine;
 
 public class PlayerState_Jump : PlayerState
 {
@@ -45,19 +46,20 @@ public class PlayerState_Jump : PlayerState
 
     [SerializeField]
     private bool isSprinting = false;
-    
+
+
     private PlayerState_Airbound airbound;
     public override void Initialize()
     {
         airbound = player.GetState<PlayerState_Airbound>();
 
         BindInputCancel(player.Input.Jump, HandleJumpCancel);
+        BindInputStart(player.Input.Spirit, SwitchReality);
     }
 
     protected override void EnterState()
     {
-        player.Animator.SetTrigger("jump");
-
+        player.PlayerAnimations.JumpAnimation(1);
         CalculateParameters();
 
         verticalVelocity = initialJumpVelocity;
@@ -209,38 +211,10 @@ public class PlayerState_Jump : PlayerState
             }
             else if (isSprinting)
             {
-                if (player.Velocity.x != 0f || player.Velocity.z != 0f)
-                {
-                    player.Animator.SetBool("isSprintingIdle", false);
-                    player.Animator.SetBool("isSprinting", true);
-                    player.Animator.SetBool("isWalking", false);
-                    player.Animator.SetBool("isIdleGround", false);
-                }
-                else
-                {
-                    player.Animator.SetBool("isSprintingIdle", true);
-                    player.Animator.SetBool("isSprinting", false);
-                    player.Animator.SetBool("isWalking", false);
-                    player.Animator.SetBool("isIdleGround", false);
-                }
-
-                player.Animator.SetTrigger("land");
-                player.Animator.SetBool("isAirBourne", false);
                 player.SwitchState<PlayerState_GroundedRunning>();
             }
             else
             {
-                player.Animator.SetBool("isSprinting", false);
-                player.Animator.SetBool("isSprintingIdle", false);
-
-                if (player.Velocity.x != 0 || player.Velocity.z != 0)
-                { player.Animator.SetBool("isWalking", true); player.Animator.SetBool("isIdleGround", false); }
-                else
-                { player.Animator.SetBool("isWalking", false); player.Animator.SetBool("isIdleGround", true); }
-
-                player.Animator.SetTrigger("land");
-                player.Animator.SetBool("isAirBourne", false);
-
                 player.SwitchState<PlayerState_Grounded>();
             }
             return;
@@ -249,7 +223,7 @@ public class PlayerState_Jump : PlayerState
 
     protected override void ExitState()
     {
-
+        player.PlayerAnimations.JumpAnimation(0);
     }
 
     protected override Vector3 CalculateVelocity(Vector2 movement, Vector3 gravity, Vector3 forward)

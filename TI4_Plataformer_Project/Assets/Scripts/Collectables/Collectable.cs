@@ -1,9 +1,9 @@
+using System;
 using UnityEngine;
-
 public class Collectable : MonoBehaviour
 {
     [SerializeField] CollectableType type;
-    int number = 0;
+    public int number = 0;
     private void OnTriggerEnter(Collider other)
     {
         GameManager.collectableManager.AddCollectable(type, number);
@@ -14,6 +14,7 @@ public class Collectable : MonoBehaviour
     public void SetNumber(int number)
     {
         this.number = number;
+        gameObject.name = "Collectable: " + number.ToString();
     }
 
     public int GetNumber()

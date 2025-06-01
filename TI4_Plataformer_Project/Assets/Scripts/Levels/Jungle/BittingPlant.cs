@@ -18,9 +18,9 @@ public class BittingPlant : MonoBehaviour
         Collider[] hit = Physics.OverlapSphere(sphereOrigin.position, radius);
         foreach (Collider col in hit)
         {
-            if (col.gameObject.TryGetComponent<Player>(out Player player))
+            if (col.gameObject.TryGetComponent(out Player player))
             {
-                Debug.Log("Player hit");
+                player.TakeDamage();
             }
         }
     }

@@ -69,6 +69,14 @@ public abstract partial class PlayerState : MonoBehaviour
         coroutines.Clear();
     }
 
+    public void SwitchReality()
+    {
+        if (GameManager.powerUp.GetPowerUp(PowerUps.Spirit))
+        {
+            SpiritualObserver.instance.SwitchReality();
+        }
+    }
+
     public abstract void Initialize();
     protected abstract void EnterState();
     protected abstract void ExitState();

@@ -11,6 +11,7 @@ public class PlayerInput
     public readonly InputHandler<float> Jump;
     public readonly InputHandler<float> Interact;
     public readonly InputHandler<float> Sprint;
+    public readonly InputHandler<float> Spirit;
 
     public PlayerInput(InputSystem_Actions actions)
     {
@@ -21,6 +22,7 @@ public class PlayerInput
         Jump = new(this.actions.Jump);
         Sprint = new(this.actions.Sprint);
         Interact = new(this.actions.Interact);
+        Spirit = new(this.actions.Spirit);
     }
 
     public class InputHandler<TValue> where TValue : struct

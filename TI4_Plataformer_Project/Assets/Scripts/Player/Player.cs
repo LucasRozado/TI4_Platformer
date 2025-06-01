@@ -5,34 +5,40 @@ using System.Reflection;
 using UnityEditor;
 using UnityEngine.InputSystem.LowLevel;
 using Unity.Cinemachine;
+using System.Collections;
 
-public enum PowerUps { Push, Torch, Climb, Spirit}
+
 [RequireComponent(typeof(CharacterController))]
 public class Player : MonoBehaviour
 {
     public static Player instance;
+
+    [Header("Stats")]
+    [SerializeField] private int hpBase = 2;
 
     [Header("Interaction")]
     [SerializeField] private Transform[] interactChecksLR;
     [SerializeField] private float interactDistance = 0.3f;
     [SerializeField] private LayerMask canInteract;
 
+    [Header("PowerUps")]
+    [SerializeField] private bool[] hasPowerUp = new bool[4];
+
     [Header("Observables")]
+    [SerializeField] private int hpCurrent;
     [SerializeField] private PlayerState state;
     [SerializeField] private Vector3 velocity;
     [SerializeField] private Vector3 forward;
     [SerializeField] private Vector2 movementVelocity;
     [SerializeField] private Vector3 gravityVelocity;
 
-    [Header("PowerUps")]
-    [SerializeField] private bool[] hasPowerUp = new bool[4];
-
     private PlayerInput input;
     private CharacterController characterController;
-    private Animator animator;
     private readonly Dictionary<Type, PlayerState> states = new();
     private readonly ControllerCollision lastCollision = new();
     private ControllerColliderHit collisionHitBuffer;
+
+    private PlayerAnimations playerAnimations;
     private void Awake()
     {
         if (instance == null)
@@ -41,9 +47,10 @@ public class Player : MonoBehaviour
         { Destroy(gameObject); }
         DontDestroyOnLoad(gameObject);
 
+        hpCurrent = hpBase;
         forward = transform.forward;
         characterController = GetComponent<CharacterController>();
-        animator = GetComponentInChildren<Animator>();
+        playerAnimations = GetComponent<PlayerAnimations>();
     }
     private void Start()
     {
@@ -86,13 +93,13 @@ public class Player : MonoBehaviour
 
     public Action<ControllerColliderHit, CollisionFlags> collisionUpdate;
 
+    public PlayerAnimations PlayerAnimations => playerAnimations;
     public PlayerInput Input => input;
     public PlayerState State => state;
     public Vector3 Velocity => velocity;
     public Vector3 Forward { get => forward; set => forward = value; }
     public Vector2 Movement { get => movementVelocity; set => movementVelocity = value; }
     public Vector3 Gravity { get => gravityVelocity; set => gravityVelocity = value; }
-    public Animator Animator { get => animator; set => animator = value; }
     public float InteractDistance => interactDistance;
     public LayerMask CanInteract => canInteract;
     public float Slope => characterController.slopeLimit;
@@ -145,6 +152,17 @@ public class Player : MonoBehaviour
         return lastCollision;
     }
     public delegate void CollisionHandler(CollisionFlags flags, ControllerColliderHit hit);
+    public void Move(Vector3 velocity, CollisionHandler collisionHandler)
+    {
+        this.velocity = velocity;
+
+        CollisionFlags lastCollisionFlags = characterController.collisionFlags;
+        CollisionFlags collisionFlags = characterController.Move(velocity * Time.deltaTime);
+        // [OnControllerColliderHit] eh chamado no [Move] caso haja colisao
+
+        collisionHandler?.Invoke(collisionFlags, collisionHitBuffer);
+        collisionHitBuffer = null;
+    }
     public void Move(Vector3 velocity, CollisionHandler onFlagsUpdate = null, CollisionHandler onCollision = null)
     {
         this.velocity = velocity;
@@ -153,13 +171,13 @@ public class Player : MonoBehaviour
         CollisionFlags collisionFlags = characterController.Move(velocity * Time.deltaTime);
         // [OnControllerColliderHit] eh chamado no [Move] caso haja colisao
 
-        if (lastCollisionFlags != collisionFlags && onFlagsUpdate != null)
+        if (lastCollisionFlags != collisionFlags)
         {
-            onFlagsUpdate(collisionFlags, collisionHitBuffer);
+            onFlagsUpdate?.Invoke(collisionFlags, collisionHitBuffer);
         }
-        else if (collisionHitBuffer != null && onCollision != null)
+        if (collisionHitBuffer != null)
         {
-            onCollision(collisionFlags, collisionHitBuffer);
+            onCollision?.Invoke(collisionFlags, collisionHitBuffer);
             collisionHitBuffer = null;
         }
     }
@@ -179,14 +197,36 @@ public class Player : MonoBehaviour
     {
         characterController.enabled = toggle;
     }
+    public void ToggleCollider(bool toggle)
+    {
+        characterController.detectCollisions = toggle;
+    }
 
+    [Obsolete("Use GameManager.powerUp.GetPowerUp")]
     public bool GetPowerUp(PowerUps type)
     {
         return hasPowerUp[(int)type];
     }
-
+    [Obsolete("Use GameManager.powerUp.AcquirePowerUp")]
     public void AcquirePowerUp(PowerUps type)
     {
         hasPowerUp[(int)type] = true;
+    }
+
+    public void TakeDamage()
+    {
+        hpCurrent -= 1;
+        if (hpCurrent == 0)
+        { Die(); }
+    }
+
+    public void Heal()
+    {
+        hpCurrent = hpBase;
+    }
+
+    public void Die()
+    {
+        SwitchState<PlayerState_Dead>();
     }
 }
