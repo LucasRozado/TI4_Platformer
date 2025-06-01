@@ -30,11 +30,11 @@ public class LevelProgressEditor : Editor
         {
             RemoveElement();
         }
-        for (int i = 0; i < progressName.arraySize; i++)
+        for (int i = 0; i < progressBool.arraySize; i++)
         {
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.PropertyField(progressBool.GetArrayElementAtIndex(i),new GUIContent(""));  
-            EditorGUILayout.PropertyField(progressName.GetArrayElementAtIndex(i));  
+            EditorGUILayout.PropertyField(progressBool.GetArrayElementAtIndex(i), new GUIContent(""));
+            EditorGUILayout.PropertyField(progressName.GetArrayElementAtIndex(i));
             EditorGUILayout.EndHorizontal();
         }
         soCod.ApplyModifiedProperties();
@@ -45,7 +45,7 @@ public class LevelProgressEditor : Editor
         Undo.SetCurrentGroupName("Add Progress Element");
         int i = Undo.GetCurrentGroup();
         soCod.Update();
-        progressName.InsertArrayElementAtIndex(progressName.arraySize);
+        progressName.InsertArrayElementAtIndex(progressBool.arraySize);
         progressBool.InsertArrayElementAtIndex(progressBool.arraySize);
         dataBool.InsertArrayElementAtIndex(dataBool.arraySize);
         soCod.ApplyModifiedProperties();
@@ -56,7 +56,7 @@ public class LevelProgressEditor : Editor
         Undo.SetCurrentGroupName("Remove Progress Element");
         int i = Undo.GetCurrentGroup();
         soCod.Update();
-        progressName.DeleteArrayElementAtIndex(progressName.arraySize - 1);
+        progressName.DeleteArrayElementAtIndex(progressBool.arraySize - 1);
         progressBool.DeleteArrayElementAtIndex(progressBool.arraySize - 1);
         dataBool.DeleteArrayElementAtIndex(dataBool.arraySize - 1);
         soCod.ApplyModifiedProperties();
