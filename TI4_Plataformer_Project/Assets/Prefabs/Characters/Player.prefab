@@ -53,6 +53,7 @@ GameObject:
   - component: {fileID: 5142344863161798831}
   - component: {fileID: 8705405052902869010}
   - component: {fileID: 3720821574349775797}
+  - component: {fileID: 390167649583329575}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -322,6 +323,24 @@ MonoBehaviour:
   duration: 2
   remainingDuration: 0
   verticalVelocity: 0
+--- !u!114 &390167649583329575
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1972300195213588809}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c61c01bc82e017841a212641fa9f867b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  movementSpeed: 2.5
+  enemyDistance: 3
+  cooldown: 5
+  forwardCamera: {fileID: 0}
+  directionalVelocity: {x: 0, y: 0}
+  groundPull: 0
 --- !u!1 &4050215357455946936
 GameObject:
   m_ObjectHideFlags: 0
