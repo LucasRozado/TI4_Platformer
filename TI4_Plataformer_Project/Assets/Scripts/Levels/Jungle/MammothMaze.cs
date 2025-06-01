@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 
-public class MammothMaze : MonoBehaviour
+public class MammothMaze : Progress
 {
     [SerializeField] Rigidbody rb;
     [SerializeField] Animator animator;
@@ -31,6 +31,14 @@ public class MammothMaze : MonoBehaviour
         currentWaypoint = firstWaypoint.position;
         agent.SetDestination(currentWaypoint);
         //gameObject.SetActive(false);
+    }
+
+    private void OnEnable()
+    {
+        if (levelProgress.data.levelProgress[intReference])
+        {
+            Destroy(gameObject);
+        }
     }
 
     private void FixedUpdate()
@@ -149,7 +157,10 @@ public class MammothMaze : MonoBehaviour
         }
         else if (other.CompareTag("Obstacle"))
         {
-            Destroy(other.gameObject);
+            if (other.gameObject.TryGetComponent<MazeTrunk>(out MazeTrunk trunk))
+            {
+                trunk.OnBossPassage();
+            }
         }
     }
     private void OnDrawGizmos()
