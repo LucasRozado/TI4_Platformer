@@ -9,6 +9,13 @@ public class DetailPull : MonoBehaviour
     [Range(0f, 360f)] public float maxYRotationVariation = 30f;
     public bool turnStatic = true;
 
+    [Header("Scale Randomization")]
+    public bool randomizeScale = false;
+    [MinMaxRange(0.1f, 3f)] public Vector2 scaleRangeX = new Vector2(0.8f, 1.2f);
+    [MinMaxRange(0.1f, 3f)] public Vector2 scaleRangeY = new Vector2(0.8f, 1.2f);
+    [MinMaxRange(0.1f, 3f)] public Vector2 scaleRangeZ = new Vector2(0.8f, 1.2f);
+    public bool uniformScaling = true;
+
     [Header("Spacing Settings")]
     public float minSpacing = 0.8f;
     public float maxSpacing = 1.2f;
@@ -107,6 +114,27 @@ public class DetailPull : MonoBehaviour
 
         GameObject spawnedObject = Instantiate(prefab, position, finalRotation, transform);
 
+        // Aplica randomização de escala
+        if (randomizeScale)
+        {
+            Vector3 originalScale = spawnedObject.transform.localScale;
+            Vector3 newScale = originalScale;
+
+            if (uniformScaling)
+            {
+                float randomScale = Random.Range(scaleRangeX.x, scaleRangeX.y);
+                newScale = originalScale * randomScale;
+            }
+            else
+            {
+                newScale.x *= Random.Range(scaleRangeX.x, scaleRangeX.y);
+                newScale.y *= Random.Range(scaleRangeY.x, scaleRangeY.y);
+                newScale.z *= Random.Range(scaleRangeZ.x, scaleRangeZ.y);
+            }
+
+            spawnedObject.transform.localScale = newScale;
+        }
+
         if (turnStatic)
         {
             spawnedObject.isStatic = true;
@@ -137,5 +165,18 @@ public class DetailPull : MonoBehaviour
         Bounds bounds = boxCollider.bounds;
         Gizmos.color = spawnPointColor;
         Gizmos.DrawWireCube(bounds.center, bounds.size);
+    }
+}
+
+[System.Serializable]
+public class MinMaxRangeAttribute : PropertyAttribute
+{
+    public float Min;
+    public float Max;
+
+    public MinMaxRangeAttribute(float min, float max)
+    {
+        Min = min;
+        Max = max;
     }
 }
