@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -5,6 +6,7 @@ public class UIManager : MonoBehaviour
 {
     public static UIManager instance;
     public FastTravelScreen fastTravelScreen;
+    public HUD hud;
     void Awake()
     {
         if (instance == null)
@@ -25,4 +27,25 @@ public class UIManager : MonoBehaviour
         }
         fastTravelScreen.gameObject.SetActive(true);        
     }
+
+    public void OpenPause()
+    {
+        hud.ShowPause();
+    }
+
+    public void ClosePause()
+    {
+        hud.HidePause();
+    }
+    
+    public void UpdateCollectable(CollectableType type)
+    {
+        hud.UpdateCollectables(type);
+    }
+
+    public void ShowText(string text, float duration)
+    {
+        hud.DisplayText(text, duration);
+    }
+
 }

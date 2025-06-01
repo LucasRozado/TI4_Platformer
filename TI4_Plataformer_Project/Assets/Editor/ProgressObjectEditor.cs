@@ -17,7 +17,7 @@ public class ProgressObjectEditor : Editor
 
     public override void OnInspectorGUI()
     {
-        if (cod.levelProgress != null)
+        if (cod.levelProgress != null && cod.levelProgress.data.elementName.Length > 0)
         {
             GUILayout.BeginHorizontal(GUI.skin.box);
             GUILayout.Label("Choose Progress");
