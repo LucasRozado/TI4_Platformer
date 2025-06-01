@@ -18,7 +18,8 @@ public class LevelProgress : ScriptableObject
 
     public string SaveProgress()
     {
-        string content = JsonUtility.ToJson(this, true);
+        data.levelProgress = levelProgress;
+        string content = JsonUtility.ToJson(data, true);
         string path = Application.persistentDataPath + "/" + fileBaseName + ".json";
         File.WriteAllText(path, content);
         return content;
