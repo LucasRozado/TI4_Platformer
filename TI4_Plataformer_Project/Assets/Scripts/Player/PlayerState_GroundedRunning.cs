@@ -213,8 +213,8 @@ public class PlayerState_GroundedRunning : PlayerState
             return;
         }
 
-        else if (hit.gameObject.layer == LayerMask.NameToLayer("Water"))
-        {
+        else if (hit != null && hit.gameObject.layer == LayerMask.NameToLayer("Water"))
+                {
             player.SwitchState<PlayerState_Swim>();
             return;
         }
