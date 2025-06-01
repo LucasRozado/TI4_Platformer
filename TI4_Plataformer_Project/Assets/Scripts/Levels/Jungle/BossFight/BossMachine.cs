@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class BossMachine : MonoBehaviour
+public class BossMachine : Progress
 {
     public Animator animator;
     public Rigidbody rb;

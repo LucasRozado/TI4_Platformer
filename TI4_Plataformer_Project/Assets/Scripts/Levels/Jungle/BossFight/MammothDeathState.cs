@@ -2,6 +2,9 @@ using UnityEngine;
 
 public class MammothDeathState : BossState
 {
+    [SerializeField] ButtonActivated[] activated;
+    [SerializeField] LevelProgress levelProgress;
+    [SerializeField] int íntReference;
     public override void AnimationTrigger()
     {
         base.AnimationTrigger();
@@ -12,6 +15,11 @@ public class MammothDeathState : BossState
     {
         GameManager.powerUp.AcquirePowerUp(PowerUps.Push);
         Destroy(gameObject);
+        foreach (ButtonActivated act in activated)
+        {
+            act.Activate();
+        }
+        levelProgress.data.levelProgress[íntReference] = true;
     }
 
     public override void EnterState(BossMachine machine)
