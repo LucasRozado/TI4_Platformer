@@ -15,8 +15,6 @@ public class PlayerState_Torch : PlayerState
     [SerializeField, Tooltip("In seconds")]
     private float cooldown = 5f;
 
-    [SerializeField] private CinemachineCamera forwardCamera;
-
     [Header("Observables")]
 
     [SerializeField, Tooltip("In meters per second")]
@@ -50,12 +48,12 @@ public class PlayerState_Torch : PlayerState
     {
         Vector2 directionalInput = player.Input.Movement.Value;
 
-        Vector3 cameraDirection = forwardCamera.transform.forward;
+        Vector3 cameraDirection = Camera.main.transform.forward;
         cameraDirection.y = 0;
 
         Quaternion rotation;
         if (cameraDirection != Vector3.zero)
-        { rotation = Quaternion.Euler(0, 0, -forwardCamera.transform.rotation.eulerAngles.y); }
+        { rotation = Quaternion.Euler(0, 0, -Camera.main.transform.rotation.eulerAngles.y); }
         else
         { rotation = Quaternion.identity; }
 
@@ -114,7 +112,7 @@ public class PlayerState_Torch : PlayerState
             return;
         }
 
-        else if (hit.gameObject.layer == LayerMask.NameToLayer("Water"))
+        else if (hit != null && hit.gameObject.layer == LayerMask.NameToLayer("Water"))
         {
             player.SwitchState<PlayerState_Swim>();
             return;
