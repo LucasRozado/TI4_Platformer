@@ -18,7 +18,6 @@ public class LevelProgress : ScriptableObject
 
     public string SaveProgress()
     {
-        data.levelProgress = levelProgress;
         string content = JsonUtility.ToJson(data, true);
         string path = Application.persistentDataPath + "/" + fileBaseName + ".json";
         File.WriteAllText(path, content);
@@ -35,6 +34,7 @@ public class LevelProgress : ScriptableObject
         }
         catch
         {
+            data.levelProgress = new bool[levelProgress.Length];    
             content = SaveProgress();
         }
         ProgressData p = JsonUtility.FromJson<ProgressData>(content);
@@ -50,6 +50,7 @@ public class LevelProgress : ScriptableObject
 
     public bool GetProgress(int i)
     {
-        return levelProgress[i] = true;
+        return false; //TODO arrumar
+        //return levelProgress[i] = true;
     }
 }
