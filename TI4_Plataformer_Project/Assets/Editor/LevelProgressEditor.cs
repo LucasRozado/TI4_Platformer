@@ -7,14 +7,16 @@ public class LevelProgressEditor : Editor
     SerializedObject soCod;
     SerializedProperty progressName;
     SerializedProperty progressBool;
-    SerializedProperty codData;
+    SerializedProperty dataBool;
+    SerializedProperty data;
     private void OnEnable()
     {
         cod = (LevelProgress)target;
         soCod = new SerializedObject(cod);
-        codData = soCod.FindProperty("data");
-        progressName = codData.FindPropertyRelative("elementName");
-        progressBool = codData.FindPropertyRelative("levelProgress");
+        data = soCod.FindProperty("data");
+        progressName = soCod.FindProperty("progressName");
+        progressBool = soCod.FindProperty("levelProgress");
+        dataBool = data.FindPropertyRelative("levelProgress");
     }
     public override void OnInspectorGUI()
     {
@@ -45,6 +47,7 @@ public class LevelProgressEditor : Editor
         soCod.Update();
         progressName.InsertArrayElementAtIndex(progressName.arraySize);
         progressBool.InsertArrayElementAtIndex(progressBool.arraySize);
+        dataBool.InsertArrayElementAtIndex(dataBool.arraySize);
         soCod.ApplyModifiedProperties();
         Undo.CollapseUndoOperations(i);
     }
@@ -55,6 +58,7 @@ public class LevelProgressEditor : Editor
         soCod.Update();
         progressName.DeleteArrayElementAtIndex(progressName.arraySize - 1);
         progressBool.DeleteArrayElementAtIndex(progressBool.arraySize - 1);
+        dataBool.DeleteArrayElementAtIndex(dataBool.arraySize - 1);
         soCod.ApplyModifiedProperties();
         Undo.CollapseUndoOperations(i);
     }

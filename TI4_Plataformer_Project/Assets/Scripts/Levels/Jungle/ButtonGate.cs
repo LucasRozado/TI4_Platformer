@@ -9,22 +9,20 @@ public class ButtonGate : ButtonActivated
     Vector3 newPosition;
     Vector3 startPosition;
 
-    private void Start()
-    {
-        startPosition = transform.position;
-        newPosition = transform.position - Vector3.down * positionDistance;
-    }
     public override void Activate()
     {
         if (!isActive)
         { 
             isActive = true;
-            StartCoroutine(CRGateOpen()); 
+            //StartCoroutine(CRGateOpen());
+            gameObject.SetActive(!gameObject.activeSelf);
         }
     }
 
     public IEnumerator CRGateOpen()
     {
+        startPosition = transform.position;
+        newPosition = transform.position - Vector3.down * positionDistance;
         float t = 0;
         while (t < duration)
         {
@@ -32,7 +30,7 @@ public class ButtonGate : ButtonActivated
             transform.position = Vector3.Lerp(startPosition, newPosition, t / duration);
             yield return new WaitForEndOfFrame();
         }
-
+        Debug.Log(transform.position);
         yield return null;
     }
 }
