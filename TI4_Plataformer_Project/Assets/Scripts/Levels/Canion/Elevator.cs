@@ -19,7 +19,7 @@ public class Elevator : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.layer == 7) // Assuming 7 is the layer for the player
+        if (other.gameObject.layer == 3) // Assuming 7 is the layer for the player
         {
             Debug.Log("ElevatorTrigger in: " + transform.name);
             isActive = true;
@@ -29,7 +29,7 @@ public class Elevator : MonoBehaviour
     private void OnTriggerExit(Collider other)
     {
 
-        if (other.gameObject.layer == 7) // Assuming 7 is the layer for the player
+        if (other.gameObject.layer == 3) // Assuming 7 is the layer for the player
         {
             StopCoroutine(moveCoroutine);
             Debug.Log("ElevatorTrigger out: " + transform.name);

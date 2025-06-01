@@ -18,7 +18,7 @@ public class ExplodeCactus : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.layer == LayerMask.NameToLayer("Player")) // Check if the object that entered the trigger is in the "Player" layer
+        if (other.gameObject.layer == 3) // Check if the object that entered the trigger is in the "Player" layer
         {
             triggered = true; // Set the flag to true to indicate that the cactus has exploded
             countdownCoroutine = StartCoroutine(CountdownCoroutine()); // Start the countdown coroutine
@@ -26,7 +26,7 @@ public class ExplodeCactus : MonoBehaviour
     }
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.layer == LayerMask.NameToLayer("Player")) // Check if the object that exited the trigger is in the "Player" layer
+        if (other.gameObject.layer == 3) // Check if the object that exited the trigger is in the "Player" layer
         {
             triggered = false; // Reset the triggered flag to allow reactivation
             if (countdownCoroutine != null) // Check if the countdown coroutine is running

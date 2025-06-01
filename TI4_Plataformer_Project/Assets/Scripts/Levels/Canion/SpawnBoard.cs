@@ -17,7 +17,7 @@ public class SpawnBoard : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.layer == LayerMask.NameToLayer("Player")) // Check if the object that entered the trigger is in the "Player" layer
+        if (other.gameObject.layer == 3) // Check if the object that entered the trigger is in the "Player" layer
         {
             ActivateTimer(); // Call the method to start the countdown timer
             countdownCoroutine = StartCoroutine(CountdownCoroutine()); // Start the countdown coroutine
@@ -25,7 +25,7 @@ public class SpawnBoard : MonoBehaviour
     }
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.layer == LayerMask.NameToLayer("Player")) // Check if the object that exited the trigger is in the "Player" layer
+        if (other.gameObject.layer == 3) // Check if the object that exited the trigger is in the "Player" layer
         {
             DeactivateTimer(); // Call the method to stop the countdown timer
             countdownCoroutine = null; // Stop the countdown coroutine

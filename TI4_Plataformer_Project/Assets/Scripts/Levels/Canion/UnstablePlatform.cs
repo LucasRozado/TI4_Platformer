@@ -7,14 +7,14 @@ public class UnstablePlatform : MonoBehaviour
     private Coroutine destructionCoroutine; // Reference to the destruction coroutine
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.layer == LayerMask.NameToLayer("Player")) // Check if the object that entered the trigger is in the "Player" layer
+        if (other.gameObject.layer == 3) // Check if the object that entered the trigger is in the "Player" layer
         {
             destructionCoroutine = StartCoroutine(DestructionCoroutine()); // Start the destruction coroutine
         }
     }
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.layer == LayerMask.NameToLayer("Player")) // Check if the object that exited the trigger is in the "Player" layer
+        if (other.gameObject.layer == 3) // Check if the object that exited the trigger is in the "Player" layer
         {
             StopCoroutine(destructionCoroutine); // Stop the destruction coroutine
             destructionCoroutine = null; // Reset the coroutine reference

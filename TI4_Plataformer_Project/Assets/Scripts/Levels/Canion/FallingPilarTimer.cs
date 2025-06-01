@@ -10,7 +10,7 @@ public class FallingPilarTimer : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.layer == LayerMask.NameToLayer("Player")) // Check if the object that entered the trigger is in the "Player" layer
+        if (other.gameObject.layer == 3) // Check if the object that entered the trigger is in the "Player" layer
         {
             isActive = true; // Set the timer to active
             countdownCoroutine = StartCoroutine(CountdownCoroutine()); // Start the countdown coroutine
