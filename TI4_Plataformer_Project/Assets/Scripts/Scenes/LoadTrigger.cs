@@ -8,7 +8,7 @@ public class LoadTrigger : MonoBehaviour
     [SerializeField] LoadSceneMode loadSceneMode;
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.layer == 7)
+        if (other.gameObject.layer == 3)
         {
             StartCoroutine(LoadScene());
         }
