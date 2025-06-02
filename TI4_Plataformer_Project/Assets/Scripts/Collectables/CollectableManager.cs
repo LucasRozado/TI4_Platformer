@@ -67,6 +67,7 @@ public class CollectableManager
                     break;
                 }
         }
+        UIManager.instance.hud.UpdateCollectables(type);
     }
 
     public bool VerifyIfCollected(CollectableType type, int number)
