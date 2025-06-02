@@ -7,16 +7,18 @@ using System;
 public class LevelProgress : ScriptableObject
 {
     [SerializeField] private string fileBaseName = "progress";
+    public bool[] levelProgress;
+    public string[] progressName;
     public ProgressData data;
 
     private void Awake()
-    {
+    {        
         Load();
     }
 
     public string SaveProgress()
     {
-        string content = JsonUtility.ToJson(this, true);
+        string content = JsonUtility.ToJson(data, true);
         string path = Application.persistentDataPath + "/" + fileBaseName + ".json";
         File.WriteAllText(path, content);
         return content;
@@ -32,15 +34,23 @@ public class LevelProgress : ScriptableObject
         }
         catch
         {
+            data.levelProgress = new bool[levelProgress.Length];    
             content = SaveProgress();
         }
         ProgressData p = JsonUtility.FromJson<ProgressData>(content);
         data.levelProgress = p.levelProgress;
-        data.elementName = p.elementName;
+        levelProgress = p.levelProgress;
     }
 
     public void Activate(int i)
     {
-        data.levelProgress[i] = true;
+        /*data.levelProgress[i] = true;
+        levelProgress[i] = true; */
+    }
+
+    public bool GetProgress(int i)
+    {
+        return false; //TODO arrumar
+        //return levelProgress[i] = true;
     }
 }

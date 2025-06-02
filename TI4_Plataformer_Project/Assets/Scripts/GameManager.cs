@@ -103,10 +103,10 @@ public class GameManager : MonoBehaviour
     {
         collectableManager.SaveCollectables();
         checkpointManager.SaveCheckPoints();
-        foreach (LevelProgress progress in levelProgresses)
-        {
-            progress.SaveProgress();
-        }
+        //foreach (LevelProgress progress in levelProgresses) TODO arrumar
+        //{
+        //    progress.SaveProgress();
+        //}
         powerUp.SavePowerUp();
     }
 

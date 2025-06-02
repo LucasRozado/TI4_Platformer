@@ -17,14 +17,14 @@ public class ProgressObjectEditor : Editor
 
     public override void OnInspectorGUI()
     {
-        if (cod.levelProgress != null && cod.levelProgress.data.elementName.Length > 0)
+        if (cod.levelProgress != null && cod.levelProgress.progressName.Length > 0)
         {
             GUILayout.BeginHorizontal(GUI.skin.box);
             GUILayout.Label("Choose Progress");
-            if (GUILayout.Button(cod.levelProgress.data.elementName[codProgress.intValue]))
+            if (GUILayout.Button(cod.levelProgress.progressName[codProgress.intValue]))
             {
                 GenericMenu menu = new GenericMenu();
-                for (int i = 0; i < cod.levelProgress.data.elementName.Length; i++)
+                for (int i = 0; i < cod.levelProgress.progressName.Length; i++)
                 {
                     AddStringToMenu(menu, i);
                 }
@@ -38,7 +38,7 @@ public class ProgressObjectEditor : Editor
 
     private void AddStringToMenu(GenericMenu menu, int i)
     {
-        menu.AddItem(new GUIContent(cod.levelProgress.data.elementName[i]), i.Equals(cod.intReference), OnDropSelected, i);
+        menu.AddItem(new GUIContent(cod.levelProgress.progressName[i]), i.Equals(cod.intReference), OnDropSelected, i);
     }
 
     public void OnDropSelected(object obj)

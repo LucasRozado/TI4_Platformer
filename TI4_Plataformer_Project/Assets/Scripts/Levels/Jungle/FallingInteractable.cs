@@ -19,7 +19,7 @@ public class FallingInteractable : Interactable
             if (isFixed)
             {
                 hasFallen = true;
-                levelProgress.data.levelProgress[intReference] = true;
+                levelProgress.Activate(intReference);
             }
             //pivot = Vector3.Cross(transform.up, player.transform.forward);
             else
@@ -39,7 +39,7 @@ public class FallingInteractable : Interactable
 
     private void OnEnable()
     {
-        if (isFixed && levelProgress.data.levelProgress[intReference])
+        if (isFixed && levelProgress.GetProgress(intReference))
         {
             hasFallen = true;
             animator.SetTrigger("Pushed");

@@ -18,4 +18,12 @@ public class TutorialTrigger : Progress
             }
         }
     }
+
+    private void OnEnable()
+    {
+        if (levelProgress.GetProgress(intReference))
+        {
+            Destroy(gameObject);
+        }
+    }
 }
