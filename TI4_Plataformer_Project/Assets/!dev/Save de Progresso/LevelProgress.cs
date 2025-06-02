@@ -44,8 +44,8 @@ public class LevelProgress : ScriptableObject
 
     public void Activate(int i)
     {
-        data.levelProgress[i] = true;
-        levelProgress[i] = true;
+        /*data.levelProgress[i] = true;
+        levelProgress[i] = true; */
     }
 
     public bool GetProgress(int i)
