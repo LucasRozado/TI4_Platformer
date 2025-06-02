@@ -19,7 +19,7 @@ public class BossTrigger : Progress
         {
             go.SetActive(false);
         }
-        if (levelProgress.data.levelProgress[intReference])
+        if (levelProgress.GetProgress(intReference))
         {
             Destroy(gameObject);
         }        

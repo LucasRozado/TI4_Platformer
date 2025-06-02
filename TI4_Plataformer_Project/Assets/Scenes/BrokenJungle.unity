@@ -3310,7 +3310,7 @@ PrefabInstance:
     - target: {fileID: 7094162099531577056, guid: b9a3c16586e149c4c89d9d43f96da7ca, type: 3}
       propertyPath: levelProgress
       value: 
-      objectReference: {fileID: 11400000, guid: f8bfe71744e4f0847b0be53465bd2c1f, type: 2}
+      objectReference: {fileID: 11400000, guid: e5096b58630caed4a90e6c566bec1561, type: 2}
     - target: {fileID: 7094162099531577056, guid: b9a3c16586e149c4c89d9d43f96da7ca, type: 3}
       propertyPath: activated.Array.size
       value: 3
@@ -4711,7 +4711,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d95ec04106d1e014599162ab9094db8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelProgress: {fileID: 11400000, guid: f8bfe71744e4f0847b0be53465bd2c1f, type: 2}
+  levelProgress: {fileID: 11400000, guid: e5096b58630caed4a90e6c566bec1561, type: 2}
   intReference: 4
   rb: {fileID: 324586238}
   animator: {fileID: 1914357805}
@@ -11848,7 +11848,7 @@ PrefabInstance:
     - target: {fileID: 7094162099531577056, guid: b9a3c16586e149c4c89d9d43f96da7ca, type: 3}
       propertyPath: levelProgress
       value: 
-      objectReference: {fileID: 11400000, guid: f8bfe71744e4f0847b0be53465bd2c1f, type: 2}
+      objectReference: {fileID: 11400000, guid: e5096b58630caed4a90e6c566bec1561, type: 2}
     - target: {fileID: 7094162099531577056, guid: b9a3c16586e149c4c89d9d43f96da7ca, type: 3}
       propertyPath: activated.Array.size
       value: 1
@@ -12132,7 +12132,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d95ec04106d1e014599162ab9094db8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelProgress: {fileID: 0}
+  levelProgress: {fileID: 11400000, guid: e5096b58630caed4a90e6c566bec1561, type: 2}
   intReference: 0
   rb: {fileID: 765453167}
   animator: {fileID: 0}
@@ -16894,7 +16894,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 553a980d5564ede4d9d090b7817d8efe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelProgress: {fileID: 11400000, guid: f8bfe71744e4f0847b0be53465bd2c1f, type: 2}
+  levelProgress: {fileID: 11400000, guid: e5096b58630caed4a90e6c566bec1561, type: 2}
   intReference: 5
   activated:
   - {fileID: 2021951410}
@@ -18093,7 +18093,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 804355611663774459, guid: a0389ca322586644da7c46d738d54167, type: 3}
       propertyPath: 'hasPowerUp.Array.data[0]'
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 804355611663774459, guid: a0389ca322586644da7c46d738d54167, type: 3}
       propertyPath: 'hasPowerUp.Array.data[1]'
@@ -18125,7 +18125,7 @@ PrefabInstance:
       objectReference: {fileID: 903641358}
     - target: {fileID: 2415328314562152853, guid: a0389ca322586644da7c46d738d54167, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 164.7
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 2415328314562152853, guid: a0389ca322586644da7c46d738d54167, type: 3}
       propertyPath: m_LocalPosition.y
@@ -18133,7 +18133,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2415328314562152853, guid: a0389ca322586644da7c46d738d54167, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 83.6
+      value: -31
       objectReference: {fileID: 0}
     - target: {fileID: 2415328314562152853, guid: a0389ca322586644da7c46d738d54167, type: 3}
       propertyPath: m_LocalRotation.w
@@ -21970,7 +21970,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 014d70e575d26444f9e9af8bf6b3a70e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelProgress: {fileID: 11400000, guid: f8bfe71744e4f0847b0be53465bd2c1f, type: 2}
+  levelProgress: {fileID: 11400000, guid: e5096b58630caed4a90e6c566bec1561, type: 2}
   intReference: 4
 --- !u!1001 &1464337851
 PrefabInstance:
@@ -24546,14 +24546,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3fbeb1df7c539248adf61a7593dda37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelProgress: {fileID: 11400000, guid: f8bfe71744e4f0847b0be53465bd2c1f, type: 2}
+  levelProgress: {fileID: 11400000, guid: e5096b58630caed4a90e6c566bec1561, type: 2}
   intReference: 5
   animator: {fileID: 2133700782}
   rb: {fileID: 1731848868}
   enterState: {fileID: 1731848870}
   currentState: {fileID: 0}
   health: 0
-  maxHealth: 3
+  maxHealth: 1
   deathState: {fileID: 1731848873}
 --- !u!114 &1731848872
 MonoBehaviour:
@@ -24588,7 +24588,7 @@ MonoBehaviour:
   - {fileID: 2021951410}
   - {fileID: 1585353270}
   - {fileID: 1827893371}
-  levelProgress: {fileID: 11400000, guid: f8bfe71744e4f0847b0be53465bd2c1f, type: 2}
+  levelProgress: {fileID: 11400000, guid: e5096b58630caed4a90e6c566bec1561, type: 2}
   intReference: 5
 --- !u!114 &1731848874
 MonoBehaviour:
@@ -25002,7 +25002,7 @@ PrefabInstance:
     - target: {fileID: 7094162099531577056, guid: b9a3c16586e149c4c89d9d43f96da7ca, type: 3}
       propertyPath: levelProgress
       value: 
-      objectReference: {fileID: 11400000, guid: f8bfe71744e4f0847b0be53465bd2c1f, type: 2}
+      objectReference: {fileID: 11400000, guid: e5096b58630caed4a90e6c566bec1561, type: 2}
     - target: {fileID: 7094162099531577056, guid: b9a3c16586e149c4c89d9d43f96da7ca, type: 3}
       propertyPath: activated.Array.size
       value: 1
@@ -27270,7 +27270,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e3c2ec8279f8794c8b0b1ac7dae6f1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelProgress: {fileID: 11400000, guid: f8bfe71744e4f0847b0be53465bd2c1f, type: 2}
+  levelProgress: {fileID: 11400000, guid: e5096b58630caed4a90e6c566bec1561, type: 2}
   intReference: 5
   objectsToStart:
   - {fileID: 1864510183}
@@ -29437,7 +29437,7 @@ PrefabInstance:
     - target: {fileID: 7094162099531577056, guid: b9a3c16586e149c4c89d9d43f96da7ca, type: 3}
       propertyPath: levelProgress
       value: 
-      objectReference: {fileID: 11400000, guid: f8bfe71744e4f0847b0be53465bd2c1f, type: 2}
+      objectReference: {fileID: 11400000, guid: e5096b58630caed4a90e6c566bec1561, type: 2}
     - target: {fileID: 7094162099531577056, guid: b9a3c16586e149c4c89d9d43f96da7ca, type: 3}
       propertyPath: activated.Array.size
       value: 1
@@ -30490,7 +30490,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3724391216257773925, guid: 007c278ff24696845b28eea99d42d793, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 172.5246
+      value: 22.8246
       objectReference: {fileID: 0}
     - target: {fileID: 3724391216257773925, guid: 007c278ff24696845b28eea99d42d793, type: 3}
       propertyPath: m_LocalPosition.y
@@ -30498,23 +30498,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3724391216257773925, guid: 007c278ff24696845b28eea99d42d793, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 81.933975
+      value: -32.666023
       objectReference: {fileID: 0}
     - target: {fileID: 3724391216257773925, guid: 007c278ff24696845b28eea99d42d793, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.7524789
+      value: 0.7525182
       objectReference: {fileID: 0}
     - target: {fileID: 3724391216257773925, guid: 007c278ff24696845b28eea99d42d793, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.19468464
+      value: 0.19469781
       objectReference: {fileID: 0}
     - target: {fileID: 3724391216257773925, guid: 007c278ff24696845b28eea99d42d793, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.60912794
+      value: -0.60907793
       objectReference: {fileID: 0}
     - target: {fileID: 3724391216257773925, guid: 007c278ff24696845b28eea99d42d793, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.15759625
+      value: 0.15758573
       objectReference: {fileID: 0}
     - target: {fileID: 3724391216257773925, guid: 007c278ff24696845b28eea99d42d793, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -30559,7 +30559,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5571130106962000103, guid: f072cc9965e4e24499abc03b8eb48b63, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 172.5246
+      value: 22.8246
       objectReference: {fileID: 0}
     - target: {fileID: 5571130106962000103, guid: f072cc9965e4e24499abc03b8eb48b63, type: 3}
       propertyPath: m_LocalPosition.y
@@ -30567,23 +30567,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5571130106962000103, guid: f072cc9965e4e24499abc03b8eb48b63, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 81.933975
+      value: -32.666023
       objectReference: {fileID: 0}
     - target: {fileID: 5571130106962000103, guid: f072cc9965e4e24499abc03b8eb48b63, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.75247896
+      value: 0.7525183
       objectReference: {fileID: 0}
     - target: {fileID: 5571130106962000103, guid: f072cc9965e4e24499abc03b8eb48b63, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.19468465
+      value: 0.19469783
       objectReference: {fileID: 0}
     - target: {fileID: 5571130106962000103, guid: f072cc9965e4e24499abc03b8eb48b63, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.60912794
+      value: -0.6090779
       objectReference: {fileID: 0}
     - target: {fileID: 5571130106962000103, guid: f072cc9965e4e24499abc03b8eb48b63, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.15759625
+      value: 0.15758571
       objectReference: {fileID: 0}
     - target: {fileID: 5571130106962000103, guid: f072cc9965e4e24499abc03b8eb48b63, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -33057,7 +33057,7 @@ PrefabInstance:
     - target: {fileID: 5010613524326171636, guid: b5981b5305f0ed9428c3cb1c0b437463, type: 3}
       propertyPath: levelProgress
       value: 
-      objectReference: {fileID: 11400000, guid: f8bfe71744e4f0847b0be53465bd2c1f, type: 2}
+      objectReference: {fileID: 11400000, guid: e5096b58630caed4a90e6c566bec1561, type: 2}
     - target: {fileID: 7552179673594711291, guid: b5981b5305f0ed9428c3cb1c0b437463, type: 3}
       propertyPath: m_Name
       value: FallingPillar
