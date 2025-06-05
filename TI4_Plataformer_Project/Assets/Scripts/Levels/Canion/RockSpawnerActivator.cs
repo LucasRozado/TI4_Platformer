@@ -6,7 +6,7 @@ public class RockSpawnerActivator : MonoBehaviour
     [SerializeField] private GameObject[] inactiveRockSpawner;
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.layer == 7) // Assuming 7 is the layer for the player
+        if (other.gameObject.layer == 3) // Assuming 7 is the layer for the player
         {
             Debug.Log("RockSpawnerActivator in: " + transform.name);
             ActivateRockSpawners();

@@ -12,7 +12,7 @@ public class BossVisionCollider : MonoBehaviour
             Debug.Log("BossVisionCollider in: " + transform.name);
             DeactivateCollider();
         }
-        if (other.gameObject.layer == 7) // Assuming 7 is the layer for the player
+        if (other.gameObject.layer == 3) // Assuming 7 is the layer for the player
         {
             Debug.Log("player in: " + transform.name);
         }
@@ -24,7 +24,7 @@ public class BossVisionCollider : MonoBehaviour
             Debug.Log("BossVisionCollider out: " + transform.name);
             ActivateCollider();
         }
-        if (other.gameObject.layer == 7) // Assuming 7 is the layer for the player
+        if (other.gameObject.layer == 3) // Assuming 7 is the layer for the player
         {
             Debug.Log("player in: " + transform.name);
         }

@@ -18,7 +18,7 @@ public class FallingPilar : MonoBehaviour
     }
     public void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
+        if (other.gameObject.layer == 3)
         {
             fallCoroutine = StartCoroutine(FallCoroutine());
             foreach (Collider col in GetComponents<Collider>())

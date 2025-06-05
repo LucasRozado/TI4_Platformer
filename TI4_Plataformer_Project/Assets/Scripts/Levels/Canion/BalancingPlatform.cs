@@ -14,7 +14,7 @@ public class BalancingPlatform : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.layer == 7) // Check if the object that entered the trigger is in the "Player" layer
+        if (other.gameObject.layer == 3) // Check if the object that entered the trigger is in the "Player" layer
         {
             isTriggered = true; // Set the trigger flag to true
             spawnCoroutine = StartCoroutine(SpawnWeight(other.gameObject)); // Start the coroutine to spawn the weight
@@ -22,7 +22,7 @@ public class BalancingPlatform : MonoBehaviour
     }
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.layer == 7) // Check if the object that exited the trigger is in the "Player" layer
+        if (other.gameObject.layer == 3) // Check if the object that exited the trigger is in the "Player" layer
         {
             isTriggered = false; // Set the trigger flag to false
             StopCoroutine(spawnCoroutine); // Stop the spawn coroutine
