@@ -5917,13 +5917,14 @@ MonoBehaviour:
   - {fileID: 375266040927905850, guid: 3fbe7dccf02dd8c4db9a573d68460ef1, type: 3}
   - {fileID: 4633126916441174217, guid: f215dbada777c8e47b6a1c5ffb821985, type: 3}
   - {fileID: 166699849198120995, guid: 3a2ac0c1fb0852545a05da98453ecedd, type: 3}
+  - {fileID: 5509067218731110152, guid: 132a0126ad26a31449e801f53db8d83a, type: 3}
   spawnChance: 0.2
   maxYRotationVariation: 303
   turnStatic: 1
-  randomizeScale: 0
-  scaleRangeX: {x: 0.8, y: 1.2}
-  scaleRangeY: {x: 0.8, y: 1.2}
-  scaleRangeZ: {x: 0.8, y: 1.2}
+  randomizeScale: 1
+  scaleRangeX: {x: 0.8, y: 2}
+  scaleRangeY: {x: 0.8, y: 2}
+  scaleRangeZ: {x: 0.8, y: 2}
   uniformScaling: 1
   minSpacing: 0.8
   maxSpacing: 2
@@ -9315,6 +9316,10 @@ PrefabInstance:
     - target: {fileID: 3731807117720308590, guid: 74804778aa0aecd4b8cd655f3c901569, type: 3}
       propertyPath: m_Name
       value: DarkRamp
+      objectReference: {fileID: 0}
+    - target: {fileID: 3731807117720308590, guid: 74804778aa0aecd4b8cd655f3c901569, type: 3}
+      propertyPath: m_Layer
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 5878564146509204918, guid: 74804778aa0aecd4b8cd655f3c901569, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -16679,6 +16684,71 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8008002099258660432, guid: a5713b2bed3de5e4daf060a88e25e783, type: 3}
   m_PrefabInstance: {fileID: 1112548765}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &1116082271
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: a9d66d3478953544ba7a19bf5b153320, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -27.49
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: a9d66d3478953544ba7a19bf5b153320, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 43.36
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: a9d66d3478953544ba7a19bf5b153320, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -80.06
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: a9d66d3478953544ba7a19bf5b153320, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.9068947
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: a9d66d3478953544ba7a19bf5b153320, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.2576271
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: a9d66d3478953544ba7a19bf5b153320, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.3207318
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: a9d66d3478953544ba7a19bf5b153320, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.09111227
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: a9d66d3478953544ba7a19bf5b153320, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -31.717
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: a9d66d3478953544ba7a19bf5b153320, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -38.953
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: a9d66d3478953544ba7a19bf5b153320, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: a9d66d3478953544ba7a19bf5b153320, type: 3}
+      propertyPath: m_Name
+      value: Bridge
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: a9d66d3478953544ba7a19bf5b153320, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 8164078558771037576, guid: a9d66d3478953544ba7a19bf5b153320, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: a9d66d3478953544ba7a19bf5b153320, type: 3}
 --- !u!1001 &1130370892
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -22513,10 +22583,10 @@ MonoBehaviour:
   spawnChance: 0.1
   maxYRotationVariation: 303
   turnStatic: 1
-  randomizeScale: 0
-  scaleRangeX: {x: 0.8, y: 1.2}
-  scaleRangeY: {x: 0.8, y: 1.2}
-  scaleRangeZ: {x: 0.8, y: 1.2}
+  randomizeScale: 1
+  scaleRangeX: {x: 0.8, y: 2}
+  scaleRangeY: {x: 0.8, y: 2}
+  scaleRangeZ: {x: 0.8, y: 2}
   uniformScaling: 1
   minSpacing: 0.8
   maxSpacing: 2
@@ -34535,3 +34605,4 @@ SceneRoots:
   - {fileID: 386848918}
   - {fileID: 1496866468}
   - {fileID: 1152259224}
+  - {fileID: 1116082271}
