@@ -4,8 +4,8 @@ using System.IO;
 public class LevelProgress : MonoBehaviour
 {
     public string fileBaseName = "progress";
-    [HideInInspector] public bool[] levelProgress;
-    [HideInInspector] public string[] progressName;
+    public bool[] levelProgress;
+    public string[] progressName;
     public static LevelProgress instance;
 
     private void Awake()
@@ -56,6 +56,11 @@ public class LevelProgress : MonoBehaviour
     public bool GetProgress(int i)
     {
         Debug.Log($"{i} {levelProgress[i]}");
-        return levelProgress[i] = true;
+        return levelProgress[i];
+    }
+
+    private void OnDestroy()
+    {
+        SaveProgress();
     }
 }

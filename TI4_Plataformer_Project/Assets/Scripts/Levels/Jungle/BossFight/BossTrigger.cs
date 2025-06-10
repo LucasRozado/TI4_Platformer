@@ -7,10 +7,13 @@ public class BossTrigger : Progress
 
     private void OnTriggerEnter(Collider other)
     {
-        foreach(GameObject go in objectsToStart)
+        if (other.CompareTag("Player"))
         {
-            go.SetActive(true);
-        }
+            foreach (GameObject go in objectsToStart)
+            {
+                go.SetActive(true);
+            }
+        }        
     }
 
     private void Start()
