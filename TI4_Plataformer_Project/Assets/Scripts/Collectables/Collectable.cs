@@ -5,10 +5,12 @@ public class Collectable : MonoBehaviour
     [SerializeField] CollectableType type;
     public int number = 0;
     private void OnTriggerEnter(Collider other)
-    {
-        GameManager.collectableManager.AddCollectable(type, number);
+    {        
         if (other.CompareTag("Player"))
+        {
+            GameManager.collectableManager.AddCollectable(type, number);
             Destroy(gameObject);
+        }
     }
 
     public void SetNumber(int number)
