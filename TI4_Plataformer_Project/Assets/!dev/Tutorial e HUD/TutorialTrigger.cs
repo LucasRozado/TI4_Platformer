@@ -14,14 +14,14 @@ public class TutorialTrigger : Progress
             gameObject.SetActive(false);
             if (lastTutorial)
             {
-                levelProgress.Activate(intReference);
+                LevelProgress.instance.Activate(intReference);
             }
         }
     }
 
-    private void OnEnable()
+    private void Start()
     {
-        if (levelProgress.GetProgress(intReference))
+        if (LevelProgress.instance.GetProgress(intReference))
         {
             Destroy(gameObject);
         }

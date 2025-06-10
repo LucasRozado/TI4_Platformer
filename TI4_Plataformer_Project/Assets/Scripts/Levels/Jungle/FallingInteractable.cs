@@ -9,7 +9,6 @@ public class FallingInteractable : Interactable
     [SerializeField] bool hasFallen;
     [SerializeField] GameObject[] drops;
     [SerializeField] Animator animator;
-    [SerializeField] LevelProgress levelProgress;
     [SerializeField] int intReference;
     public override void InteractWith(Player player)
     {
@@ -19,7 +18,7 @@ public class FallingInteractable : Interactable
             if (isFixed)
             {
                 hasFallen = true;
-                levelProgress.Activate(intReference);
+                LevelProgress.instance.Activate(intReference);
             }
             //pivot = Vector3.Cross(transform.up, player.transform.forward);
             else
@@ -37,9 +36,9 @@ public class FallingInteractable : Interactable
         }
     }
 
-    private void OnEnable()
+    private void Start()
     {
-        if (isFixed && levelProgress.GetProgress(intReference))
+        if (isFixed && LevelProgress.instance.GetProgress(intReference))
         {
             hasFallen = true;
             animator.SetTrigger("Pushed");

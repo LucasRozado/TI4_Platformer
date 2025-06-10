@@ -13,13 +13,13 @@ public class BossTrigger : Progress
         }
     }
 
-    private void OnEnable()
+    private void Start()
     {
         foreach (GameObject go in objectsToStart)
         {
             go.SetActive(false);
         }
-        if (levelProgress.GetProgress(intReference))
+        if (LevelProgress.instance.GetProgress(intReference))
         {
             Destroy(gameObject);
         }        

@@ -4711,7 +4711,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d95ec04106d1e014599162ab9094db8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelProgress: {fileID: 11400000, guid: e5096b58630caed4a90e6c566bec1561, type: 2}
   intReference: 4
   rb: {fileID: 324586238}
   animator: {fileID: 1914357805}
@@ -12137,7 +12136,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d95ec04106d1e014599162ab9094db8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelProgress: {fileID: 11400000, guid: e5096b58630caed4a90e6c566bec1561, type: 2}
   intReference: 0
   rb: {fileID: 765453167}
   animator: {fileID: 0}
@@ -16964,7 +16962,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 553a980d5564ede4d9d090b7817d8efe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelProgress: {fileID: 11400000, guid: e5096b58630caed4a90e6c566bec1561, type: 2}
   intReference: 5
   activated:
   - {fileID: 2021951410}
@@ -17724,6 +17721,62 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5445606269629144060, guid: 032e173981bb91e48b83aafc1c50f3bb, type: 3}
   m_PrefabInstance: {fileID: 1179087601}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1181956273
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1181956275}
+  - component: {fileID: 1181956274}
+  m_Layer: 0
+  m_Name: LevelProgress
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1181956274
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1181956273}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a89f6aa0587ab754aa24dc3e7f8cc209, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fileBaseName: JungleP
+  levelProgress: 000000000000000000
+  progressName:
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+--- !u!4 &1181956275
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1181956273}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 13.654598, y: 1.7963054, z: -31.943075}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1185704332
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -22040,7 +22093,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 014d70e575d26444f9e9af8bf6b3a70e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelProgress: {fileID: 11400000, guid: e5096b58630caed4a90e6c566bec1561, type: 2}
   intReference: 4
 --- !u!1001 &1464337851
 PrefabInstance:
@@ -24616,7 +24668,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3fbeb1df7c539248adf61a7593dda37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelProgress: {fileID: 11400000, guid: e5096b58630caed4a90e6c566bec1561, type: 2}
   intReference: 5
   animator: {fileID: 2133700782}
   rb: {fileID: 1731848868}
@@ -24658,7 +24709,6 @@ MonoBehaviour:
   - {fileID: 2021951410}
   - {fileID: 1585353270}
   - {fileID: 1827893371}
-  levelProgress: {fileID: 11400000, guid: e5096b58630caed4a90e6c566bec1561, type: 2}
   intReference: 5
 --- !u!114 &1731848874
 MonoBehaviour:
@@ -27340,7 +27390,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e3c2ec8279f8794c8b0b1ac7dae6f1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelProgress: {fileID: 11400000, guid: e5096b58630caed4a90e6c566bec1561, type: 2}
   intReference: 5
   objectsToStart:
   - {fileID: 1864510183}
@@ -34606,3 +34655,4 @@ SceneRoots:
   - {fileID: 1496866468}
   - {fileID: 1152259224}
   - {fileID: 1116082271}
+  - {fileID: 1181956275}
