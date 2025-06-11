@@ -1,24 +1,29 @@
 using UnityEngine;
 using System.IO;
-using System;
 
-[CreateAssetMenu(fileName = "levelProgress", menuName = "Scriptable Objects/Saves/LevelProgress")]
-[Serializable]
-public class LevelProgress : ScriptableObject
+public class LevelProgress : MonoBehaviour
 {
-    [SerializeField] private string fileBaseName = "progress";
+    public string fileBaseName = "progress";
     public bool[] levelProgress;
     public string[] progressName;
-    public ProgressData data;
+    public static LevelProgress instance;
 
     private void Awake()
     {        
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
         Load();
     }
 
     public string SaveProgress()
     {
-        string content = JsonUtility.ToJson(data, true);
+        string content = JsonUtility.ToJson(new ProgressAdapter(this), true);
         string path = Application.persistentDataPath + "/" + fileBaseName + ".json";
         File.WriteAllText(path, content);
         return content;
@@ -33,24 +38,29 @@ public class LevelProgress : ScriptableObject
             content = File.ReadAllText(path);
         }
         catch
-        {
-            data.levelProgress = new bool[levelProgress.Length];    
+        {    
+            int size = levelProgress.Length;
+            levelProgress = new bool[size];
             content = SaveProgress();
         }
         ProgressData p = JsonUtility.FromJson<ProgressData>(content);
-        data.levelProgress = p.levelProgress;
-        levelProgress = p.levelProgress;
+        ProgressAdapter.DataToProgress(p, this);
     }
 
     public void Activate(int i)
     {
-        /*data.levelProgress[i] = true;
-        levelProgress[i] = true; */
+        Debug.Log($"{i} activate");
+        levelProgress[i] = true;
     }
 
     public bool GetProgress(int i)
     {
-        return false; //TODO arrumar
-        //return levelProgress[i] = true;
+        Debug.Log($"{i} {levelProgress[i]}");
+        return levelProgress[i];
+    }
+
+    private void OnDestroy()
+    {
+        SaveProgress();
     }
 }

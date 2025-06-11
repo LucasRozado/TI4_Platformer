@@ -4,13 +4,13 @@ public class MazeTrunk : Progress
 {
     public void OnBossPassage()
     {
-        levelProgress.Activate(intReference);
+        LevelProgress.instance.Activate(intReference);
         Destroy(gameObject);
     }
 
-    private void OnEnable()
+    private void Start()
     {
-        if (levelProgress.GetProgress(intReference))
+        if (LevelProgress.instance.GetProgress(intReference))
         {
             Destroy(gameObject);
         }

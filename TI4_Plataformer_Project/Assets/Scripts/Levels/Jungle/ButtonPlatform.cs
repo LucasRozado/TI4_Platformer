@@ -7,17 +7,18 @@ public class ButtonPlatform : Progress
     [SerializeField] Animator animator;
     bool isActive;
 
-    private void OnEnable()
+    private void Start()
     {
-        if (levelProgress.GetProgress(intReference))
+        if (LevelProgress.instance.GetProgress(intReference))
         {
+            Debug.Log($"{intReference} is active");
             Activate();
         }
     }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void OnTriggerEnter(Collider other)
     {
-        if (!isActive)
+        if (!isActive && other.CompareTag("Player"))
         {
             Activate();
         }
@@ -34,6 +35,6 @@ public class ButtonPlatform : Progress
         {
             act.Activate();
         }
-        levelProgress.Activate(intReference);
+        LevelProgress.instance.Activate(intReference);
     }
 }
