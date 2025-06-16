@@ -11,13 +11,20 @@ public class CPInteraction : Interactable
         GameManager.SetSpawnPosition(spawnPosition.position);
         if (!isActive)
         {
-            isActive = true;
             GameManager.checkpointManager.AddCheckPoint(info);
+            SetAsActive();
         }
         else
         {
             UIManager.instance.OpenFastTravel();
         }
+    }
+
+    private void SetAsActive()
+    {
+        isActive = true;
+        MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
+        meshRenderer.material.color = Color.green;
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -34,7 +41,7 @@ public class CPInteraction : Interactable
     {
         if (GameManager.checkpointManager.VerifyCheckPoint(info))
         {
-            isActive = true;
+            SetAsActive();
         }
     }
 }

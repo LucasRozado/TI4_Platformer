@@ -14,6 +14,8 @@ public class FallingInteractable : Interactable
     {
         if (GameManager.powerUp.GetPowerUp(PowerUps.Push) && !hasFallen)
         {
+
+            Debug.Log("Falling Interactable Activation");
             //StartCoroutine(Fall());
             if (isFixed)
             {
