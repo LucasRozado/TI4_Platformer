@@ -12,10 +12,11 @@ public class ButtonGate : ButtonActivated
     public override void Activate()
     {
         if (!isActive)
-        { 
+        {
+            Debug.Log("Activate " + gameObject.name);
             isActive = true;
-            //StartCoroutine(CRGateOpen());
-            gameObject.SetActive(!gameObject.activeSelf);
+            StartCoroutine(CRGateOpen());
+            //gameObject.SetActive(!gameObject.activeSelf);
         }
     }
 
@@ -30,7 +31,6 @@ public class ButtonGate : ButtonActivated
             transform.position = Vector3.Lerp(startPosition, newPosition, t / duration);
             yield return new WaitForEndOfFrame();
         }
-        Debug.Log(transform.position);
         yield return null;
     }
 }

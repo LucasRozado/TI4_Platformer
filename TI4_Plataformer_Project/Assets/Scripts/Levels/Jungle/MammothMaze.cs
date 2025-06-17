@@ -35,7 +35,11 @@ public class MammothMaze : Progress
 
     private void Start()
     {
-        if (LevelProgress.instance.GetProgress(intReference))
+        if (LevelProgress.instance.GetProgress(intReference - 1))
+        {
+            gameObject.SetActive(false);
+        }
+        else if (LevelProgress.instance.GetProgress(intReference))
         {
             Destroy(gameObject);
         }

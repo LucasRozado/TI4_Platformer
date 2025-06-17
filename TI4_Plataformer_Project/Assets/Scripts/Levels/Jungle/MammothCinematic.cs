@@ -1,38 +1,39 @@
 using UnityEngine;
+using UnityEngine.Playables;
 
-public class MammothCinematic : MonoBehaviour
+public class MammothCinematic : Progress
 {
-    [SerializeField] Transform cameraTarget;
     [SerializeField] GameObject mammoth;
-    [SerializeField] Animator animator;
-    Vector3 playerPos;
+    [SerializeField] PlayableDirector director;
+
     bool isActive;
+
+    private void OnEnable()
+    {
+        if (LevelProgress.instance.GetProgress(intReference))
+        {
+            Destroy(gameObject);
+        }
+    }
     private void OnTriggerEnter(Collider other)
     {
         if (!isActive && other.CompareTag("Player"))
         {
             isActive = true;
-            animator.SetTrigger("Cinematic");
-            mammoth.SetActive(false);
-            StopPlayer();
-            //BrainStatic.instance.cinemachine.Target.TrackingTarget = cameraTarget;
+            director.Play();
+            //LevelProgress.instance.Activate(intReference);
         }
     }
 
-    public void EndCinematic()
+    public void ControlCinematic(bool setActive)
     {
-        mammoth.SetActive(true);
-        isActive = false;
-        Destroy(gameObject);
-    }
-    public void StopPlayer()
-    {
-        playerPos = Player.instance.transform.position;
-    }
+        mammoth.SetActive(setActive);
+        Player.instance.gameObject.SetActive(setActive);
+        BrainStatic.instance.gameObject.SetActive(setActive);
 
-    public void Update()
-    {
-        if (isActive)
-            Player.instance.transform.position = playerPos;
+        if (setActive == true)
+        {
+            Destroy(gameObject);
+        }
     }
 }
