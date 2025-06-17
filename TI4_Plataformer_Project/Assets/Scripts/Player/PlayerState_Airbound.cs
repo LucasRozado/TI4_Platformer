@@ -27,6 +27,8 @@ public class PlayerState_Airbound : PlayerState
     [SerializeField]
     private bool isSprinting = false;
 
+    [SerializeField] ParticleSystem dust;
+
 
     private PlayerState_Jump jump;
     public override void Initialize()
@@ -159,10 +161,12 @@ public class PlayerState_Airbound : PlayerState
             else if (isSprinting)
             {
                 player.SwitchState<PlayerState_GroundedRunning>();
+                dust.Play();
             }
             else
             {
                 player.SwitchState<PlayerState_Grounded>();
+                dust.Play();
             }
             return;
         }

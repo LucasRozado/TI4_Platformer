@@ -48,6 +48,8 @@ public class PlayerState_RunningJump : PlayerState
     [SerializeField]
     private bool isSprinting = false;
 
+    [SerializeField] ParticleSystem dust;
+
 
     private PlayerState_Airbound airbound;
     public override void Initialize()
@@ -68,6 +70,8 @@ public class PlayerState_RunningJump : PlayerState
 
         if (IsCancelBuffered)
         { HandleJumpCancel(); }
+
+        dust.Play();
     }
 
     private void CalculateParameters()
