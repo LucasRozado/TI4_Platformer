@@ -31,6 +31,7 @@ public class Player : MonoBehaviour
     [SerializeField] private Vector3 forward;
     [SerializeField] private Vector2 movementVelocity;
     [SerializeField] private Vector3 gravityVelocity;
+    public Collider torchTrigger;
 
     private PlayerInput input;
     private CharacterController characterController;
