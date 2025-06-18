@@ -39,6 +39,8 @@ public class PlayerState_GroundedRunning : PlayerState
     [SerializeField, Tooltip("In meters per second")]
     private float groundPull;
 
+    [SerializeField] ParticleSystem dust;
+
 
     private PlayerState_Jump jump;
     public override void Initialize()
@@ -56,6 +58,7 @@ public class PlayerState_GroundedRunning : PlayerState
         if (jump.IsBuffered)
         { HandleJump(); }
         speedMultiplier = 1f;
+        dust.Play();
     }
     protected override void ExitState()
     {
@@ -63,6 +66,7 @@ public class PlayerState_GroundedRunning : PlayerState
         isInputing = false;
         isSprinting = false;
         speedMultiplier = 1f;
+        dust.Stop();
     }
     
     private void Update()

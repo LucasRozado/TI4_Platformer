@@ -23,6 +23,8 @@ public class PlayerState_Torch : PlayerState
     [SerializeField, Tooltip("In meters per second")]
     private float groundPull;
 
+    [SerializeField] ParticleSystem fire;
+
     public override void Initialize()
     {
 
@@ -30,7 +32,12 @@ public class PlayerState_Torch : PlayerState
 
     protected override void EnterState()
     {
+        fire.Play();
+    }
 
+    protected override void ExitState()
+    {
+        fire.Stop();
     }
 
     private void Update()
@@ -117,11 +124,6 @@ public class PlayerState_Torch : PlayerState
             player.SwitchState<PlayerState_Swim>();
             return;
         }
-    }
-
-    protected override void ExitState()
-    {
-
     }
 
     protected override Vector3 CalculateVelocity(Vector2 movement, Vector3 gravity, Vector3 forward)
