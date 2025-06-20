@@ -10,6 +10,7 @@ public class PlayerInput
     public readonly InputHandler<Vector2> Movement;
     public readonly InputHandler<float> Jump;
     public readonly InputHandler<float> Interact;
+    public readonly InputHandler<float> Torch;
     public readonly InputHandler<float> Sprint;
     public readonly InputHandler<float> Spirit;
 
@@ -22,6 +23,7 @@ public class PlayerInput
         Jump = new(this.actions.Jump);
         Sprint = new(this.actions.Sprint);
         Interact = new(this.actions.Interact);
+        Torch = new(this.actions.Torch);
         Spirit = new(this.actions.Spirit);
     }
 

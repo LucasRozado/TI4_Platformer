@@ -23,14 +23,21 @@ public class PlayerState_Torch : PlayerState
     [SerializeField, Tooltip("In meters per second")]
     private float groundPull;
 
+    private PlayerState_Jump jump;
     public override void Initialize()
     {
+        jump = player.GetState<PlayerState_Jump>();
 
+        BindInputStart(player.Input.Jump, HandleJump);
+        BindInputStart(player.Input.Torch, HandleTorch);
+        BindInputStart(player.Input.Spirit, SwitchReality);
     }
 
     protected override void EnterState()
     {
-
+        player.PlayerAnimations.RunningAnimation(false);
+        if (jump.IsBuffered)
+        { HandleJump(); }
     }
 
     private void Update()
@@ -117,6 +124,16 @@ public class PlayerState_Torch : PlayerState
             player.SwitchState<PlayerState_Swim>();
             return;
         }
+    }
+
+    private void HandleTorch()
+    {
+        player.SwitchState<PlayerState_Grounded>();
+    }
+
+    private void HandleJump()
+    {
+        player.SwitchState<PlayerState_Jump>();
     }
 
     protected override void ExitState()

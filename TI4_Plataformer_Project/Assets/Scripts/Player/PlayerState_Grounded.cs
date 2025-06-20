@@ -26,6 +26,7 @@ public class PlayerState_Grounded : PlayerState
         BindInputStart(player.Input.Jump, HandleJump);
         BindInputStart(player.Input.Sprint, HandleSprint);
         BindInputStart(player.Input.Interact, HandleInteraction);
+        BindInputStart(player.Input.Torch, HandleTorch);
         BindInputStart(player.Input.Spirit, SwitchReality);
     }
 
@@ -151,6 +152,11 @@ public class PlayerState_Grounded : PlayerState
                 Debug.Log("Interact Done");
             }
         }
+    }
+
+    private void HandleTorch()
+    {
+        player.SwitchState<PlayerState_Torch>();
     }
 
     private void HandleJump()
