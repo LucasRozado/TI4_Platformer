@@ -217,8 +217,13 @@ public class Player : MonoBehaviour
     public void TakeDamage()
     {
         hpCurrent -= 1;
+        if (hpCurrent > 0)
+        {
+            // Play damage animation or sound here if needed
+            playerAnimations?.HurtAnimation();
+        }
         if (hpCurrent == 0)
-        { Die(); }
+            { Die(); }
     }
 
     public void Heal()
