@@ -6,7 +6,7 @@ public class FarusStare : BossState
     [SerializeField] FarusPatrol patrolState;
     [SerializeField] float slow = 0.5f;
     [SerializeField] Transform bone;
-    [SerializeField] RigTransform rigTransform;
+    [SerializeField] RigBuilder rigBuilder;
     [Tooltip("Player and Obstacles")]
     [SerializeField] LayerMask rayInteract;
     [SerializeField] LayerMask playerLayer;
@@ -20,13 +20,13 @@ public class FarusStare : BossState
     public override void EnterState(BossMachine machine)
     {
         base.EnterState(machine);
-        rigTransform.enabled = true;
+        rigBuilder.enabled = true;
     }
 
     public override void ExitState(BossMachine machine)
     {
         base.ExitState(machine);
-        rigTransform.enabled = false;
+        rigBuilder.enabled = false;
         damageTimer = 0f;
         cancelTimer = 0f;
     }
@@ -51,8 +51,7 @@ public class FarusStare : BossState
         if (Physics.Raycast(bone.position, (Player.instance.transform.position + Vector3.up) - bone.position,
             out hit, rayDistance, rayInteract, QueryTriggerInteraction.Ignore))
         {            
-            if (Physics.Raycast(bone.position, (Player.instance.transform.position + Vector3.up) - bone.position,
-            out hit, rayDistance, playerLayer, QueryTriggerInteraction.Ignore))
+            if (hit.collider.CompareTag("Player"))
             {
                 line.SetPosition(1, hit.point);
                 Debug.Log("Hit player");
