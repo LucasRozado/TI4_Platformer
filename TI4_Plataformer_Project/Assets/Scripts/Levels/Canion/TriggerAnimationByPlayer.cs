@@ -24,6 +24,24 @@ public class TriggerAnimationByPlayer : MonoBehaviour
             case 3: // Idle Platform 4
                 animator.SetBool("idlePlatform3", true);
                 break;
+            case 4: // Idle Platform 5
+                animator.SetBool("idlePlatform4", true);
+                break;
+            case 5: // Idle Platform 6
+                animator.SetBool("idlePlatform5", true);
+                break;
+            case 6: // Idle Platform 7
+                animator.SetBool("idlePlatform6", true);
+                break;
+            case 7: // Idle Platform 8
+                animator.SetBool("idlePlatform7", true);
+                break;
+            case 8: // Idle Platform 9
+                animator.SetBool("idlePlatform8", true);
+                break;
+            case 9: // Idle Platform 10
+                animator.SetBool("idlePlatform9", true);
+                break;
             default:
                 Debug.LogWarning("Unknown platform type");
                 break;
@@ -48,6 +66,24 @@ public class TriggerAnimationByPlayer : MonoBehaviour
                 case 3: // Idle Platform 4
                     animator.SetBool("idlePlatform3", false);
                     break;
+                case 4: // Idle Platform 5
+                    animator.SetBool("idlePlatform4", false);
+                    break;
+                case 5: // Idle Platform 6
+                    animator.SetBool("idlePlatform5", false);
+                    break;
+                case 6: // Idle Platform 7
+                    animator.SetBool("idlePlatform6", false);
+                    break;
+                case 7: // Idle Platform 8
+                    animator.SetBool("idlePlatform7", false);
+                    break;
+                case 8: // Idle Platform 9
+                    animator.SetBool("idlePlatform8", false);
+                    break;
+                case 9: // Idle Platform 10
+                    animator.SetBool("idlePlatform9", false);
+                    break;
                 default:
                     Debug.LogWarning("Unknown platform type");
                     break;
@@ -71,6 +107,24 @@ public class TriggerAnimationByPlayer : MonoBehaviour
                     break;
                 case 3: // Idle Platform 4
                     animator.SetBool("idlePlatform3", true);
+                    break;
+                case 4: // Idle Platform 5
+                    animator.SetBool("idlePlatform4", true);
+                    break;
+                case 5: // Idle Platform 6
+                    animator.SetBool("idlePlatform5", true);
+                    break;
+                case 6: // Idle Platform 7
+                    animator.SetBool("idlePlatform6", true);
+                    break;
+                case 7: // Idle Platform 8
+                    animator.SetBool("idlePlatform7", true);
+                    break;
+                case 8: // Idle Platform 9
+                    animator.SetBool("idlePlatform8", true);
+                    break;
+                case 9: // Idle Platform 10
+                    animator.SetBool("idlePlatform9", true);
                     break;
                 default:
                     Debug.LogWarning("Unknown platform type");
