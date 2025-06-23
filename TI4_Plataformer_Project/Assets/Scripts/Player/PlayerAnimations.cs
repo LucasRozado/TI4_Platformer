@@ -88,4 +88,11 @@ public class PlayerAnimations : MonoBehaviour
             animator.SetFloat("swimSpeed", speed);
         }
     }
+    public void HurtAnimation()
+    {
+        if (animator != null)
+        {
+            animator.SetTrigger("hurt");
+        }
+    }
 }   
