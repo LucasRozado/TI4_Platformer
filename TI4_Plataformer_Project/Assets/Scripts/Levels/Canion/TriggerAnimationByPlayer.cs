@@ -84,6 +84,15 @@ public class TriggerAnimationByPlayer : MonoBehaviour
                 case 9: // Idle Platform 10
                     animator.SetBool("idlePlatform9", false);
                     break;
+                case 10: // Idle Platform 11
+                    animator.SetTrigger("jigglePlatform");
+                    break;
+                case 11: // Idle Platform 12
+                    animator.SetTrigger("jigglePlatform1");
+                    break;
+                case 12: // Idle Platform 13
+                    animator.SetTrigger("jigglePlatform2");
+                    break; 
                 default:
                     Debug.LogWarning("Unknown platform type");
                     break;
