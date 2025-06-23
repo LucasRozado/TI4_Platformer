@@ -4,6 +4,7 @@ public class MammothDamageState : BossState
 {
     [SerializeField] BossState animationState;
     [SerializeField] BossState deathState;
+    [SerializeField] ParticleSystem pillarFallVFX;
     public override void AnimationTrigger()
     {
         base.AnimationTrigger();
@@ -14,6 +15,7 @@ public class MammothDamageState : BossState
     {
         base.EnterState(machine);
         machine.TakeDamage();
+        pillarFallVFX.Play();   
         if (machine.GetHealth() <= 0)
         {
             machine.ChangeState(deathState);

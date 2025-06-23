@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class CPInteraction : Interactable
 {
+    [SerializeField] GameObject decal;
     [SerializeField] public Transform spawnPosition;
     [SerializeField] CPInfo info;
     [SerializeField] bool isFirstCheckpoint;
@@ -23,8 +24,7 @@ public class CPInteraction : Interactable
     private void SetAsActive()
     {
         isActive = true;
-        MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
-        meshRenderer.material.color = Color.green;
+        decal.SetActive(true);
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
