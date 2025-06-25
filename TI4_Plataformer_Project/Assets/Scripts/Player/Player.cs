@@ -15,6 +15,7 @@ public class Player : MonoBehaviour
 
     [Header("Stats")]
     [SerializeField] private int hpBase = 2;
+    [SerializeField] private float speedFactor = 1f;
 
     [Header("Interaction")]
     [SerializeField] private Transform[] interactChecksLR;
@@ -144,7 +145,7 @@ public class Player : MonoBehaviour
 
     public ControllerCollision Move(Vector3 velocity)
     {
-        this.velocity = velocity;
+        this.velocity = velocity * speedFactor;
 
         CollisionFlags collisionFlags = characterController.Move(velocity * Time.deltaTime);
         // [OnControllerColliderHit] � chamado no [Move] caso haja colis�o
@@ -155,7 +156,7 @@ public class Player : MonoBehaviour
     public delegate void CollisionHandler(CollisionFlags flags, ControllerColliderHit hit);
     public void Move(Vector3 velocity, CollisionHandler collisionHandler)
     {
-        this.velocity = velocity;
+        this.velocity = velocity * speedFactor;
 
         CollisionFlags lastCollisionFlags = characterController.collisionFlags;
         CollisionFlags collisionFlags = characterController.Move(velocity * Time.deltaTime);
@@ -166,7 +167,7 @@ public class Player : MonoBehaviour
     }
     public void Move(Vector3 velocity, CollisionHandler onFlagsUpdate = null, CollisionHandler onCollision = null)
     {
-        this.velocity = velocity;
+        this.velocity = velocity * speedFactor;
 
         CollisionFlags lastCollisionFlags = characterController.collisionFlags;
         CollisionFlags collisionFlags = characterController.Move(velocity * Time.deltaTime);
@@ -234,5 +235,15 @@ public class Player : MonoBehaviour
     public void Die()
     {
         SwitchState<PlayerState_Dead>();
+    }
+
+    public void ChangeSpeed(float speedFactor)
+    {
+        this.speedFactor = speedFactor;
+    }
+
+    public float GetSpeed()
+    {
+        return speedFactor;
     }
 }
