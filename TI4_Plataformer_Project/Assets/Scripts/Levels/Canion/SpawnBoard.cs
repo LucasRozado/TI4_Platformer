@@ -6,6 +6,7 @@ public class SpawnBoard : MonoBehaviour
     [SerializeField] private float spawnTimer = 0.5f; // Time before the spawn occurs
     [SerializeField] private bool triggered = false; // Flag to check if the spawn has been triggered
     [SerializeField] private GameObject boardPrefab; // Prefab to be spawned
+    [SerializeField] private Animator animator; // Animator to control animations (if needed)
     private Coroutine countdownCoroutine; // Reference to the countdown coroutine
 
     private void Start()
@@ -14,11 +15,13 @@ public class SpawnBoard : MonoBehaviour
         {
             Debug.LogWarning("Board prefab not found in the specified path.");
         }
+        animator = GetComponentInChildren<Animator>(); // Get the Animator component from the children of this GameObject
     }
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.layer == 3) // Check if the object that entered the trigger is in the "Player" layer
         {
+            animator.SetBool("isFalling", true); // Set the animator parameter to trigger falling animation
             ActivateTimer(); // Call the method to start the countdown timer
             countdownCoroutine = StartCoroutine(CountdownCoroutine()); // Start the countdown coroutine
         }
@@ -27,6 +30,7 @@ public class SpawnBoard : MonoBehaviour
     {
         if (other.gameObject.layer == 3) // Check if the object that exited the trigger is in the "Player" layer
         {
+            animator.SetBool("isFalling", false); // Reset the animator parameter to stop the falling animation
             DeactivateTimer(); // Call the method to stop the countdown timer
             countdownCoroutine = null; // Stop the countdown coroutine
         }
