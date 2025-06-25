@@ -65,6 +65,10 @@ public class SpawnBoard : MonoBehaviour
         if (boardPrefab != null)
         {
             GetComponent<MeshRenderer>().enabled = false; // Disable the MeshRenderer of the current GameObject
+            foreach (MeshRenderer mr in GetComponentsInChildren<MeshRenderer>())
+            {
+                mr.enabled = false; // Disable all MeshRenderers attached to the current GameObject and its children
+            }
             foreach (Collider c in GetComponents<Collider>())
             {
                 c.enabled = false; // Disable all colliders attached to the current GameObject
