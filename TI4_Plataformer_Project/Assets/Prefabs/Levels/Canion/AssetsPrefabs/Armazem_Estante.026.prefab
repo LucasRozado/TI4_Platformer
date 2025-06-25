@@ -1,0 +1,347 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8358053140706791789
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9209333005779987351}
+  - component: {fileID: 2633802243196805193}
+  - component: {fileID: 8605303640465309209}
+  m_Layer: 0
+  m_Name: Armazem_Estante.026
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9209333005779987351
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8358053140706791789}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 55.352524, y: 57.63331, z: -118.40288}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
+  m_Children:
+  - {fileID: 5625129740665542073}
+  - {fileID: 3261647449121087005}
+  - {fileID: 3700451807044913219}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!205 &2633802243196805193
+LODGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8358053140706791789}
+  serializedVersion: 2
+  m_LocalReferencePoint: {x: 0, y: 0, z: 0}
+  m_Size: 1
+  m_FadeMode: 0
+  m_AnimateCrossFading: 0
+  m_LastLODIsBillboard: 0
+  m_LODs:
+  - screenRelativeHeight: 0.047247518
+    fadeTransitionWidth: 0
+    renderers:
+    - renderer: {fileID: 8197469640923851565}
+  - screenRelativeHeight: 0.021586787
+    fadeTransitionWidth: 0
+    renderers:
+    - renderer: {fileID: 5032752318968055878}
+  - screenRelativeHeight: 0.0058643944
+    fadeTransitionWidth: 0
+    renderers:
+    - renderer: {fileID: 7750851105672692931}
+  m_Enabled: 1
+--- !u!65 &8605303640465309209
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8358053140706791789}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.7524245, y: 1.8354799, z: 0.92379}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!1001 &3634990794754805083
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 9209333005779987351}
+    m_Modifications:
+    - target: {fileID: 4176925738685639805, guid: d09e8a9280760ad429a783fa8d90c645, type: 3}
+      propertyPath: m_Name
+      value: ArmazemEstanteMedia2_LOD0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4877776537165522550, guid: d09e8a9280760ad429a783fa8d90c645, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 44b196a63860a954ba0c05ba3f76440d, type: 2}
+    - target: {fileID: 8962846520335800546, guid: d09e8a9280760ad429a783fa8d90c645, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 8962846520335800546, guid: d09e8a9280760ad429a783fa8d90c645, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 8962846520335800546, guid: d09e8a9280760ad429a783fa8d90c645, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 8962846520335800546, guid: d09e8a9280760ad429a783fa8d90c645, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8962846520335800546, guid: d09e8a9280760ad429a783fa8d90c645, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8962846520335800546, guid: d09e8a9280760ad429a783fa8d90c645, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8962846520335800546, guid: d09e8a9280760ad429a783fa8d90c645, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 8962846520335800546, guid: d09e8a9280760ad429a783fa8d90c645, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 8962846520335800546, guid: d09e8a9280760ad429a783fa8d90c645, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8962846520335800546, guid: d09e8a9280760ad429a783fa8d90c645, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8962846520335800546, guid: d09e8a9280760ad429a783fa8d90c645, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 8962846520335800546, guid: d09e8a9280760ad429a783fa8d90c645, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8962846520335800546, guid: d09e8a9280760ad429a783fa8d90c645, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8962846520335800546, guid: d09e8a9280760ad429a783fa8d90c645, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: d09e8a9280760ad429a783fa8d90c645, type: 3}
+--- !u!4 &5625129740665542073 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8962846520335800546, guid: d09e8a9280760ad429a783fa8d90c645, type: 3}
+  m_PrefabInstance: {fileID: 3634990794754805083}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &8197469640923851565 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 4877776537165522550, guid: d09e8a9280760ad429a783fa8d90c645, type: 3}
+  m_PrefabInstance: {fileID: 3634990794754805083}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &5793582510335054496
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 9209333005779987351}
+    m_Modifications:
+    - target: {fileID: 1563062471104830182, guid: 91a7060dafd5a8744b9bb14fff7c33e6, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 44b196a63860a954ba0c05ba3f76440d, type: 2}
+    - target: {fileID: 4983653469701992296, guid: 91a7060dafd5a8744b9bb14fff7c33e6, type: 3}
+      propertyPath: m_Name
+      value: ArmazemEstanteMedia2_LOD1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9017688088897653949, guid: 91a7060dafd5a8744b9bb14fff7c33e6, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 9017688088897653949, guid: 91a7060dafd5a8744b9bb14fff7c33e6, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 9017688088897653949, guid: 91a7060dafd5a8744b9bb14fff7c33e6, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 9017688088897653949, guid: 91a7060dafd5a8744b9bb14fff7c33e6, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9017688088897653949, guid: 91a7060dafd5a8744b9bb14fff7c33e6, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9017688088897653949, guid: 91a7060dafd5a8744b9bb14fff7c33e6, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9017688088897653949, guid: 91a7060dafd5a8744b9bb14fff7c33e6, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 9017688088897653949, guid: 91a7060dafd5a8744b9bb14fff7c33e6, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 9017688088897653949, guid: 91a7060dafd5a8744b9bb14fff7c33e6, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9017688088897653949, guid: 91a7060dafd5a8744b9bb14fff7c33e6, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9017688088897653949, guid: 91a7060dafd5a8744b9bb14fff7c33e6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 9017688088897653949, guid: 91a7060dafd5a8744b9bb14fff7c33e6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9017688088897653949, guid: 91a7060dafd5a8744b9bb14fff7c33e6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9017688088897653949, guid: 91a7060dafd5a8744b9bb14fff7c33e6, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 91a7060dafd5a8744b9bb14fff7c33e6, type: 3}
+--- !u!4 &3261647449121087005 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 9017688088897653949, guid: 91a7060dafd5a8744b9bb14fff7c33e6, type: 3}
+  m_PrefabInstance: {fileID: 5793582510335054496}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &5032752318968055878 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 1563062471104830182, guid: 91a7060dafd5a8744b9bb14fff7c33e6, type: 3}
+  m_PrefabInstance: {fileID: 5793582510335054496}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &5988095044057474458
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 9209333005779987351}
+    m_Modifications:
+    - target: {fileID: 1977754777017444703, guid: 60f14199fd74f89479c443e4d6668133, type: 3}
+      propertyPath: m_Name
+      value: ArmazemEstanteMedia2_LOD2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4073913457815200089, guid: 60f14199fd74f89479c443e4d6668133, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 44b196a63860a954ba0c05ba3f76440d, type: 2}
+    - target: {fileID: 6936486701180120537, guid: 60f14199fd74f89479c443e4d6668133, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 6936486701180120537, guid: 60f14199fd74f89479c443e4d6668133, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 6936486701180120537, guid: 60f14199fd74f89479c443e4d6668133, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 6936486701180120537, guid: 60f14199fd74f89479c443e4d6668133, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6936486701180120537, guid: 60f14199fd74f89479c443e4d6668133, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6936486701180120537, guid: 60f14199fd74f89479c443e4d6668133, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6936486701180120537, guid: 60f14199fd74f89479c443e4d6668133, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 6936486701180120537, guid: 60f14199fd74f89479c443e4d6668133, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 6936486701180120537, guid: 60f14199fd74f89479c443e4d6668133, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6936486701180120537, guid: 60f14199fd74f89479c443e4d6668133, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6936486701180120537, guid: 60f14199fd74f89479c443e4d6668133, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 6936486701180120537, guid: 60f14199fd74f89479c443e4d6668133, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6936486701180120537, guid: 60f14199fd74f89479c443e4d6668133, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6936486701180120537, guid: 60f14199fd74f89479c443e4d6668133, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 60f14199fd74f89479c443e4d6668133, type: 3}
+--- !u!4 &3700451807044913219 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6936486701180120537, guid: 60f14199fd74f89479c443e4d6668133, type: 3}
+  m_PrefabInstance: {fileID: 5988095044057474458}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &7750851105672692931 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 4073913457815200089, guid: 60f14199fd74f89479c443e4d6668133, type: 3}
+  m_PrefabInstance: {fileID: 5988095044057474458}
+  m_PrefabAsset: {fileID: 0}
