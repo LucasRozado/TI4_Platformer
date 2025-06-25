@@ -15,7 +15,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &771491239689451480
 Transform:
@@ -70,7 +70,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &4071199525612108798
 Transform:
@@ -235,6 +235,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: PonteTabua_LOD1
       objectReference: {fileID: 0}
+    - target: {fileID: 7389048741910363859, guid: a44d0206e7c4c584cac4dad4805e6fe0, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 7464902478539714313, guid: a44d0206e7c4c584cac4dad4805e6fe0, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 35ae34326fff72340a2cca8b3457b7ed, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -262,6 +270,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: PonteTabua_LOD2
       objectReference: {fileID: 0}
+    - target: {fileID: 2375737421824905512, guid: 2b6d8ec61d31cc145a1fe03bc8cbb34c, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 3327206440388558628, guid: 2b6d8ec61d31cc145a1fe03bc8cbb34c, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 35ae34326fff72340a2cca8b3457b7ed, type: 2}
     - target: {fileID: 4434458292472293857, guid: 2b6d8ec61d31cc145a1fe03bc8cbb34c, type: 3}
       propertyPath: m_LocalScale.x
       value: 1
@@ -340,6 +356,10 @@ PrefabInstance:
     - target: {fileID: 2409085926782221681, guid: 61c980abd76672a4d9435c42f4d04819, type: 3}
       propertyPath: m_Name
       value: PonteTabua_LOD0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409085926782221681, guid: 61c980abd76672a4d9435c42f4d04819, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 5580401574539298321, guid: 61c980abd76672a4d9435c42f4d04819, type: 3}
       propertyPath: m_LocalScale.x
