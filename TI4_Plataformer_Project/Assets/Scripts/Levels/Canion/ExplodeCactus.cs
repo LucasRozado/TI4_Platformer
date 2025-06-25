@@ -6,7 +6,8 @@ public class ExplodeCactus : MonoBehaviour
     [SerializeField] private float explodeTimer = 2f; // Time before the cactus explodes
     [SerializeField] private float shootForce = 5f; // Force applied to the spikes when they are spawned
     [SerializeField] private bool triggered = false; // Flag to check if the cactus has exploded
-    [SerializeField] private GameObject spikesPrefab; // Prefab of the spikes to be spawned
+    [SerializeField] private GameObject spikesPrefab; // Prefab of the spikes to be spawned]
+    [SerializeField] private Animator animator; // Animator to control the cactus animation
     private Coroutine countdownCoroutine; // Reference to the countdown coroutine
 
     private void Start()
@@ -15,12 +16,14 @@ public class ExplodeCactus : MonoBehaviour
         {
             Debug.LogWarning("Spikes prefab not found in the specified path.");
         }
+        animator = GetComponentInChildren<Animator>(); // Get the animator component from the child objects of the cactus
     }
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.layer == 3) // Check if the object that entered the trigger is in the "Player" layer
         {
             triggered = true; // Set the flag to true to indicate that the cactus has exploded
+            animator.SetBool("isExploding", true); // Set the animator parameter to trigger the explosion animation
             countdownCoroutine = StartCoroutine(CountdownCoroutine()); // Start the countdown coroutine
         }
     }
@@ -29,6 +32,7 @@ public class ExplodeCactus : MonoBehaviour
         if (other.gameObject.layer == 3) // Check if the object that exited the trigger is in the "Player" layer
         {
             triggered = false; // Reset the triggered flag to allow reactivation
+            animator.SetBool("isExploding", false); // Reset the animator parameter to stop the explosion animation
             if (countdownCoroutine != null) // Check if the countdown coroutine is running
             {
                 StopCoroutine(countdownCoroutine); // Stop the countdown coroutine
@@ -49,6 +53,10 @@ public class ExplodeCactus : MonoBehaviour
                 {
                     explodeTimer = 0f; // Reset the timer to zero
                     triggered = false; // Reset the triggered flag to allow reactivation  
+                    animator.SetTrigger("explode"); // Trigger the explosion animation
+                    // Wait for the animation to finish before calling Explode
+                    float waitTime = animator.GetCurrentAnimatorStateInfo(0).length; // Get the length of the current animation state
+                    yield return new WaitForSeconds(waitTime - 0.65f); // Wait for the animation to finish
                     Explode(); // Call the explode method to handle the explosion effect
                 }
             }
@@ -57,7 +65,7 @@ public class ExplodeCactus : MonoBehaviour
     }
     public void Explode()
     {
-        GetComponent<MeshRenderer>().enabled = false; // Disable the mesh renderer to hide the cactus
+        //GetComponent<MeshRenderer>().enabled = false; // Disable the mesh renderer to hide the cactus
         Collider[] colliders = GetComponents<Collider>(); // Get all colliders attached to the cactus
         foreach (Collider collider in colliders)
         {
@@ -69,6 +77,7 @@ public class ExplodeCactus : MonoBehaviour
     }
     private void SpawnSpikes()
     {
+
         float radius = 1f; // Radius of the octagon
         GameObject[] spike = new GameObject[8]; // Initialize the spike variable
         for (int i = 0; i < 8; i++)
