@@ -7,12 +7,11 @@ public class AudioManager : MonoBehaviour
 {
     static private AudioManager instance;
 
-    [SerializeField] private AudioClip musica;
-    [SerializeField] private bool ApenasUmaVez;
+    [SerializeField] private AudioClip music;
+    [SerializeField] private bool playOnlyOnce;
 
-    [SerializeField] private AudioSource gerenciadorMusica;
-    [SerializeField] private AudioSource gerenciadorVozes;
-    [SerializeField] private AudioSource gerenciadorSFX;
+    [SerializeField] private AudioSource musicManager;
+    [SerializeField] private AudioSource sfxManager;
     [SerializeField] private AudioMixer audioMixer;
 
     private void Awake()
@@ -21,13 +20,13 @@ public class AudioManager : MonoBehaviour
         {
             instance = this;
             DontDestroyOnLoad(gameObject);
-            TocarPredefinida();
+            PlayDefault();
         }
         else
         {
-            instance.musica = musica;
-            instance.ApenasUmaVez = ApenasUmaVez;
-            TocarPredefinida();
+            instance.music = music;
+            instance.playOnlyOnce = playOnlyOnce;
+            PlayDefault();
             Destroy(gameObject);
         }
     }
@@ -38,52 +37,52 @@ public class AudioManager : MonoBehaviour
     [System.Serializable]
     public class _SFX
     {
-        [SerializeField] public AudioClip buttonClick;
+        [SerializeField] public AudioClip playerStep;
     }
 
 
     static public void TocarSFX(AudioClip sfx)
     => instance._TocarSFX(sfx);
     private void _TocarSFX(AudioClip sfx)
-    => gerenciadorSFX.PlayOneShot(sfx);
+    => sfxManager.PlayOneShot(sfx);
 
 
-    static public void TocarPredefinida()
-    => instance._TocarPredefinida();
-    private void _TocarPredefinida()
+    static public void PlayDefault()
+    => instance._PlayDefault();
+    private void _PlayDefault()
     {
-        if (musica == null) return;
+        if (music == null) return;
 
-        if (ApenasUmaVez) TocarMusicaUmaVez(musica);
-        else TocarMusicaEmLoop(musica);
+        if (playOnlyOnce) PlayMusicOnce(music);
+        else PlayMusicLoop(music);
     }
 
-    static public void TocarMusicaUmaVez(AudioClip musica)
-    => instance._TocarMusicaUmaVez(musica);
-    private void _TocarMusicaUmaVez(AudioClip musica)
+    static public void PlayMusicOnce(AudioClip music)
+    => instance._PlayMusicOnce(music);
+    private void _PlayMusicOnce(AudioClip music)
     {
-        gerenciadorMusica.loop = false;
-        gerenciadorMusica.clip = musica;
-        gerenciadorMusica.Play();
+        musicManager.loop = false;
+        musicManager.clip = music;
+        musicManager.Play();
     }
 
-    static public void TocarMusicaEmLoop(AudioClip musica)
-    => instance._TocarMusicaDeFundo(musica);
-    private void _TocarMusicaDeFundo(AudioClip musica)
+    static public void PlayMusicLoop(AudioClip musica)
+    => instance._PlayMusicLoop(musica);
+    private void _PlayMusicLoop(AudioClip musica)
     {
-        if (gerenciadorMusica.clip == musica && gerenciadorMusica.isPlaying) return;
+        if (musicManager.clip == musica && musicManager.isPlaying) return;
 
-        gerenciadorMusica.loop = true;
-        gerenciadorMusica.clip = musica;
-        gerenciadorMusica.Play();
+        musicManager.loop = true;
+        musicManager.clip = musica;
+        musicManager.Play();
     }
 
-    static public void PararMusica()
-    => instance._PararMusica();
-    private void _PararMusica()
-    { gerenciadorMusica.Stop(); }
+    static public void StopMusic()
+    => instance._StopMusic();
+    private void _StopMusic()
+    { musicManager.Stop(); }
 
-    static private float ConverteVolume(float porcentagem)
+    static private float ConvertVolume(float porcentagem)
     {
         float valorDecimal = porcentagem / 100;
         // o humano escuta em uma escala logarítmica
@@ -91,34 +90,24 @@ public class AudioManager : MonoBehaviour
         return valorDecimal == 0 ? -80f : Mathf.Log10(valorDecimal) * 20;
     }
 
-    static private int volumeGeral = 100;
-    static public int GetVolumeGeral() => volumeGeral;
-    static public void SetVolumeGeral(float porcentagem)
-    => instance._SetVolumeGeral(porcentagem);
-    private void _SetVolumeGeral(float porcentagem)
+    static private int volumeMaster = 100;
+    static public int GetVolumeMaster() => volumeMaster;
+    static public void SetVolumeMaster(float percentage)
+    => instance._SetVolumeMaster(percentage);
+    private void _SetVolumeMaster(float percentage)
     {
-        float volume = ConverteVolume(porcentagem);
-        audioMixer.SetFloat("VolumeGeral", volume);
+        float volume = ConvertVolume(percentage);
+        audioMixer.SetFloat("VolumeMaster", volume);
     }
 
-    static private int volumeMusica = 100;
-    static public int GetVolumeMusica() => volumeMusica;
-    static public void SetVolumeMusica(float porcentagem)
-    => instance._SetVolumeMusica(porcentagem);
-    private void _SetVolumeMusica(float porcentagem)
+    static private int volumeMusic = 100;
+    static public int GetVolumeMusic() => volumeMusic;
+    static public void SetVolumeMusic(float percentage)
+    => instance._SetVolumeMusic(percentage);
+    private void _SetVolumeMusic(float percentage)
     {
-        float volume = ConverteVolume(porcentagem);
-        audioMixer.SetFloat("VolumeMusica", volume);
-    }
-
-    static private int volumeVozes = 100;
-    static public int GetVolumeVozes() => volumeVozes;
-    static public void SetVolumeVozes(float porcentagem)
-    => instance._SetVolumeVozes(porcentagem);
-    private void _SetVolumeVozes(float porcentagem)
-    {
-        float volume = ConverteVolume(porcentagem);
-        audioMixer.SetFloat("VolumeVozes", volume);
+        float volume = ConvertVolume(percentage);
+        audioMixer.SetFloat("VolumeMusic", volume);
     }
 
     static private int volumeSFX = 100;
@@ -127,7 +116,7 @@ public class AudioManager : MonoBehaviour
     => instance._SetVolumeSFX(porcentagem);
     private void _SetVolumeSFX(float porcentagem)
     {
-        float volume = ConverteVolume(porcentagem);
+        float volume = ConvertVolume(porcentagem);
         audioMixer.SetFloat("VolumeSFX", volume);
     }
 }
