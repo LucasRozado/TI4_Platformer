@@ -9,7 +9,7 @@ public class DetectionTrigger : MonoBehaviour
     [SerializeField] LayerMask obstacles;
     private void OnTriggerStay(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.gameObject.layer == 3)
         {
             Debug.Log("Player found");
             if (!Physics.Raycast(head.position, head.position - Player.instance.transform.position + Vector3.up,

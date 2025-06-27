@@ -4,7 +4,6 @@ using UnityEngine.Animations.Rigging;
 public class FarusSpawn : BossState
 {
     [SerializeField] FarusPatrol patrolState;
-
     [SerializeField] RigBuilder rigBuilder;
 
     public override void EnterState(BossMachine machine)

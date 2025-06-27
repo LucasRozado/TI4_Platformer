@@ -3,6 +3,19 @@ using UnityEngine;
 public class FarusActivator : MonoBehaviour
 {
     public GameObject farus;
+    public Animator farusAnimator;
+    void Start()
+    {
+        if (farus == null)
+        {
+            Debug.LogError("Farus GameObject is not assigned in the inspector.");
+        }
+        else
+        {
+            farus.SetActive(false);
+            farusAnimator = farus.GetComponentInChildren<Animator>();
+        }
+    }
     
     void OnTriggerEnter(Collider other)
     {
@@ -10,6 +23,7 @@ public class FarusActivator : MonoBehaviour
         {
             Debug.Log("FARUS ACTIVATED");
             farus.SetActive(true);
+            farusAnimator.SetBool("Patrol", true);
         }
     }
     void OnTriggerExit(Collider other)

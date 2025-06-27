@@ -5,7 +5,7 @@ public class AimTarget : MonoBehaviour
     [SerializeField] Transform[] baseTargets;
     [SerializeField] int baseTargetIndex = 0;
     [SerializeField] float changeTargetTimer = 5f;
-    float changeTargetTime = 0f;
+    [SerializeField]float changeTargetTime = 0f;
     [SerializeField] Transform currentTarget;
 
     void Start()
@@ -30,21 +30,30 @@ public class AimTarget : MonoBehaviour
 
     private void Update()
     {
-        changeTargetTime -= Time.deltaTime;
-        if (changeTargetTime <= 0f)
+        if (currentTarget == Player.instance.transform)
         {
-            changeTargetTime = changeTargetTimer;
-            if (baseTargetIndex >= baseTargets.Length - 1)
-            {
-                baseTargetIndex = 0;
-            }
-            else
-            {
-                baseTargetIndex++;
-            }
-            TargetBase();
+            changeTargetTime = changeTargetTimer; // Reset timer when targeting player
+            transform.position = currentTarget.position;
         }
+        else
+        {
+            changeTargetTime -= Time.deltaTime;
 
-        transform.position = currentTarget.position;
+            if (changeTargetTime <= 0f)
+            {
+                changeTargetTime = changeTargetTimer;
+                if (baseTargetIndex >= baseTargets.Length - 1)
+                {
+                    baseTargetIndex = 0;
+                }
+                else
+                {
+                    baseTargetIndex++;
+                }
+                TargetBase();
+                transform.position = currentTarget.position;
+            }
+
+        }
     }
 }

@@ -27,4 +27,21 @@ public class GlobalSound : MonoBehaviour
     {
         source.PlayOneShot(clip, volume);
     }
+    public void PlayClip(AudioClip clip, float volume, bool loop)
+    {
+        source.loop = loop;
+        source.volume = volume;
+        source.clip = clip;
+        if (!source.isPlaying)
+        {
+            source.Play();
+        }
+    }
+    public void StopClip()
+    {
+        source.Stop();
+        source.loop = false;
+        source.clip = null;
+    }
+
 }

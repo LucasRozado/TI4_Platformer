@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8072521325362681043}
   - component: {fileID: 664869505486598888}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -69,7 +69,8 @@ GameObject:
   - component: {fileID: 8602454448712737006}
   - component: {fileID: 2281258728711380082}
   - component: {fileID: 8770006294330875607}
-  m_Layer: 0
+  - component: {fileID: 880197789212662968}
+  m_Layer: 8
   m_Name: Plataforma.023
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -201,6 +202,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 0}
   platformType: 11
+--- !u!114 &880197789212662968
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5454567071111045365}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb713875c87e0cb42bd00a980300b939, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundToPlay:
+  - {fileID: 8300000, guid: c6b900f03c1a53440b0b8bbcf68def1e, type: 3}
+  - {fileID: 8300000, guid: b58f703cab8923341ab0688ff9d6e1c0, type: 3}
+  - {fileID: 8300000, guid: 732440df838fa064eaf8820ef12742e4, type: 3}
+  - {fileID: 8300000, guid: d030d1c4489d0eb46bc2c6e5284abb2f, type: 3}
+  - {fileID: 8300000, guid: 5cc54b0d56ce4544f91c6ee9456f9389, type: 3}
+  - {fileID: 8300000, guid: cf8b50f9dff544442ac665d02d60e4c5, type: 3}
+  - {fileID: 8300000, guid: cf2619cb87378be468991100e844f5ac, type: 3}
+  - {fileID: 8300000, guid: efd05a8a14b14ed4da5dd2eab7f8ffc4, type: 3}
+  delay: 0
+  volume: 0.1
+  playOnEnter: 1
+  playOnExit: 0
+  playOnLoop: 0
 --- !u!1001 &974132164237829257
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -212,6 +239,18 @@ PrefabInstance:
     - target: {fileID: 696300049188929883, guid: 43143219f79e3f74d96d4148d0b874cc, type: 3}
       propertyPath: m_Name
       value: Armature.011
+      objectReference: {fileID: 0}
+    - target: {fileID: 696300049188929883, guid: 43143219f79e3f74d96d4148d0b874cc, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 3171914193177134966, guid: 43143219f79e3f74d96d4148d0b874cc, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 3281749108086215645, guid: 43143219f79e3f74d96d4148d0b874cc, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 3293853029856633356, guid: 43143219f79e3f74d96d4148d0b874cc, type: 3}
       propertyPath: m_LocalScale.x
@@ -269,6 +308,18 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 02e6f4bf86c7aea4fb3b338d9648fafb, type: 2}
+    - target: {fileID: 5590411928581396087, guid: 43143219f79e3f74d96d4148d0b874cc, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 6803305738266882925, guid: 43143219f79e3f74d96d4148d0b874cc, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8928919908774610109, guid: 43143219f79e3f74d96d4148d0b874cc, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
