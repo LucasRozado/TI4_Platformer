@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: River
-  m_Shader: {fileID: -6465566751694194690, guid: 3b06c54e02d3d15448d1db31fce77fff, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: 3297f4ff4e590b44eb8e5646e291376c, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
@@ -121,6 +121,10 @@ Material:
     - _SrcBlend: 5
     - _SrcBlendAlpha: 1
     - _Surface: 1
+    - _VertexOffsetAmount: 0.2
+    - _VoronoiIntensity: 3.92
+    - _VoronoiScale: 12
+    - _VoronoiSpeed: 1.7
     - _WorkflowMode: 1
     - _ZTest: 4
     - _ZWrite: 0
@@ -129,6 +133,8 @@ Material:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _RippleSpeed: {r: 0, g: 0.01, b: 0, a: 0}
+    - _RipplesColor: {r: 0.4912624, g: 3.7786078, b: 6.12633, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
     - _Speed: {r: 0.1, g: -1, b: 0, a: 0}
     - _Tilling: {r: 2, g: 2, b: 0, a: 0}
