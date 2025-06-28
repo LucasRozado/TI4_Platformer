@@ -27,7 +27,7 @@ public class PlayerState_Torch : PlayerState
 
     public override void Initialize()
     {
-
+        player.PlayerAnimations.TorchIdleAnimation(true);
     }
 
     protected override void EnterState()
@@ -38,6 +38,8 @@ public class PlayerState_Torch : PlayerState
     protected override void ExitState()
     {
         fire.Stop();
+        player.PlayerAnimations.TorchIdleAnimation(false);
+        player.PlayerAnimations.TorchWalkAnimation(false);
     }
 
     private void Update()
@@ -67,10 +69,12 @@ public class PlayerState_Torch : PlayerState
         if (directionalInput != Vector2.zero)
         {
             // TODO: Walk Animation
+            player.PlayerAnimations.TorchWalkAnimation(true);
         }
         else
         {
             // TODO: Idle Animation
+            player.PlayerAnimations.TorchWalkAnimation(false);
         }
 
         Vector2 movementVelocity = rotation * (directionalInput * movementSpeed);
