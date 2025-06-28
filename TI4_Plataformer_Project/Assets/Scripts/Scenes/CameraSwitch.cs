@@ -16,16 +16,18 @@ public class CameraSwitch : MonoBehaviour
     void Start()
     {
         primaryCamera = player.GetComponent<PlayerCameraSwitch>().primaryCamera; // Get the primary camera from the player
-        if (player == null)
-        {
-            player = GameObject.FindGameObjectWithTag("Player"); // Find the player object by tag if not assigned
-        }
+        player = GameObject.FindGameObjectWithTag("Player"); // Find the player object by tag if not assigned
     }
     // Trigger events for camera switching
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
+            if (player == null)
+            {
+                primaryCamera = player.GetComponent<PlayerCameraSwitch>().primaryCamera; // Get the primary camera from the player
+                player = GameObject.FindGameObjectWithTag("Player"); // Find the player object by tag if not assigned
+            }
             if (targetCamera != primaryCamera)
             {
                 player.GetComponent<PlayerCameraSwitch>().SetPrimaryCamera(primaryCameraLocation, primaryCameraRotation); // Set the primary camera position and rotation
@@ -33,7 +35,7 @@ public class CameraSwitch : MonoBehaviour
             else
             {
                 player.GetComponent<PlayerCameraSwitch>().SwitchToPrimaryCamera(); // Switch to the primary camera
-            }        
+            }
             player.GetComponent<PlayerCameraSwitch>().AddCamera(targetCamera);
             player.GetComponent<PlayerCameraSwitch>().SwitchToCamera(targetCamera);
             if (removeCameraCoroutine != null)
