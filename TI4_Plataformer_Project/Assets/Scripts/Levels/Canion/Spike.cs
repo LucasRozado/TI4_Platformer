@@ -26,12 +26,13 @@ public class Spike : MonoBehaviour
     }
     private void OnCollisionEnter(Collision collision)
     {
-        spikeRigidbody.isKinematic = true; // Set the Rigidbody to kinematic to stop it from moving
         if (collision.gameObject.layer == LayerMask.NameToLayer("Player")) // Check if the spike collides with the player
         {
             Debug.Log("Spike hit the player!"); 
+            Player.instance.TakeDamage();
             transform.SetParent(collision.transform); // Set the spike as a child of the player
             // Add any additional logic for when the spike hits the player here
         }
+        spikeRigidbody.isKinematic = true; // Set the Rigidbody to kinematic to stop it from moving
     }
 }
