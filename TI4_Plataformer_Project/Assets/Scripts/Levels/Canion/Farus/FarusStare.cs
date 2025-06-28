@@ -63,7 +63,7 @@ public class FarusStare : BossState
             {
                 Debug.Log("Hit obstacle");
                 line.SetPosition(1, hit.point);
-                aimTarget.TargetBase();
+                //aimTarget.TargetBase();
                 WaitReset();
             }
         }
