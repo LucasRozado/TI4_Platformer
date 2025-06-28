@@ -7,6 +7,7 @@ using UnityEngine.AI;
 public class Enemy : MonoBehaviour
 {
     [SerializeField] private EnemyAggroArea aggroArea;
+    [SerializeField] private Animator animator;
 
     [Header("Idle")]
     [SerializeField] private float idleDurationMin = 3f;
@@ -32,8 +33,8 @@ public class Enemy : MonoBehaviour
 
     private void Idle()
     {
+        animator.SetTrigger("Idle");
         float duration = UnityEngine.Random.Range(idleDurationMin, idleDurationMax);
-
         StartCoroutine(Idle_Coroutine(duration));
     }
     private IEnumerator Idle_Coroutine(float duration)
@@ -55,23 +56,24 @@ public class Enemy : MonoBehaviour
 
     private void Patrol()
     {
+        animator.SetTrigger("Move");
         Vector3 position = GetRandomPatrolPoint();
         StartCoroutine(Patrol_Coroutine(position));
     }
     private IEnumerator Patrol_Coroutine(Vector3 position)
     {
         agent.SetDestination(position);
-        
+
         // Tratando para nao preferir ficar nos cantos
         while (agent.pathPending)
         { yield return null; }
         if (Vector3.Distance(agent.destination, transform.position) < patrolDistanceMin)
         {
-            Debug.Log("Recalculating patrol");
             Patrol();
             yield break;
         }
 
+        Vector3 lastPosition;
         while (Vector3.Distance(transform.position, agent.destination) > agent.stoppingDistance)
         {
             if (aggroArea.HasAggro)
@@ -80,7 +82,11 @@ public class Enemy : MonoBehaviour
                 yield break;
             }
 
+            lastPosition = transform.position;
             yield return null;
+
+            if (transform.position == lastPosition)
+            { break; }
         }
 
         Idle();
@@ -101,44 +107,60 @@ public class Enemy : MonoBehaviour
 
     private void Follow()
     {
+        animator.SetTrigger("Move");
         StartCoroutine(Follow_Coroutine());
     }
     private IEnumerator Follow_Coroutine()
     {
-        while (aggroArea.HasAggro)
+        if (aggroArea.HasAggro)
         {
             Player player = aggroArea.Target.GetComponent<Player>();
-
-            Vector3 directionVector = player.transform.position - transform.position;
-            float distance = directionVector.magnitude;
-
             PlayerState_Torch torchState = player.GetState<PlayerState_Torch>();
-            if (player.State == torchState
-                && distance <= torchState.EnemyDistance)
-            {
-                agent.SetDestination(transform.position);
-                Idle();
-                yield break;
-            }
-            else if (distance <= attackDistance)
-            {
-                agent.SetDestination(transform.position);
-                Quaternion direction = Quaternion.LookRotation(directionVector, transform.up);
-                Attack(direction);
-                yield break;
-            }
 
-            //Vector3 targetDistance = target.transform.position - transform.position;
-            //Vector3 attackPosition = targetDistance * (targetDistance.magnitude - attackDistance);
-            agent.SetDestination(player.transform.position);
-            yield return null;
+            while (aggroArea.HasAggro)
+            {
+                Vector3 directionVector = player.transform.position - transform.position;
+                float distance = directionVector.magnitude;
+
+                if (player.State == torchState)
+                {
+                    if (distance <= torchState.EnemyDistance)
+                    {
+                        agent.SetDestination(directionVector.normalized * torchState.EnemyDistance);
+                        yield return null;
+                        continue;
+                    }
+                    else
+                    {
+                        Scared();
+                        yield break;
+                    }
+                }
+                else
+                {
+                    if (distance <= attackDistance)
+                    {
+                        agent.SetDestination(transform.position);
+                        Quaternion direction = Quaternion.LookRotation(directionVector, transform.up);
+                        Attack(direction);
+                        yield break;
+                    }
+                }
+
+                //Vector3 targetDistance = target.transform.position - transform.position;
+                //Vector3 attackPosition = targetDistance * (targetDistance.magnitude - attackDistance);
+                agent.SetDestination(player.transform.position);
+                yield return null;
+            }
         }
 
+        agent.SetDestination(transform.position);
         Idle();
     }
 
     private void Attack(Quaternion direction)
     {
+        animator.SetTrigger("Attack");
         const float duration = 1f;
         StartCoroutine(Attack_Coroutine(direction, duration));
     }
@@ -153,8 +175,43 @@ public class Enemy : MonoBehaviour
         }
 
         if (aggroArea.HasAggro)
+        {
+            Player player = aggroArea.Target.GetComponent<Player>();
+            if (Vector3.Dot(transform.forward, player.transform.position) > 0f
+                && Vector3.Distance(transform.forward, player.transform.position) > attackDistance)
+            {
+                player.TakeDamage();
+            }
+        }
+
+        if (aggroArea.HasAggro)
         { Follow(); }
         else
         { Idle(); }
+    }
+
+    private void Scared()
+    {
+        animator.SetTrigger("Scared");
+        StartCoroutine(Scared_Coroutine());
+    }
+    private IEnumerator Scared_Coroutine()
+    {
+        if (aggroArea.HasAggro)
+        {
+            Player player = aggroArea.Target.GetComponent<Player>();
+            PlayerState_Torch torchState = player.GetState<PlayerState_Torch>();
+
+            while (aggroArea.HasAggro && player.State == torchState)
+            {
+                Vector3 directionVector = player.transform.position - transform.position;
+                Quaternion direction = Quaternion.LookRotation(directionVector, transform.up);
+                transform.rotation = Quaternion.Lerp(transform.rotation, direction, Time.deltaTime * 5f);
+
+                yield return null;
+            }
+        }
+
+        Idle();
     }
 }

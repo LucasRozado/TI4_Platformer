@@ -47,7 +47,7 @@ NavMeshAgent:
   m_Speed: 3.5
   m_Acceleration: 8
   avoidancePriority: 50
-  m_AngularSpeed: 120
+  m_AngularSpeed: 270
   m_StoppingDistance: 0
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
@@ -69,6 +69,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   aggroArea: {fileID: 0}
+  animator: {fileID: 18622866995366081}
   idleDurationMin: 3
   idleDurationMax: 5
   patrolDistanceMin: 4
@@ -129,8 +130,38 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: e9231cb0c13d6ac4ca84cc0497874014, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 18622866995366081}
   m_SourcePrefab: {fileID: 100100000, guid: e9231cb0c13d6ac4ca84cc0497874014, type: 3}
+--- !u!1 &4812357516442018680 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: e9231cb0c13d6ac4ca84cc0497874014, type: 3}
+  m_PrefabInstance: {fileID: 5623171277586439721}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &18622866995366081
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4812357516442018680}
+  m_Enabled: 1
+  m_Avatar: {fileID: 9000000, guid: e9231cb0c13d6ac4ca84cc0497874014, type: 3}
+  m_Controller: {fileID: 9100000, guid: f091f175e2cc3a84f904544d1bc34228, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!4 &5297144685129988546 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: e9231cb0c13d6ac4ca84cc0497874014, type: 3}
