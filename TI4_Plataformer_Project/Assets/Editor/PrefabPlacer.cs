@@ -119,7 +119,6 @@ public class PrefabPlacer : EditorWindow
             Undo.RegisterCreatedObjectUndo(spawned, "Spawned Object");
             spawned.transform.position = hit.point;
             spawned.transform.rotation = rot;
-            spawned.transform.parent = hit.collider.transform;
 
             float scaleX = Random.Range(minScale, maxScale);
             float scaleY = Random.Range(minScale, maxScale);
@@ -127,6 +126,7 @@ public class PrefabPlacer : EditorWindow
             Vector3 scale = new Vector3(scaleX, scaleY, scaleZ);
             spawned.transform.localScale = scale;
 
+            spawned.transform.parent = hit.collider.transform;
             spawned.isStatic = true;
         }
     }
