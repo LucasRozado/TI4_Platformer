@@ -9,6 +9,15 @@ public class ButtonGate : ButtonActivated
     Vector3 newPosition;
     Vector3 startPosition;
 
+    private void OnEnable()
+    {
+        startPosition = transform.position;
+        newPosition = transform.position - Vector3.down * positionDistance;
+        Debug.Log(gameObject.name);
+        Debug.Log(startPosition);
+        Debug.Log(newPosition);
+    }
+
     public override void Activate()
     {
         if (!isActive)
@@ -22,15 +31,27 @@ public class ButtonGate : ButtonActivated
 
     public IEnumerator CRGateOpen()
     {
+        Debug.Log(gameObject.name);
         startPosition = transform.position;
+        Debug.Log(startPosition);
         newPosition = transform.position - Vector3.down * positionDistance;
+        Debug.Log(newPosition);
         float t = 0;
+        int i = 0;
         while (t < duration)
         {
+            i++;
+            Debug.Log(i);
             t += Time.deltaTime;
+            Debug.Log(t);
             transform.position = Vector3.Lerp(startPosition, newPosition, t / duration);
+            Debug.Log(transform.position);
             yield return new WaitForEndOfFrame();
         }
-        yield return null;
+    }
+
+    public override void ManualActivation()
+    {
+        transform.position = newPosition;
     }
 }
