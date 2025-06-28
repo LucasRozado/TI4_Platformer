@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 6547351446235762859}
   - component: {fileID: -5830765531855754399}
   - component: {fileID: -5369288737441801624}
+  - component: {fileID: 8674202819913644076}
   m_Layer: 6
   m_Name: PushableCube
   m_TagString: Untagged
@@ -123,6 +124,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d48be7112be1ac84fb561c810b19c732, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tutorialText: Press E to Interact
+  tutorialDuration: 5
+  timeToTutorial: 2
   size: 2
   height: 0.3
 --- !u!54 &-5369288737441801624
@@ -152,6 +156,27 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
+--- !u!135 &8674202819913644076
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6379667294749317667}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 2
+  m_Center: {x: -0.003025949, y: 0.5, z: 0.008304477}
 --- !u!1001 &7875449182089808440
 PrefabInstance:
   m_ObjectHideFlags: 0
