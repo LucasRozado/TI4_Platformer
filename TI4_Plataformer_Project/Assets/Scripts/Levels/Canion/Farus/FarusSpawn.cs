@@ -14,7 +14,7 @@ public class FarusSpawn : BossState
     public override void AnimationTrigger()
     {
         base.AnimationTrigger();
-        rigBuilder.enabled = true;
         machine.ChangeState(patrolState);
+        rigBuilder.enabled = true;
     }
 }

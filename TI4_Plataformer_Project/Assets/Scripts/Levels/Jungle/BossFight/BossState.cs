@@ -37,6 +37,6 @@ public class BossState : MonoBehaviour
     }
     public virtual void AnimationTrigger()
     {
-        
+
     }
 }
