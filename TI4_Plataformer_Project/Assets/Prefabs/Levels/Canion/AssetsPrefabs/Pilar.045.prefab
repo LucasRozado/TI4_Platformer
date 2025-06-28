@@ -75,6 +75,7 @@ GameObject:
   - component: {fileID: 4136623141270569508}
   - component: {fileID: 2185650165402900746}
   - component: {fileID: 2912440555421757578}
+  - component: {fileID: 2053934258633744704}
   m_Layer: 0
   m_Name: Pilar.045
   m_TagString: Untagged
@@ -322,6 +323,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 0}
   jiggleIndex: 34
+--- !u!114 &2053934258633744704
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4632269580570860818}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb713875c87e0cb42bd00a980300b939, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundToPlay:
+  - {fileID: 8300000, guid: c6b900f03c1a53440b0b8bbcf68def1e, type: 3}
+  - {fileID: 8300000, guid: b58f703cab8923341ab0688ff9d6e1c0, type: 3}
+  - {fileID: 8300000, guid: 732440df838fa064eaf8820ef12742e4, type: 3}
+  - {fileID: 8300000, guid: d030d1c4489d0eb46bc2c6e5284abb2f, type: 3}
+  - {fileID: 8300000, guid: 5cc54b0d56ce4544f91c6ee9456f9389, type: 3}
+  - {fileID: 8300000, guid: cf8b50f9dff544442ac665d02d60e4c5, type: 3}
+  - {fileID: 8300000, guid: cf2619cb87378be468991100e844f5ac, type: 3}
+  - {fileID: 8300000, guid: efd05a8a14b14ed4da5dd2eab7f8ffc4, type: 3}
+  delay: 0
+  volume: 1
+  playOnEnter: 1
+  playOnExit: 0
+  playOnLoop: 1
 --- !u!1001 &2764721243381025754
 PrefabInstance:
   m_ObjectHideFlags: 0

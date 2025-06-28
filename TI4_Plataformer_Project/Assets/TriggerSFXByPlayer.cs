@@ -8,6 +8,7 @@ public class TriggerSFXByPlayer : MonoBehaviour
     [SerializeField] private bool playOnEnter = true;
     [SerializeField] private bool playOnExit = false;
     [SerializeField] private bool playOnLoop = false;
+    [SerializeField] private bool stopAllAudioOnExit = false;
     void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.layer == 3 && playOnEnter == true) // Assuming 3 is the layer for the player
@@ -59,6 +60,13 @@ public class TriggerSFXByPlayer : MonoBehaviour
             {
                 Debug.LogWarning("No sound clips assigned to TriggerSFXByPlayer on " + gameObject.name);
             }
+        }
+    }
+    void StopAllAudio()
+    {
+        if (stopAllAudioOnExit)
+        {
+            GlobalSound.instance.StopClip(); // Stop all audio clips
         }
     }
 }
