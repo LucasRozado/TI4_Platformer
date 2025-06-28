@@ -35,6 +35,11 @@ public class PlayerState_Dead : PlayerState
         remainingDuration = duration;
     }
 
+    public void SetDuration(float duration)
+    {
+        this.duration = duration;
+        remainingDuration = duration;
+    }
     private void CalculateParameters()
     {
         gravityAcceleration = (2f * jump.DefaultHeight) / -Mathf.Pow(jump.DefaultFallTime, 2);
