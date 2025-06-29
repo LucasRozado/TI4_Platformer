@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3209029593117242422}
   - component: {fileID: 3983697839409387507}
+  - component: {fileID: 4031930494239131073}
   m_Layer: 12
   m_Name: Parede.062
   m_TagString: Untagged
@@ -62,6 +63,27 @@ LODGroup:
     renderers:
     - renderer: {fileID: 3672653491962753010}
   m_Enabled: 1
+--- !u!65 &4031930494239131073
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3134993479989079687}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 5.3957977, y: 2.7432022, z: 1.5581293}
+  m_Center: {x: -0.41286469, y: -0.3211174, z: 0}
 --- !u!1001 &4300633461031332761
 PrefabInstance:
   m_ObjectHideFlags: 0

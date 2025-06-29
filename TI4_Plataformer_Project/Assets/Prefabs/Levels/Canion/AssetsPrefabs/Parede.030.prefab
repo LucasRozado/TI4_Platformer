@@ -10,12 +10,13 @@ GameObject:
   m_Component:
   - component: {fileID: 7447919664968440137}
   - component: {fileID: 6289224401600624023}
-  m_Layer: 0
+  - component: {fileID: 1337458816236884811}
+  m_Layer: 12
   m_Name: Parede.030
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &7447919664968440137
 Transform:
@@ -62,6 +63,27 @@ LODGroup:
     renderers:
     - renderer: {fileID: 8053635485486206985}
   m_Enabled: 1
+--- !u!65 &1337458816236884811
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2164842966966621228}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.8672135, y: 3.1778476, z: 0.56467485}
+  m_Center: {x: 0, y: -0.42152083, z: 0}
 --- !u!1001 &4034178959307553694
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -77,6 +99,14 @@ PrefabInstance:
     - target: {fileID: 4126216805417210908, guid: 09f9b2d0c59e864449ce19785c749b62, type: 3}
       propertyPath: m_Name
       value: PlataformaPilar19_LOD1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4126216805417210908, guid: 09f9b2d0c59e864449ce19785c749b62, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 4126216805417210908, guid: 09f9b2d0c59e864449ce19785c749b62, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 4600414231701478029, guid: 09f9b2d0c59e864449ce19785c749b62, type: 3}
       propertyPath: m_LocalPosition.x
@@ -189,6 +219,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlataformaPilar19_LOD2
       objectReference: {fileID: 0}
+    - target: {fileID: 3255095935885486584, guid: 9f621525fec35484985cce18808de548, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 3255095935885486584, guid: 9f621525fec35484985cce18808de548, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -259,6 +297,14 @@ PrefabInstance:
     - target: {fileID: 7200328322777566070, guid: 52442b440a406e148b83f4b664cf12ba, type: 3}
       propertyPath: m_Name
       value: PlataformaPilar19_LOD0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7200328322777566070, guid: 52442b440a406e148b83f4b664cf12ba, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 7200328322777566070, guid: 52442b440a406e148b83f4b664cf12ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2886973590789638527}
   - component: {fileID: 3967548844443819729}
   - component: {fileID: 184821117555872847}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Trail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4848,7 +4848,7 @@ GameObject:
   - component: {fileID: 7311692631602871769}
   - component: {fileID: 4847101576489619546}
   - component: {fileID: 1793349194153235405}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Spike
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4953,6 +4953,7 @@ MonoBehaviour:
   playOnEnter: 1
   playOnExit: 0
   playOnLoop: 0
+  stopAllAudioOnExit: 0
 --- !u!135 &1793349194153235405
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -5041,6 +5042,10 @@ PrefabInstance:
     - target: {fileID: 9089987626341483448, guid: 3f89dd6e2500cd44185bbad4c82291fb, type: 3}
       propertyPath: m_Name
       value: Spike
+      objectReference: {fileID: 0}
+    - target: {fileID: 9089987626341483448, guid: 3f89dd6e2500cd44185bbad4c82291fb, type: 3}
+      propertyPath: m_Layer
+      value: 12
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
