@@ -112,6 +112,7 @@ public class GameManager : MonoBehaviour
         //    progress.SaveProgress();
         //}
         powerUp.SavePowerUp();
+        endGame.SaveEndGame();
     }
 
     public void ResetToCheckPoint()
