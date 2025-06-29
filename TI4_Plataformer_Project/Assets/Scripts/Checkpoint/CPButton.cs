@@ -9,6 +9,8 @@ public class CPButton : MonoBehaviour
     {
         if (checkpoint.scene != SceneManager.GetActiveScene().buildIndex)
         {
+            Player.instance.transform.parent = null;
+            DontDestroyOnLoad(Player.instance);
             SceneManager.LoadScene(checkpoint.scene);
             Player.instance.ToggleController(false);
             Player.instance.gameObject.transform.position = checkpoint.spawnPosition;
@@ -17,6 +19,8 @@ public class CPButton : MonoBehaviour
         }
         else
         {
+            Player.instance.transform.parent = null;
+            DontDestroyOnLoad(Player.instance);
             Player.instance.ToggleController(false);
             Player.instance.gameObject.transform.position = checkpoint.spawnPosition;
             Player.instance.ToggleController(true);
