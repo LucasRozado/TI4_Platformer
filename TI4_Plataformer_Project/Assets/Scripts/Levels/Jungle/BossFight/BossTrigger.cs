@@ -26,7 +26,8 @@ public class BossTrigger : Progress
         }
         if (LevelProgress.instance.GetProgress(intReference))
         {
-            Destroy(gameObject);
+            Debug.Log("Completed");
+            gameObject.SetActive(false);
         }        
     }
 }

@@ -13,16 +13,12 @@ public class ButtonGate : ButtonActivated
     {
         startPosition = transform.position;
         newPosition = transform.position - Vector3.down * positionDistance;
-        Debug.Log(gameObject.name);
-        Debug.Log(startPosition);
-        Debug.Log(newPosition);
     }
 
     public override void Activate()
     {
         if (!isActive)
         {
-            Debug.Log("Activate " + gameObject.name);
             isActive = true;
             StartCoroutine(CRGateOpen());
             //gameObject.SetActive(!gameObject.activeSelf);
