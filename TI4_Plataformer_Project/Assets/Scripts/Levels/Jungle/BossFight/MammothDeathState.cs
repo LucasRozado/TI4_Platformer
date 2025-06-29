@@ -14,7 +14,7 @@ public class MammothDeathState : BossState
     public void Death()
     {
         GameManager.powerUp.AcquirePowerUp(PowerUps.Push);
-        Destroy(gameObject);
+        //Destroy(gameObject);
         foreach (ButtonActivated act in activated)
         {
             act.Activate();
@@ -45,6 +45,6 @@ public class MammothDeathState : BossState
 
     public override void Trigger(Collider other)
     {
-        base.Trigger(other);
+        
     }
 }
