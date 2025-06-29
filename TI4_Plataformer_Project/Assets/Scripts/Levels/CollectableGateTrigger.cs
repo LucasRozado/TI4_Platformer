@@ -5,6 +5,7 @@ public class CollectableGateTrigger : MonoBehaviour
     [SerializeField] CollectableType type;
     [SerializeField] int gateValue = 70;
     [SerializeField] GameObject completionVFX;
+    [SerializeField] ParticleSystem playerVFX;
 
     private void Start()
     {
@@ -25,6 +26,7 @@ public class CollectableGateTrigger : MonoBehaviour
 
     public void ActivateTrigger()
     {
+        playerVFX.Play();
         GameManager.endGame.CompleteLevel(type);
         completionVFX.SetActive(true);
     }

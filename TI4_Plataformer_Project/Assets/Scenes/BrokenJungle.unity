@@ -7120,6 +7120,7 @@ MonoBehaviour:
   type: 0
   gateValue: 70
   completionVFX: {fileID: 691251513}
+  playerVFX: {fileID: 6451262152480477607}
 --- !u!1001 &41838621
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -321552,7 +321553,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7133788522951307341, guid: 23d9c2c22d75cf04c974137d711a759e, type: 3}
       propertyPath: m_Name
-      value: Particle System
+      value: PlayerVFX
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -321562,6 +321563,11 @@ PrefabInstance:
 --- !u!4 &6451262152480477606 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2253376368977964010, guid: 23d9c2c22d75cf04c974137d711a759e, type: 3}
+  m_PrefabInstance: {fileID: 6451262152480477605}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &6451262152480477607 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 263240503359109366, guid: 23d9c2c22d75cf04c974137d711a759e, type: 3}
   m_PrefabInstance: {fileID: 6451262152480477605}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6605127763478902791
