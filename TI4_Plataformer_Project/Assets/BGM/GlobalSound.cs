@@ -43,5 +43,14 @@ public class GlobalSound : MonoBehaviour
         source.loop = false;
         source.clip = null;
     }
+    public void StopClip(AudioClip clip)
+    {
+        if (source.clip == clip)
+        {
+            source.Stop();
+            source.loop = false;
+            source.clip = null;
+        }
+    }
 
 }

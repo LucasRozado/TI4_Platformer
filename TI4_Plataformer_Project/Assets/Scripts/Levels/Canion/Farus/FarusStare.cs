@@ -23,10 +23,12 @@ public class FarusStare : BossState
     {
         base.EnterState(machine);
         rigBuilder.enabled = true;
+        GlobalSound.instance.PlayClip(tinnitusAudio, 0.5f);
     }
 
     public override void ExitState(BossMachine machine)
     {
+        GlobalSound.instance.StopClip(tinnitusAudio);
         base.ExitState(machine);
         rigBuilder.enabled = false;
         damageTimer = 0f;
@@ -85,7 +87,7 @@ public class FarusStare : BossState
 
     private void HitPlayer()
     {
-        GlobalSound.instance.PlayClip(tinnitusAudio, 0.5f, true);
+
         Player.instance.ChangeSpeed(slow);
         cancelTimer = 0f;
         damageTimer += Time.fixedDeltaTime;
