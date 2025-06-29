@@ -12,7 +12,7 @@ public class ButtonPlatform : Progress
         if (LevelProgress.instance.GetProgress(intReference))
         {
             Debug.Log($"{intReference} is active");
-            Activate();
+            ManualActivate();
         }
     }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -34,6 +34,20 @@ public class ButtonPlatform : Progress
         foreach (ButtonActivated act in activated)
         {
             act.Activate();
+        }
+        LevelProgress.instance.Activate(intReference);
+    }
+
+    private void ManualActivate()
+    {
+        isActive = true;
+        if (animator != null)
+        {
+            animator.SetBool("IsActive", true);
+        }
+        foreach (ButtonActivated act in activated)
+        {
+            act.ManualActivation();
         }
         LevelProgress.instance.Activate(intReference);
     }
