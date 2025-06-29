@@ -3,9 +3,11 @@ using UnityEngine;
 public class MammothRoarState : BossState
 {
     [SerializeField] BossState animationState;
+    [SerializeField] AudioClip roarSound;
     public override void EnterState(BossMachine machine)
     {
         base.EnterState(machine);
+        GlobalSound.instance.PlayClip(roarSound);
     }
 
     public override void ExitState(BossMachine machine)
