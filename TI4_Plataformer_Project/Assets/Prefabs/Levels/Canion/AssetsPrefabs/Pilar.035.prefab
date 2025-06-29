@@ -526,6 +526,7 @@ MonoBehaviour:
   playOnEnter: 1
   playOnExit: 0
   playOnLoop: 1
+  stopAllAudioOnExit: 0
 --- !u!114 &207186748606190832
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -540,10 +541,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   soundToPlay: []
   delay: 0
-  volume: 1
+  volume: 0.2
   playOnEnter: 1
   playOnExit: 0
   playOnLoop: 0
+  stopAllAudioOnExit: 0
 --- !u!1001 &1176723789797561019
 PrefabInstance:
   m_ObjectHideFlags: 0
