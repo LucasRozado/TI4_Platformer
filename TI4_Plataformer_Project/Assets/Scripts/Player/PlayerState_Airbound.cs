@@ -172,7 +172,7 @@ public class PlayerState_Airbound : PlayerState
         }
 
         bool hitWall = flags.HasFlag(CollisionFlags.Sides);
-        if (hitWall && hit.gameObject.TryGetComponent<ClimbWall>(out _))
+        if (hitWall && hit.gameObject.TryGetComponent<ClimbWall>(out _) && GameManager.powerUp.GetPowerUp(PowerUps.Climb)
         {
             player.Look(-hit.normal);
             player.SwitchState<PlayerState_Climbing>();
