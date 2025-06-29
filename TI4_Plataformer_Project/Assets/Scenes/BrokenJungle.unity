@@ -7050,9 +7050,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbceeb75415fe7d45810d5be3c4f3029, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gate: {fileID: 0}
   type: 0
   gateValue: 70
+  completionVFX: {fileID: 0}
 --- !u!1001 &41838621
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -46029,7 +46029,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d95ec04106d1e014599162ab9094db8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelProgress: {fileID: 0}
   intReference: 4
   rb: {fileID: 324586238}
   animator: {fileID: 1914357805}
@@ -46063,6 +46062,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   chargeSpeed: 15
+  roarSound: {fileID: 0}
 --- !u!54 &324586238
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -162768,7 +162768,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 553a980d5564ede4d9d090b7817d8efe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelProgress: {fileID: 0}
   intReference: 5
   activated:
   - {fileID: 2021951410}
@@ -167865,8 +167864,6 @@ MonoBehaviour:
   - FallingPilar
   - River
   - EndBoss
-  data:
-    levelProgress: 010001010101010100
 --- !u!4 &1181956275
 Transform:
   m_ObjectHideFlags: 0
@@ -195333,9 +195330,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fa564f676b49304e8449be9466a4f6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cameraTarget: {fileID: 0}
+  intReference: 0
   mammoth: {fileID: 324586235}
-  animator: {fileID: 0}
+  director: {fileID: 0}
 --- !u!65 &1381033371
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -208271,8 +208268,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 014d70e575d26444f9e9af8bf6b3a70e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelProgress: {fileID: 0}
   intReference: 4
+  explosion: {fileID: 0}
 --- !u!1001 &1458971406
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -246957,7 +246954,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3fbeb1df7c539248adf61a7593dda37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelProgress: {fileID: 0}
   intReference: 5
   animator: {fileID: 2133700782}
   rb: {fileID: 1731848868}
@@ -246981,6 +246977,7 @@ MonoBehaviour:
   stateTimer: 5
   stateName: Roar
   animationState: {fileID: 1731848869}
+  roarSound: {fileID: 0}
 --- !u!114 &1731848873
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -246999,7 +246996,7 @@ MonoBehaviour:
   - {fileID: 2021951410}
   - {fileID: 1585353270}
   - {fileID: 1827893371}
-  levelProgress: {fileID: 0}
+  levelMusic: {fileID: 0}
   intReference: 5
 --- !u!114 &1731848874
 MonoBehaviour:
@@ -247017,6 +247014,7 @@ MonoBehaviour:
   stateName: Damage
   animationState: {fileID: 1731848870}
   deathState: {fileID: 1731848873}
+  pillarFallVFX: {fileID: 0}
 --- !u!114 &1731848875
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -279432,13 +279430,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e3c2ec8279f8794c8b0b1ac7dae6f1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelProgress: {fileID: 0}
   intReference: 5
   objectsToStart:
   - {fileID: 1864510183}
   - {fileID: 739513970}
   - {fileID: 1827893370}
   - {fileID: 1731848865}
+  bossMusic: {fileID: 0}
 --- !u!1001 &1961344710
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -307269,6 +307267,10 @@ PrefabInstance:
       propertyPath: info
       value: 
       objectReference: {fileID: 11400000, guid: 089bad09ffd9428469c95e1199000aef, type: 2}
+    - target: {fileID: 3009539594488486427, guid: 76f1ecbd7f903f44d96629c54c67e7bc, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 2100000, guid: 407a2392b0afccb4cb2a01699c23a8ec, type: 2}
     - target: {fileID: 4463371605675758922, guid: 76f1ecbd7f903f44d96629c54c67e7bc, type: 3}
       propertyPath: m_Name
       value: BossCheckpoint
