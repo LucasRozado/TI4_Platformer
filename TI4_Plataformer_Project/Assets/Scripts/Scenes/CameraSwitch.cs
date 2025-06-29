@@ -8,7 +8,7 @@ public class CameraSwitch : MonoBehaviour
     [Header("References")]
     [SerializeField] private GameObject player; // Reference to the player object
     public CinemachineCamera targetCamera; // Reference to the target camera
-    [SerializeField] private CinemachineCamera primaryCamera; // Reference to the primary camera
+    public CinemachineCamera primaryCamera; // Reference to the primary camera
     [SerializeField] private Vector3 primaryCameraLocation; // Forward camera location
     [SerializeField] private Vector3 primaryCameraRotation; // Forward camera rotation
 
@@ -27,6 +27,10 @@ public class CameraSwitch : MonoBehaviour
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
+            if (primaryCamera == null)
+            {
+                primaryCamera = BrainStatic.instance.cinemachine; // Get the primary camera from the player if not assigned
+            }
             if (targetCamera == null)
             {
                 targetCamera = primaryCamera; // If no target camera is assigned, use the primary camera
