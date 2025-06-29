@@ -19,7 +19,7 @@ public class CollectablesList : MonoBehaviour
 
     private void Start()
     {
-        NumberCollectables();
+        //NumberCollectables();
         GameManager.collectableManager.UpdateCollectables(levelCollectables);
     }
 
