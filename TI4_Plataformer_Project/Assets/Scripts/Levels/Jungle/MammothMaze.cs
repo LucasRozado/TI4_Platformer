@@ -159,7 +159,7 @@ public class MammothMaze : Progress
     {
         if (other.CompareTag("Player"))
         {
-            Debug.Log("Player hit by mammoth");
+            Player.instance.TakeDamage();
         }
         else if (other.CompareTag("Obstacle"))
         {
