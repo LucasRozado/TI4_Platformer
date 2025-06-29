@@ -39,6 +39,7 @@ public class Player : MonoBehaviour
     private readonly Dictionary<Type, PlayerState> states = new();
     private readonly ControllerCollision lastCollision = new();
     private ControllerColliderHit collisionHitBuffer;
+    public ParticleSystem bloodVFX;
 
     private PlayerAnimations playerAnimations;
     private void Awake()
@@ -221,6 +222,7 @@ public class Player : MonoBehaviour
         if (hpCurrent > 0)
         {
             // Play damage animation or sound here if needed
+            bloodVFX.Play(true);
             playerAnimations?.HurtAnimation();
         }
         if (hpCurrent == 0)
@@ -230,6 +232,7 @@ public class Player : MonoBehaviour
     public void Heal()
     {
         hpCurrent = hpBase;
+        bloodVFX.Stop(true);
     }
 
     public void Die()
