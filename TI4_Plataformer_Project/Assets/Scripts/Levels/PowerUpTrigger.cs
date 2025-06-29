@@ -9,7 +9,7 @@ public class PowerUpTrigger : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             GameManager.powerUp.AcquirePowerUp(powerUp);
-            Destroy(gameObject);
+            Destroy(gameObject, 2f); // Destroy the power-up after 2 seconds
         }
     }
 }
