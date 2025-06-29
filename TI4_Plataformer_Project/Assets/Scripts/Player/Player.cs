@@ -216,17 +216,32 @@ public class Player : MonoBehaviour
         hasPowerUp[(int)type] = true;
     }
 
+    private bool invincible = false;
     public void TakeDamage()
     {
+        if (invincible) return;
+
         hpCurrent -= 1;
         if (hpCurrent > 0)
         {
+            StartCoroutine(Invencibility_Coroutine());
             // Play damage animation or sound here if needed
             bloodVFX.Play(true);
             playerAnimations?.HurtAnimation();
         }
         if (hpCurrent == 0)
-            { Die(); }
+        { Die(); }
+    }
+    private IEnumerator Invencibility_Coroutine()
+    {
+        invincible = true;
+        float duration = 1f;
+        while (duration > Time.deltaTime)
+        {
+            duration -= Time.deltaTime;
+            yield return null;
+        }
+        invincible = false;
     }
 
     public void Heal()
