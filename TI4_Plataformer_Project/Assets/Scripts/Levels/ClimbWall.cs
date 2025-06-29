@@ -20,7 +20,7 @@ public class ClimbWall : MonoBehaviour
 
     protected virtual void OnTriggerStay(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && GameManager.powerUp.GetPowerUp(PowerUps.Climb))
         {
             timer -= Time.fixedDeltaTime;
             if (timer <= 0)
