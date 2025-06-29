@@ -10,6 +10,8 @@ public class LoadTrigger : MonoBehaviour
     {
         if (other.gameObject.layer == 3)
         {
+            Player.instance.transform.parent = null;
+            DontDestroyOnLoad(Player.instance.transform);
             StartCoroutine(LoadScene());
         }
     }
