@@ -21,6 +21,7 @@ public class MammothDeathState : BossState
         }
         LevelProgress.instance.Activate(intReference);
         AudioManager.PlayMusicLoop(levelMusic);
+        UIManager.instance.ShowText("You have gained the strenght of the Mammoth. Press E to push", 15f);
     }
 
     public override void EnterState(BossMachine machine)
