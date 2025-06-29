@@ -3,6 +3,7 @@ using UnityEngine;
 public class MammothBoss : BossMachine
 {
     [SerializeField] MammothDeathState deathState;
+    
     public override void Awake()
     {
         base.Awake();

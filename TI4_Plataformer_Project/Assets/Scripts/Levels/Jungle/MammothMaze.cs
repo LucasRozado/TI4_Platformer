@@ -22,6 +22,7 @@ public class MammothMaze : Progress
     [SerializeField] LayerMask targets;
     [SerializeField] LayerMask player;
     [SerializeField] float chargeSpeed = 13f;
+    [SerializeField] AudioClip roarSound;
     bool isCharging;
 
 
@@ -90,6 +91,7 @@ public class MammothMaze : Progress
         Debug.Log("Begin Charge");
         agent.speed = chargeSpeed;
         rbSpeed = chargeSpeed;
+        GlobalSound.instance.PlayClip(roarSound);
     }
 
     public void EndCharge()
