@@ -3,6 +3,7 @@ using UnityEngine;
 public class BossTrigger : Progress
 {
     [SerializeField] GameObject[] objectsToStart;
+    [SerializeField] AudioClip bossMusic;
 
 
     private void OnTriggerEnter(Collider other)
@@ -12,6 +13,7 @@ public class BossTrigger : Progress
             foreach (GameObject go in objectsToStart)
             {
                 go.SetActive(true);
+                AudioManager.PlayMusicLoop(bossMusic);
             }
         }        
     }

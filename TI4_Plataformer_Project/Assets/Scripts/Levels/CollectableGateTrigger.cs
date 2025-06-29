@@ -2,15 +2,30 @@ using UnityEngine;
 
 public class CollectableGateTrigger : MonoBehaviour
 {
-    [SerializeField] ButtonActivated gate;
     [SerializeField] CollectableType type;
     [SerializeField] int gateValue = 70;
+    [SerializeField] GameObject completionVFX;
+
+    private void Start()
+    {
+        if (GameManager.endGame.GetLevel(type))
+        {
+            gameObject.SetActive(false);
+            ActivateTrigger();
+        }
+    }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player") && GameManager.collectableManager.GetScore(type) >= gateValue)
         {
-            gate.Activate();
+            ActivateTrigger();
         }
+    }
+
+    public void ActivateTrigger()
+    {
+        GameManager.endGame.CompleteLevel(type);
+        completionVFX.SetActive(true);
     }
 }

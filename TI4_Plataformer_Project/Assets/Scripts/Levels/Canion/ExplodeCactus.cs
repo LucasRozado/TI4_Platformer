@@ -77,7 +77,6 @@ public class ExplodeCactus : MonoBehaviour
     }
     private void SpawnSpikes()
     {
-
         float radius = 1f; // Radius of the octagon
         GameObject[] spike = new GameObject[8]; // Initialize the spike variable
         for (int i = 0; i < 8; i++)

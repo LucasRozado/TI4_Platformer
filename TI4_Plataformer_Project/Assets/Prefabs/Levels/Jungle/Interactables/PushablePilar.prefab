@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: -7166539948622924348}
   - component: {fileID: 4728581714384194798}
   - component: {fileID: 3248783579428438383}
+  - component: {fileID: 3070501007355246685}
   m_Layer: 6
   m_Name: PushablePilar
   m_TagString: Untagged
@@ -44,7 +45,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1557796566418372649}
-  m_Mesh: {fileID: 847138106107840099, guid: 892c7a0f598e19f4ba388584779b7486, type: 3}
+  m_Mesh: {fileID: 847138106107840099, guid: 5e1da141911481748b7e6a0ec3a5b9a6, type: 3}
 --- !u!23 &4238496354610962978
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -123,6 +124,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d48be7112be1ac84fb561c810b19c732, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tutorialText: Press E to Interact
+  tutorialDuration: 5
+  timeToTutorial: 2
   size: 2
   height: 0.3
 --- !u!54 &3248783579428438383
@@ -152,6 +156,27 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
+--- !u!135 &3070501007355246685
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1557796566418372649}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 2
+  m_Center: {x: 0.0033510625, y: 1, z: 0}
 --- !u!1001 &5340869719849588389
 PrefabInstance:
   m_ObjectHideFlags: 0

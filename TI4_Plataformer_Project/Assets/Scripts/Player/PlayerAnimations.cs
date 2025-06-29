@@ -11,6 +11,20 @@ public class PlayerAnimations : MonoBehaviour
             Debug.LogError("Animator component not found in children.");
         }
     }
+    public void TorchIdleAnimation(bool state)
+    {
+        if (animator != null)
+        {
+            animator.SetBool("idleTorch", state);
+        }
+    }
+    public void TorchWalkAnimation(bool state)
+    {
+        if (animator != null)
+        {
+            animator.SetBool("walkTorch", state);
+        }
+    }
     public void WalkAnimation(bool state)
     {
         if (animator != null)

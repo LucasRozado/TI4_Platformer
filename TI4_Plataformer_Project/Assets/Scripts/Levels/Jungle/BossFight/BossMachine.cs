@@ -45,6 +45,10 @@ public class BossMachine : Progress
     private void OnTriggerEnter(Collider other)
     {
         currentState.Trigger(other);
+        if (other.CompareTag("Player"))
+        {
+            Player.instance.TakeDamage();
+        }
     }
 
     public virtual void TakeDamage()

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6435627946382155678}
   - component: {fileID: 1452415602791765789}
   - component: {fileID: 55830543635162556}
+  - component: {fileID: 8709088439929187434}
   m_Layer: 6
   m_Name: SpinController
   m_TagString: Untagged
@@ -45,6 +46,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77b3b34d249153c4abdbbc5d0781f196, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tutorialText: Press E to Interact
+  tutorialDuration: 5
+  timeToTutorial: 2
   rotationSpeed: 40
   spinObject: {fileID: 8730294131777670035}
 --- !u!65 &55830543635162556
@@ -67,6 +71,27 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 2, y: 2, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!135 &8709088439929187434
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4235522032201670699}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 2
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8730294131777670035
 GameObject:

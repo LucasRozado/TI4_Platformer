@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     public static CollectableManager collectableManager;
     public static CPManager checkpointManager;
     public static PlayerPowerUp powerUp;
+    public static EndGame endGame;
     bool isPaused;
     [Header("All Checkpoints to Add")]
     public List<CPInfo> allCheckpointsToAdd;
@@ -41,6 +42,9 @@ public class GameManager : MonoBehaviour
 
         powerUp = new PlayerPowerUp();
         powerUp.LoadPowerUp();
+
+        endGame = new EndGame();
+        endGame.LoadEndGame();
     }
 
     public void Update()

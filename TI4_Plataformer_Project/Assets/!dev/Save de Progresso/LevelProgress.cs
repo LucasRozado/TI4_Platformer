@@ -49,13 +49,11 @@ public class LevelProgress : MonoBehaviour
 
     public void Activate(int i)
     {
-        Debug.Log($"{i} activate");
         levelProgress[i] = true;
     }
 
     public bool GetProgress(int i)
     {
-        Debug.Log($"{i} {levelProgress[i]}");
         return levelProgress[i];
     }
 

@@ -17,6 +17,7 @@ public class FarusStare : BossState
     float cancelTimer = 0;
     [SerializeField] LineRenderer line;
     [SerializeField] AimTarget aimTarget;
+    [SerializeField] AudioClip tinnitusAudio;
 
     public override void EnterState(BossMachine machine)
     {
@@ -63,7 +64,7 @@ public class FarusStare : BossState
             {
                 Debug.Log("Hit obstacle");
                 line.SetPosition(1, hit.point);
-                aimTarget.TargetBase();
+                //aimTarget.TargetBase();
                 WaitReset();
             }
         }
@@ -84,6 +85,7 @@ public class FarusStare : BossState
 
     private void HitPlayer()
     {
+        GlobalSound.instance.PlayClip(tinnitusAudio, 0.5f, true);
         Player.instance.ChangeSpeed(slow);
         cancelTimer = 0f;
         damageTimer += Time.fixedDeltaTime;

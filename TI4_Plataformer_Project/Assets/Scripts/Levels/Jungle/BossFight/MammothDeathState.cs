@@ -3,6 +3,7 @@ using UnityEngine;
 public class MammothDeathState : BossState
 {
     [SerializeField] ButtonActivated[] activated;
+    [SerializeField] AudioClip levelMusic;
     [SerializeField] int intReference;
     public override void AnimationTrigger()
     {
@@ -19,6 +20,7 @@ public class MammothDeathState : BossState
             act.Activate();
         }
         LevelProgress.instance.Activate(intReference);
+        AudioManager.PlayMusicLoop(levelMusic);
     }
 
     public override void EnterState(BossMachine machine)

@@ -17,6 +17,8 @@ GameObject:
   - component: {fileID: 4852763625530295284}
   - component: {fileID: 2550527149564147523}
   - component: {fileID: 7191175478630855761}
+  - component: {fileID: 491668248719538938}
+  - component: {fileID: 8107147485290117861}
   m_Layer: 0
   m_Name: Pilar.033
   m_TagString: Untagged
@@ -201,6 +203,52 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 0}
   jiggleIndex: 22
+--- !u!114 &491668248719538938
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8959073678412949020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb713875c87e0cb42bd00a980300b939, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundToPlay:
+  - {fileID: 8300000, guid: c6b900f03c1a53440b0b8bbcf68def1e, type: 3}
+  - {fileID: 8300000, guid: b58f703cab8923341ab0688ff9d6e1c0, type: 3}
+  - {fileID: 8300000, guid: 732440df838fa064eaf8820ef12742e4, type: 3}
+  - {fileID: 8300000, guid: d030d1c4489d0eb46bc2c6e5284abb2f, type: 3}
+  - {fileID: 8300000, guid: 5cc54b0d56ce4544f91c6ee9456f9389, type: 3}
+  - {fileID: 8300000, guid: cf8b50f9dff544442ac665d02d60e4c5, type: 3}
+  - {fileID: 8300000, guid: cf2619cb87378be468991100e844f5ac, type: 3}
+  - {fileID: 8300000, guid: efd05a8a14b14ed4da5dd2eab7f8ffc4, type: 3}
+  delay: 0
+  volume: 0.56
+  playOnEnter: 1
+  playOnExit: 0
+  playOnLoop: 1
+  stopAllAudioOnExit: 0
+--- !u!114 &8107147485290117861
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8959073678412949020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb713875c87e0cb42bd00a980300b939, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundToPlay: []
+  delay: 0
+  volume: 0.2
+  playOnEnter: 1
+  playOnExit: 0
+  playOnLoop: 0
+  stopAllAudioOnExit: 0
 --- !u!1 &9008878010570140143
 GameObject:
   m_ObjectHideFlags: 0

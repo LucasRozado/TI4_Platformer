@@ -20,6 +20,7 @@ public class PlayerCameraSwitch : MonoBehaviour
         {
             player = GameObject.FindGameObjectWithTag("Player"); // Find the player object by tag if not assigned
         }
+        
         SwitchToCamera(primaryCamera); // Switch to the primary camera at the start
     }
     public void AddCamera(CinemachineCamera camera)
