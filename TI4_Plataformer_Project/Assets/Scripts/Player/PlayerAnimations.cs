@@ -109,4 +109,11 @@ public class PlayerAnimations : MonoBehaviour
             animator.SetTrigger("hurt");
         }
     }
+    public void DeathAnimation()
+    {
+        if (animator != null)
+        {
+            animator.SetTrigger("death");
+        }
+    }
 }   

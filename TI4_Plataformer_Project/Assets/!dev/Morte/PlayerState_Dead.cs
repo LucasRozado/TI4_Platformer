@@ -31,6 +31,8 @@ public class PlayerState_Dead : PlayerState
         player.ToggleCollider(false);
         player.PlayerAnimations.RunningAnimation(false);
 
+        player.PlayerAnimations.DeathAnimation();
+
         CalculateParameters();
         remainingDuration = duration;
     }
