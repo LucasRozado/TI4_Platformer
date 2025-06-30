@@ -10,8 +10,11 @@ public class VoidTrigger : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            PlayerState_Dead deadState = Player.instance.GetComponent<PlayerState_Dead>();
+            float oldRespawnDelay = deadState.Duration;
+            deadState.SetDuration(respawnDelay);
             Player.instance.Die();
-            Player.instance.GetComponent<PlayerState_Dead>().SetDuration(respawnDelay);
+            deadState.SetDuration(oldRespawnDelay);
         }
     }
 }
