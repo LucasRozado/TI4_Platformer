@@ -59,6 +59,7 @@ public class PlayerState_Spin : PlayerState
     protected override void ExitState()
     {
         player.transform.parent = null;
+        DontDestroyOnLoad(player.transform);
     }
 
     private void HandleGravity()
