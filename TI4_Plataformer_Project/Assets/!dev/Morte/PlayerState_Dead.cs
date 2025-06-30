@@ -4,6 +4,7 @@ public class PlayerState_Dead : PlayerState
 {
     [Header("Values")]
 
+    public float Duration => duration;
     [SerializeField, Tooltip("In seconds")]
     private float duration = 2f;
 
