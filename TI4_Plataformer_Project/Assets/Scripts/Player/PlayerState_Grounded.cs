@@ -13,6 +13,7 @@ public class PlayerState_Grounded : PlayerState
 
     [SerializeField, Tooltip("In meters per second")]
     private Vector2 directionalVelocity;
+    [SerializeField] private bool freezePosition = false;
 
     [SerializeField, Tooltip("In meters per second")]
     private float groundPull;
@@ -41,24 +42,45 @@ public class PlayerState_Grounded : PlayerState
 
     private void Update()
     {
-        UpdateMovement();
-        UpdateGroundPull();
+        if (freezePosition)
+        {
+            player.Move(Vector3.zero);
+            return;
+        }
+        else
+        {            
+            UpdateMovement();
+            UpdateGroundPull();
 
-        RotatePlayer();
+            RotatePlayer();
 
-        Vector3 velocity = CalculateVelocity();
-        player.Move(velocity, HandleCollision);
+            Vector3 velocity = CalculateVelocity();
+            player.Move(velocity, HandleCollision);
+        }
     }
 
     private void HandleSprint()
     {
         Debug.Log("Sprint");
-        player.SwitchState<PlayerState_GroundedRunning>();
+        if (freezePosition == false)
+        {
+            player.SwitchState<PlayerState_GroundedRunning>();
+        }
     }
 
     private void UpdateMovement()
     {
+
         Vector2 directionalInput = player.Input.Movement.Value;
+
+        if (directionalInput != Vector2.zero)
+        {
+            player.RestoreStamina(Time.deltaTime * player.StaminaDepletionRate * 0.5f);  
+        }
+        else
+        {
+            player.RestoreStamina(Time.deltaTime * player.StaminaDepletionRate);
+        }
 
         Vector3 cameraDirection = Camera.main.transform.forward;
         cameraDirection.y = 0;
@@ -158,7 +180,14 @@ public class PlayerState_Grounded : PlayerState
 
     private void HandleJump()
     {
-        player.SwitchState<PlayerState_Jump>();
+        if (freezePosition == false)
+        {
+            player.SwitchState<PlayerState_Jump>();
+        }
+    }
+    public void FreezePlayerPosition(bool freeze)
+    {
+        freezePosition = freeze;
     }
 
     protected override void ExitState()

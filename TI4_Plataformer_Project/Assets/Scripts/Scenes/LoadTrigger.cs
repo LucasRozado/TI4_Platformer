@@ -11,15 +11,15 @@ public class LoadTrigger : MonoBehaviour
         if (other.gameObject.layer == 3)
         {
             Player.instance.transform.parent = null;
-            DontDestroyOnLoad(Player.instance.transform);
+            DontDestroyOnLoad(Player.instance.gameObject);
+
             StartCoroutine(LoadScene());
         }
     }
-
     public IEnumerator LoadScene()
     {
+        Player.instance.GetComponent<PlayerCameraSwitch>().ClearCameraList(); // Clear the camera list to
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneToGo, loadSceneMode);
-
         // Wait until the asynchronous scene fully loads
         while (!asyncLoad.isDone)
         {

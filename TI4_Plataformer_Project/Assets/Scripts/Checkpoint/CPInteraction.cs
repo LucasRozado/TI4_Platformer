@@ -1,4 +1,6 @@
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
 
 public class CPInteraction : Interactable
 {
@@ -6,17 +8,35 @@ public class CPInteraction : Interactable
     [SerializeField] public Transform spawnPosition;
     [SerializeField] CPInfo info;
     [SerializeField] bool isFirstCheckpoint;
+    [SerializeField] private Player player;
+    [SerializeField] private float activationTime = 1f;
+    [SerializeField] private GameObject cameraTrigger;
+    private Coroutine activationCoroutine;
     bool isActive;
+
+    private void Awake()
+    {
+        if (player == null)
+        {
+            player = Player.instance;
+        }
+        cameraTrigger.SetActive(false);
+    }
     public override void InteractWith(Player player)
     {
         GameManager.SetSpawnPosition(spawnPosition.position);
+        cameraTrigger.SetActive(true);
         if (!isActive)
         {
             GameManager.checkpointManager.AddCheckPoint(info);
+            player.GetComponent<PlayerState_Grounded>().FreezePlayerPosition(true);
+            player.GetComponent<PlayerAnimations>().PaintingAnimation();
             SetAsActive();
         }
         else
         {
+            player.GetComponent<PlayerState_Grounded>().FreezePlayerPosition(true);
+            player.GetComponent<PlayerAnimations>().SitDownAnimation();
             UIManager.instance.OpenFastTravel();
         }
     }
@@ -24,9 +44,15 @@ public class CPInteraction : Interactable
     private void SetAsActive()
     {
         isActive = true;
+
+        activationCoroutine = StartCoroutine(ActivateCheckpoint());
+    }
+    private IEnumerator ActivateCheckpoint()
+    {
+        yield return new WaitForSeconds(activationTime);
+        player.GetComponent<PlayerState_Grounded>().FreezePlayerPosition(false);
         decal.SetActive(true);
     }
-
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {

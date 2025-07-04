@@ -1,0 +1,85 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3579663084351339780
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5027255086985162660}
+  - component: {fileID: 7697334025931379648}
+  - component: {fileID: 5451221649214884970}
+  - component: {fileID: 3499446129641121463}
+  m_Layer: 0
+  m_Name: CameraTrigger(OverHeadCamera1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5027255086985162660
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3579663084351339780}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.13001992, z: -0, w: 0.9915114}
+  m_LocalPosition: {x: 484.686, y: 30, z: 0.86291504}
+  m_LocalScale: {x: 8.272802, y: 7.9943, z: 18.032001}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 8.021, z: 0}
+--- !u!33 &7697334025931379648
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3579663084351339780}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &5451221649214884970
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3579663084351339780}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b6eff965b20f49459a5e388d657a664, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 1972300195213588809, guid: a0389ca322586644da7c46d738d54167, type: 3}
+  targetCamera: {fileID: 4175689251184140037, guid: a9117127745a01d4ab69e7ba8c3f636f, type: 3}
+  primaryCamera: {fileID: 0}
+  primaryCameraLocation: {x: 468.64, y: 27.88, z: 12.5}
+  primaryCameraRotation: {x: 0, y: 133, z: 0}
+  switchToPrimaryCameraOnTriggerExit: 1
+--- !u!136 &3499446129641121463
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3579663084351339780}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.47082895
+  m_Height: 6.0081506
+  m_Direction: 1
+  m_Center: {x: -0.94341785, y: -0.7861761, z: 0.20954041}

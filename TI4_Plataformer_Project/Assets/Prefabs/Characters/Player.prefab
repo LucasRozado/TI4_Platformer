@@ -41,6 +41,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2415328314562152853}
   - component: {fileID: 9147775351343639121}
+  - component: {fileID: 3732313684982815465}
   - component: {fileID: 15965929466153704}
   - component: {fileID: 804355611663774459}
   - component: {fileID: 5832773752726732205}
@@ -49,6 +50,7 @@ GameObject:
   - component: {fileID: 3414085757564275078}
   - component: {fileID: 3700570784867488159}
   - component: {fileID: 5117446561807197320}
+  - component: {fileID: 506669405313258464}
   - component: {fileID: 8965749133753995687}
   - component: {fileID: 5142344863161798831}
   - component: {fileID: 8705405052902869010}
@@ -111,6 +113,22 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 1, z: 0}
+--- !u!114 &3732313684982815465
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1972300195213588809}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20d4137f769b5c147af23404c22029fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 0}
+  primaryCamera: {fileID: 0}
+  currentCamera: {fileID: 0}
+  cameras: []
 --- !u!114 &15965929466153704
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -137,6 +155,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hpBase: 2
   speedFactor: 1
+  stamina: 100
+  staminaDepletionRate: 20
+  maxStamina: 100
   interactChecksLR:
   - {fileID: 2169309546443379107}
   - {fileID: 6936605765315538404}
@@ -167,6 +188,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementSpeed: 5
   directionalVelocity: {x: 0, y: 0}
+  freezePosition: 0
   groundPull: 0
   dust: {fileID: 3596949799293752210}
 --- !u!114 &2357994208751721710
@@ -209,7 +231,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementSpeed: 7
-  terminalVelocity: 18.76
+  terminalVelocity: 20
   directionalVelocity: {x: 0, y: 0}
   verticalVelocity: 0
   isSprinting: 0
@@ -227,8 +249,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementSpeed: 5
+  jumpForce: 1
   maxHorizontalAngle: 45
   directionalVelocity: {x: 0, y: 0}
+  isJumping: 0
   wallDirection: 0
 --- !u!114 &3700570784867488159
 MonoBehaviour:
@@ -276,6 +300,30 @@ MonoBehaviour:
   coyoteTimer: 0
   isSprinting: 0
   dust: {fileID: 4718907826819017759}
+--- !u!114 &506669405313258464
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1972300195213588809}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fad3a5364d4900f408ba25527d1a3a86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  movementSpeed: 5
+  defaultHeight: 1.1
+  currentHeight: 1.1
+  defaultTimeToApex: 0.4
+  defaultFallTime: 0.3
+  bufferTime: 0.1
+  coyoteTime: 0.5
+  directionalVelocity: {x: 0, y: 0}
+  verticalVelocity: 0
+  coyoteTimer: 0
+  isSprinting: 0
+  dust: {fileID: 0}
 --- !u!114 &8965749133753995687
 MonoBehaviour:
   m_ObjectHideFlags: 0

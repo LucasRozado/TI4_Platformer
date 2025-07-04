@@ -16,6 +16,9 @@ public class Player : MonoBehaviour
     [Header("Stats")]
     [SerializeField] private int hpBase = 2;
     [SerializeField] private float speedFactor = 1f;
+    [SerializeField] private float stamina = 100f;
+    [SerializeField] private float staminaDepletionRate = 10f;
+    [SerializeField] private float maxStamina = 100f;
 
     [Header("Interaction")]
     [SerializeField] private Transform[] interactChecksLR;
@@ -58,7 +61,7 @@ public class Player : MonoBehaviour
     private void Start()
     {
         input = new PlayerInput(GameManager.Instance.Actions);
-        
+
         // Inicializando a m�quina de estados
         PlayerState[] states = GetComponents<PlayerState>();
         if (states.Length > 0)
@@ -106,6 +109,10 @@ public class Player : MonoBehaviour
     public float InteractDistance => interactDistance;
     public LayerMask CanInteract => canInteract;
     public float Slope => characterController.slopeLimit;
+
+    public float Stamina => stamina;
+    public float StaminaDepletionRate => staminaDepletionRate;
+    public float MaxStamina => maxStamina;
 
     public Transform LeftInteractionChecker => interactChecksLR[0];
     public Transform RightInteractionChecker => interactChecksLR[1];
@@ -227,7 +234,14 @@ public class Player : MonoBehaviour
             StartCoroutine(Invencibility_Coroutine());
             // Play damage animation or sound here if needed
             bloodVFX.Play(true);
-            playerAnimations?.HurtAnimation();
+            if (state is PlayerState_Climbing)
+            {
+                playerAnimations?.ClimbHurtAnimation();
+            }
+            else
+            {
+                playerAnimations?.HurtAnimation();
+            }
         }
         if (hpCurrent == 0)
         { Die(); }
@@ -264,4 +278,15 @@ public class Player : MonoBehaviour
     {
         return speedFactor;
     }
+    public void DepleteStamina(float amount)
+    {
+        stamina -= amount * staminaDepletionRate;
+        stamina = Mathf.Clamp(stamina, 0, 100f);
+    }
+    public void RestoreStamina(float amount)
+    {
+        stamina += amount;
+        stamina = Mathf.Clamp(stamina, 0, 100f);
+    }
+
 }

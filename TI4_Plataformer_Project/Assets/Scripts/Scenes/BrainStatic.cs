@@ -16,9 +16,15 @@ public class BrainStatic : MonoBehaviour
             Destroy(gameObject);
         }
         DontDestroyOnLoad(gameObject);
+        ActivateCamera();
     }
     public void Start()
     {
         cinemachine = GetComponent<CinemachineCamera>();
+    }
+    public void ActivateCamera()
+    {
+        cinemachine.gameObject.SetActive(true);
+        cinemachine.Follow = Player.instance.transform;
     }
 }

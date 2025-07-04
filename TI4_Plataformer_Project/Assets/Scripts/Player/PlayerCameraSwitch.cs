@@ -13,6 +13,23 @@ public class PlayerCameraSwitch : MonoBehaviour
     public CinemachineCamera[] cameras; // Array of Cinemachine virtual cameras
     private Coroutine cameraSwitchCoroutine; // Coroutine for switching cameras
 
+    private void Awake()
+    {
+        if (player == null)
+        {
+            player = GameObject.FindGameObjectWithTag("Player"); // Find the player object by tag if not assigned
+        }
+        if (primaryCamera == null)
+        {
+            primaryCamera = BrainStatic.instance.cinemachine; // Get the primary camera from the BrainStatic instance
+        }
+        if (currentCamera == null)
+        {
+            currentCamera = primaryCamera; // If no current camera is assigned, use the primary camera
+        }
+        ClearCameraList();
+    }
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -20,8 +37,19 @@ public class PlayerCameraSwitch : MonoBehaviour
         {
             player = GameObject.FindGameObjectWithTag("Player"); // Find the player object by tag if not assigned
         }
-        
+        if (currentCamera == null)
+        {
+            currentCamera = primaryCamera; // If no current camera is assigned, use the primary camera
+        }
+        primaryCamera = BrainStatic.instance.cinemachine; // Get the primary camera from the BrainStatic instance
         SwitchToCamera(primaryCamera); // Switch to the primary camera at the start
+    }
+    void Update()
+    {
+        if (currentCamera == null)
+        {
+            ClearCameraList(); // Clear the camera list to reset camera state
+        }
     }
     public void AddCamera(CinemachineCamera camera)
     {
@@ -59,7 +87,7 @@ public class PlayerCameraSwitch : MonoBehaviour
     private IEnumerator SwitchToPrimaryCameraCoroutine()
     {
         SwitchToCamera(primaryCamera); // Switch to the primary camera after a delay
-        yield return new WaitForSeconds(0.1f); 
+        yield return new WaitForSeconds(0.1f);
         primaryCamera.Follow = player.transform; // Set the player as the follow target for the primary camera
     }
     public void SetPrimaryCamera(Vector3 position, Vector3 rotation)
@@ -81,5 +109,13 @@ public class PlayerCameraSwitch : MonoBehaviour
     {
         // Deactivate the primary camera
         primaryCamera.gameObject.SetActive(false);
+    }
+    public void ClearCameraList()
+    {
+        // Clear the list of cameras
+        cameras = new CinemachineCamera[0];
+        currentCamera = primaryCamera; // Reset the current camera
+        primaryCamera.GetComponent<BrainStatic>().ActivateCamera(); // Reactivate the primary camera
+        primaryCamera.gameObject.SetActive(true); // Reactivate the primary camera
     }
 }

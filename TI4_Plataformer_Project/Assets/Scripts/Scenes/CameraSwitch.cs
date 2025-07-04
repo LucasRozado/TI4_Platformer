@@ -11,25 +11,34 @@ public class CameraSwitch : MonoBehaviour
     public CinemachineCamera primaryCamera; // Reference to the primary camera
     [SerializeField] private Vector3 primaryCameraLocation; // Forward camera location
     [SerializeField] private Vector3 primaryCameraRotation; // Forward camera rotation
-
+    [SerializeField] private bool switchToPrimaryCameraOnTriggerExit = true; // Flag to switch to primary camera on trigger
+    [SerializeField] private bool useCurrentPrimaryCameraPosition = false;
     private Coroutine removeCameraCoroutine; // Coroutine reference for removing the camera
     void Start()
     {
         primaryCamera = BrainStatic.instance.cinemachine; // Get the primary camera from the player
-        player = GameObject.FindGameObjectWithTag("Player"); // Find the player object by tag if not assigned
+        player = Player.instance.gameObject; // Find the player object by tag if not assigned
+        if (useCurrentPrimaryCameraPosition)
+        {
+            primaryCameraLocation = primaryCamera.transform.position; // Use the current position of the primary camera
+            primaryCameraRotation = primaryCamera.transform.rotation.eulerAngles; // Use the current rotation of the primary camera
+        }
         if (targetCamera == null)
         {
             targetCamera = primaryCamera; // If no target camera is assigned, use the primary camera
-        }
+        }   
     }
     // Trigger events for camera switching
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
-            if (primaryCamera == null)
+            primaryCamera = BrainStatic.instance.cinemachine; // Get the primary camera from the player
+            player = Player.instance.gameObject; // Find the player object by tag if not assigned
+            if (useCurrentPrimaryCameraPosition)
             {
-                primaryCamera = BrainStatic.instance.cinemachine; // Get the primary camera from the player if not assigned
+                primaryCameraLocation = primaryCamera.transform.position; // Use the current position of the primary camera
+                primaryCameraRotation = primaryCamera.transform.rotation.eulerAngles; // Use the current rotation of the primary camera
             }
             if (targetCamera == null)
             {
@@ -60,8 +69,17 @@ public class CameraSwitch : MonoBehaviour
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
+
+            if (switchToPrimaryCameraOnTriggerExit)
+            {
+                player.GetComponent<PlayerCameraSwitch>().SwitchToPrimaryCamera(); // Switch to the primary camera on trigger exit
+            }
             removeCameraCoroutine = StartCoroutine(RemoveCamera()); // Start the coroutine to remove the camera
         }
+    }
+    public void SetTargetCamera(CinemachineCamera camera)
+    {
+        targetCamera = camera; // Set the target camera to the specified camera
     }
     private IEnumerator RemoveCamera()
     {

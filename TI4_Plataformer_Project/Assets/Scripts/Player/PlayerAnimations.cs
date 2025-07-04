@@ -53,6 +53,13 @@ public class PlayerAnimations : MonoBehaviour
             animator.SetBool("isClimbing", state);
         }
     }
+    public void ClimbHurtAnimation()
+    {
+        if (animator != null)
+        {
+            animator.SetTrigger("climbHurt");
+        }
+    }
     public void ClimbTypeAnimation(int state)
     {
         if (animator != null)
@@ -114,6 +121,28 @@ public class PlayerAnimations : MonoBehaviour
         if (animator != null)
         {
             animator.SetTrigger("death");
+        }
+    }
+    public void PaintingAnimation()
+    {
+        if (animator != null)
+        {
+            animator.SetTrigger("paint");
+        }
+    }
+    public void SitDownAnimation()
+    {
+        if (animator != null)
+        {
+            animator.SetTrigger("sitDown");
+        }
+    }
+    public void GetUpAnimation()
+    {
+        if (animator != null)
+        {
+            animator.SetTrigger("getUp");
+            this.gameObject.GetComponent<PlayerState_Grounded>().FreezePlayerPosition(false);
         }
     }
 }   
