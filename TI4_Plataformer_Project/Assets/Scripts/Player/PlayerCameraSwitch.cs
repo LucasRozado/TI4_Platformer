@@ -27,7 +27,6 @@ public class PlayerCameraSwitch : MonoBehaviour
         {
             currentCamera = primaryCamera; // If no current camera is assigned, use the primary camera
         }
-        ClearCameraList();
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created

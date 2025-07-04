@@ -155,6 +155,11 @@ public class PlayerState_Grounded : PlayerState
 
     private void HandleInteraction()
     {
+        if (freezePosition)
+        {
+            Debug.Log("Player is frozen, cannot interact.");
+            return;
+        }
         Debug.Log("Interaction");
         Transform checkL = player.GetInteractChecks(0);
         Transform checkR = player.GetInteractChecks(1);

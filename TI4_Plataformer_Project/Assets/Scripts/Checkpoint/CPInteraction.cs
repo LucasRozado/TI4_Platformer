@@ -29,13 +29,11 @@ public class CPInteraction : Interactable
         if (!isActive)
         {
             GameManager.checkpointManager.AddCheckPoint(info);
-            player.GetComponent<PlayerState_Grounded>().FreezePlayerPosition(true);
             player.GetComponent<PlayerAnimations>().PaintingAnimation();
             SetAsActive();
         }
         else
         {
-            player.GetComponent<PlayerState_Grounded>().FreezePlayerPosition(true);
             player.GetComponent<PlayerAnimations>().SitDownAnimation();
             UIManager.instance.OpenFastTravel();
         }
@@ -50,7 +48,8 @@ public class CPInteraction : Interactable
     private IEnumerator ActivateCheckpoint()
     {
         yield return new WaitForSeconds(activationTime);
-        player.GetComponent<PlayerState_Grounded>().FreezePlayerPosition(false);
+        Debug.Log("Checkpoint activated");
+        Player.instance.GetComponent<PlayerState_Grounded>().FreezePlayerPosition(false);
         decal.SetActive(true);
     }
     // Start is called once before the first execution of Update after the MonoBehaviour is created

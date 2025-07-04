@@ -128,6 +128,7 @@ public class PlayerAnimations : MonoBehaviour
         if (animator != null)
         {
             animator.SetTrigger("paint");
+            this.gameObject.GetComponent<PlayerState_Grounded>().FreezePlayerPosition(true);
         }
     }
     public void SitDownAnimation()
@@ -135,6 +136,8 @@ public class PlayerAnimations : MonoBehaviour
         if (animator != null)
         {
             animator.SetTrigger("sitDown");
+            this.gameObject.GetComponent<PlayerState_Grounded>().FreezePlayerPosition(true);
+
         }
     }
     public void GetUpAnimation()
